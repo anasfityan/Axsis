@@ -3,1106 +3,820 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
-<meta name="theme-color" content="#1a1a2e">
-<title>موادي — University Planner</title>
+<meta name="application-name" content="موادي">
+<meta name="theme-color" id="meta-theme" content="#0f0f1a">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;موادي — University Planner&quot;,&quot;short_name&quot;:&quot;موادي&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0f0f1a&quot;,&quot;theme_color&quot;:&quot;#6c63ff&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%236c63ff'/><text y='340' font-size='280' text-anchor='middle' x='256' fill='white' font-family='serif'>م</text></svg>&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any maskable&quot;}]}">
+<title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
+/* ===== THEMES ===== */
 :root{
-  --bg:#0f0f1a;
-  --bg2:#16162a;
-  --bg3:#1e1e35;
-  --surface:#1e1e35;
-  --surface2:#252540;
-  --surface3:#2e2e50;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.14);
-  --text:#f0f0ff;
-  --text2:#9898c0;
-  --text3:#5a5a80;
-  --accent:#6c63ff;
-  --accent2:#a78bfa;
-  --exam:#f59e0b;
-  --exam2:#fcd34d;
-  --success:#10b981;
-  --danger:#ef4444;
-  --r:14px;
-  --r-sm:8px;
-  --r-lg:20px;
+  --bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;
+  --sur:#1e1e35;--sur2:#252540;--sur3:#2e2e50;
+  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.14);
+  --txt:#f0f0ff;--txt2:#8888b8;--txt3:#4a4a70;
+  --acc:#6c63ff;--acc2:#a78bfa;
+  --r:12px;--rsm:8px;--rlg:18px;
 }
-.theme-light{
-  --bg:#f0eff8;
-  --bg2:#e8e7f5;
-  --bg3:#ffffff;
-  --surface:#ffffff;
-  --surface2:#f0eff8;
-  --surface3:#e4e3f5;
-  --border:rgba(0,0,0,0.07);
-  --border2:rgba(0,0,0,0.14);
-  --text:#1a1a2e;
-  --text2:#5a5a80;
-  --text3:#9898c0;
-  --accent:#6c63ff;
-  --accent2:#7c6fef;
+.th-light{
+  --bg:#f0eff8;--bg2:#e8e7f4;--bg3:#fff;
+  --sur:#fff;--sur2:#f0eff8;--sur3:#e4e3f5;
+  --bord:rgba(0,0,0,0.07);--bord2:rgba(0,0,0,0.13);
+  --txt:#1a1a2e;--txt2:#6060a0;--txt3:#9898c0;
+  --acc:#6c63ff;--acc2:#7c6fef;
 }
-.theme-midnight{
-  --bg:#0a0a12;
-  --bg2:#111120;
-  --bg3:#18182e;
-  --surface:#18182e;
-  --surface2:#1f1f38;
-  --surface3:#282845;
-  --border:rgba(255,255,255,0.06);
-  --border2:rgba(255,255,255,0.12);
-  --text:#e8e8ff;
-  --text2:#7878a8;
-  --accent:#818cf8;
-  --accent2:#a5b4fc;
+.th-dark{
+  --bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;
+  --sur:#1e1e35;--sur2:#252540;--sur3:#2e2e50;
+  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.14);
+  --txt:#f0f0ff;--txt2:#8888b8;--txt3:#4a4a70;
+  --acc:#6c63ff;--acc2:#a78bfa;
 }
-.theme-forest{
-  --bg:#0d1a0f;
-  --bg2:#121f14;
-  --bg3:#182a1a;
-  --surface:#182a1a;
-  --surface2:#1f3322;
-  --surface3:#253d28;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.13);
-  --text:#e8f5e8;
-  --text2:#7aaa7a;
-  --accent:#4ade80;
-  --accent2:#86efac;
-}
-.theme-rose{
-  --bg:#1a0d14;
-  --bg2:#221218;
-  --bg3:#2e1820;
-  --surface:#2e1820;
-  --surface2:#381e28;
-  --surface3:#422430;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.13);
-  --text:#ffe8f0;
-  --text2:#c07090;
-  --accent:#f472b6;
-  --accent2:#f9a8d4;
+.th-gold{
+  --bg:#0e0c06;--bg2:#16130a;--bg3:#1f1a0e;
+  --sur:#1f1a0e;--sur2:#27210f;--sur3:#302816;
+  --bord:rgba(255,210,80,0.1);--bord2:rgba(255,210,80,0.2);
+  --txt:#fff8e0;--txt2:#c8a84b;--txt3:#806830;
+  --acc:#d4a017;--acc2:#f5c842;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%}
+html,body{height:100%;overscroll-behavior:none}
 body{
   font-family:'Cairo',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  transition:background 0.3s,color 0.3s;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;overflow-x:hidden;
+  transition:background .25s,color .25s;
 }
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* APP SHELL */
-.app-shell{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto}
-
-/* TOP BAR */
+/* ===== TOPBAR ===== */
 .topbar{
+  padding:10px 14px 0;
   background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
   position:sticky;top:0;z-index:100;
-  backdrop-filter:blur(12px);
 }
-.app-logo{
-  display:flex;align-items:center;gap:10px;
+.topbar-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
 }
-.logo-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+.app-wordmark{
+  font-size:22px;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.topbar-right{display:flex;align-items:center;gap:6px}
+.ib{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--sur2);border:1px solid var(--bord);
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
+  cursor:pointer;color:var(--txt2);transition:all .15s;
 }
-.logo-icon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2}
-.logo-text{font-size:18px;font-weight:900;color:var(--text);letter-spacing:-0.5px}
-.logo-text span{color:var(--accent)}
-.topbar-actions{display:flex;align-items:center;gap:6px}
-.icon-btn{
-  width:36px;height:36px;border-radius:10px;
-  background:var(--surface2);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.15s;
-  color:var(--text2);position:relative;
-}
-.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.icon-btn:hover{background:var(--surface3);color:var(--text)}
-.add-fab-btn{
-  width:36px;height:36px;border-radius:10px;
-  background:var(--accent);border:none;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.15s;color:#fff;
-}
-.add-fab-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
-.add-fab-btn:hover{opacity:0.88;transform:scale(1.05)}
+.ib:hover{background:var(--sur3);color:var(--txt)}
+.ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.add-ib{background:var(--acc);border-color:var(--acc);color:#fff}
+.add-ib:hover{opacity:.88}
+.add-ib svg{stroke:#fff}
 
-/* TABS (courses/exams) */
+/* ===== MAIN TABS (glassmorphism) ===== */
 .main-tabs{
-  display:flex;padding:12px 16px 0;gap:8px;
-  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;gap:4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--bord);
+  border-radius:10px;
+  padding:3px;
+  backdrop-filter:blur(10px);
+  margin:0 0 0;
 }
 .main-tab{
-  padding:8px 18px;border-radius:var(--r-sm) var(--r-sm) 0 0;
-  font-size:13px;font-weight:600;font-family:'Cairo',sans-serif;
-  background:transparent;border:1px solid transparent;
-  border-bottom:none;color:var(--text2);cursor:pointer;
-  display:flex;align-items:center;gap:6px;
-  transition:all 0.15s;
+  flex:1;padding:7px 0;border:none;border-radius:7px;
+  font-family:'Cairo',sans-serif;font-size:12px;font-weight:600;
+  color:var(--txt2);cursor:pointer;background:transparent;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .18s;
 }
 .main-tab.active{
-  background:var(--bg);color:var(--accent);
-  border-color:var(--border);border-bottom:2px solid var(--accent);
+  background:var(--acc);color:#fff;
 }
-.main-tab svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tab-count{
-  background:var(--surface3);color:var(--text2);
-  font-size:10px;padding:1px 6px;border-radius:10px;
+.main-tab svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab-badge{
+  font-size:10px;padding:1px 5px;border-radius:8px;
+  background:rgba(255,255,255,0.15);
 }
-.main-tab.active .tab-count{background:var(--accent);color:#fff}
+.main-tab:not(.active) .tab-badge{background:var(--sur3);color:var(--txt3)}
 
-/* CONTENT */
-.content{flex:1;padding:14px 14px 100px}
+/* ===== CONTENT ===== */
+.content{padding:12px 12px 90px;max-width:480px;margin:0 auto}
 
-/* VIEW SWITCHER */
-.view-switcher{
-  display:flex;gap:0;margin-bottom:12px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:3px;overflow:hidden;
-}
-.view-btn{
-  flex:1;padding:7px 0;border:none;background:transparent;
-  font-family:'Cairo',sans-serif;font-size:12px;font-weight:600;
-  color:var(--text2);cursor:pointer;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all 0.15s;
-}
-.view-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.view-btn.active{background:var(--accent);color:#fff}
-
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
 .stat{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:10px 12px;text-align:center;
+  background:var(--sur);border:1px solid var(--bord);
+  border-radius:var(--r);padding:8px 10px;text-align:center;
 }
-.stat-num{font-size:22px;font-weight:900;color:var(--accent)}
-.stat-lbl{font-size:11px;color:var(--text2);margin-top:1px;line-height:1.3}
+.stat-num{font-size:18px;font-weight:900;color:var(--acc)}
+.stat-lbl{font-size:10px;color:var(--txt2);margin-top:1px}
 
-/* DAY FILTER */
+/* ===== VIEW SWITCHER ===== */
+.vsw{
+  display:flex;gap:0;margin-bottom:10px;
+  background:var(--sur);border:1px solid var(--bord);
+  border-radius:var(--rsm);padding:3px;
+}
+.vbtn{
+  flex:1;padding:6px 0;border:none;background:transparent;
+  font-family:'Cairo',sans-serif;font-size:11px;font-weight:600;
+  color:var(--txt2);cursor:pointer;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all .15s;
+}
+.vbtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.vbtn.active{background:var(--acc);color:#fff}
+
+/* ===== DAY FILTER ===== */
 .day-scroll{
-  display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;
-  scrollbar-width:none;
+  display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;
+  margin-bottom:10px;scrollbar-width:none;
 }
 .day-scroll::-webkit-scrollbar{display:none}
-.day-chip{
-  flex-shrink:0;padding:5px 13px;border-radius:20px;
-  background:var(--surface);border:1px solid var(--border);
-  font-size:12px;font-weight:600;font-family:'Cairo',sans-serif;
-  color:var(--text2);cursor:pointer;transition:all 0.15s;
-}
-.day-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-
-/* SIZE TOGGLE */
-.size-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.size-lbl{font-size:12px;color:var(--text3)}
-.size-pills{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:3px}
-.size-pill{
-  padding:4px 10px;border-radius:5px;border:none;background:transparent;
+.dchip{
+  flex-shrink:0;padding:4px 11px;border-radius:16px;
+  background:var(--sur);border:1px solid var(--bord);
   font-size:11px;font-weight:600;font-family:'Cairo',sans-serif;
-  color:var(--text2);cursor:pointer;transition:all 0.15s;
+  color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap;
 }
-.size-pill.active{background:var(--accent);color:#fff}
+.dchip.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
-/* GRID */
-.grid{display:grid;gap:10px}
+/* ===== SIZE TOGGLE ===== */
+.size-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.size-lbl{font-size:10px;color:var(--txt3)}
+.size-pills{display:flex;gap:3px;background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:2px}
+.spill{
+  padding:3px 9px;border-radius:5px;border:none;background:transparent;
+  font-size:10px;font-weight:600;font-family:'Cairo',sans-serif;
+  color:var(--txt2);cursor:pointer;transition:all .15s;
+}
+.spill.active{background:var(--acc);color:#fff}
+
+/* ===== CARDS ===== */
+.grid{display:grid;gap:8px}
 .grid.sm{grid-template-columns:repeat(3,minmax(0,1fr))}
 .grid.md{grid-template-columns:repeat(2,minmax(0,1fr))}
 .grid.lg{grid-template-columns:1fr}
 
-/* COURSE CARD */
-.c-card{
-  background:var(--surface);border:1px solid var(--border);
+.cc{
+  background:var(--sur);border:1px solid var(--bord);
   border-radius:var(--r);overflow:hidden;cursor:pointer;
-  transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;
-  animation:fadeIn 0.25s ease both;
+  transition:transform .18s,border-color .18s;
+  animation:fi .22s ease both;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.c-card:hover{transform:translateY(-2px);border-color:var(--border2)}
-.c-card:active{transform:scale(0.97)}
-.c-top{height:5px;width:100%}
-.c-body{padding:11px 12px}
-.c-body.sm{padding:8px 9px}
-.c-body.lg{padding:14px 16px}
-.c-name{font-weight:700;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.grid.sm .c-name{font-size:11px}
-.grid.md .c-name{font-size:13px}
-.grid.lg .c-name{font-size:15px}
-.c-sub{font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.grid.sm .c-sub{display:none}
-.c-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-.grid.sm .c-tags{display:none}
-.c-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
-.c-time{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:11px;color:var(--text2)}
-.c-time svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
-.grid.sm .c-time{margin-top:4px;font-size:10px}
-.grid.sm .c-time svg{display:none}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.cc:hover{transform:translateY(-2px);border-color:var(--bord2)}
+.cc:active{transform:scale(.97)}
+.cc-bar{height:4px;width:100%}
+.cc-body{padding:10px 11px}
+.cc-body.sm{padding:7px 8px}
+.cc-body.lg{padding:13px 14px}
+.cc-name{font-weight:700;color:var(--txt);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.grid.sm .cc-name{font-size:10px;-webkit-line-clamp:1}
+.grid.md .cc-name{font-size:12px}
+.grid.lg .cc-name{font-size:14px}
+.cc-sub{font-size:10px;color:var(--txt2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grid.sm .cc-sub{display:none}
+.cc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.grid.sm .cc-tags{display:none}
+.cc-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px}
+.cc-time{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:var(--txt2)}
+.cc-time svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.grid.sm .cc-time{font-size:9px;margin-top:3px}
+.grid.sm .cc-time svg{display:none}
 
-/* EXAM CARD special */
-.c-card.exam .c-top{background:linear-gradient(90deg,var(--exam),var(--exam2))!important}
-.c-card.exam .c-name{color:var(--text)}
-
-/* LIST VIEW */
-.list-wrap{display:flex;flex-direction:column;gap:8px}
-.l-item{
-  background:var(--surface);border:1px solid var(--border);
+/* ===== LIST VIEW ===== */
+.lw{display:flex;flex-direction:column;gap:7px}
+.li{
+  background:var(--sur);border:1px solid var(--bord);
   border-radius:var(--r);display:flex;align-items:stretch;
-  overflow:hidden;cursor:pointer;transition:all 0.15s;
-  animation:fadeIn 0.2s ease both;
+  overflow:hidden;cursor:pointer;transition:all .15s;
+  animation:fi .2s ease both;
 }
-.l-item:hover{border-color:var(--border2)}
-.l-stripe{width:4px;flex-shrink:0}
-.l-body{flex:1;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.l-left .ln{font-size:14px;font-weight:700}
-.l-left .ls{font-size:12px;color:var(--text2);margin-top:2px}
-.l-right{text-align:left;flex-shrink:0}
-.l-day{font-size:12px;font-weight:700;color:var(--accent)}
-.l-time{font-size:11px;color:var(--text2)}
-.l-room{font-size:10px;color:var(--text3);margin-top:1px}
+.li:hover{border-color:var(--bord2)}
+.li-stripe{width:4px;flex-shrink:0}
+.li-body{flex:1;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.li-left .ln{font-size:13px;font-weight:700}
+.li-left .ls{font-size:11px;color:var(--txt2);margin-top:1px}
+.li-right{text-align:left;flex-shrink:0}
+.li-day{font-size:11px;font-weight:700;color:var(--acc)}
+.li-time{font-size:10px;color:var(--txt2)}
+.li-room{font-size:9px;color:var(--txt3);margin-top:1px}
 
-/* SCHEDULE VIEW */
-.sched-wrap{display:flex;flex-direction:column;gap:14px}
-.s-day-block{}
-.s-day-header{
-  display:flex;align-items:center;gap:10px;margin-bottom:8px;
+/* ===== SCHEDULE ===== */
+.sw{display:flex;flex-direction:column;gap:12px}
+.s-dh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.s-dn{font-size:11px;font-weight:700;color:var(--txt2);white-space:nowrap}
+.s-dl{flex:1;height:1px;background:var(--bord)}
+.s-dc{font-size:9px;background:var(--sur2);color:var(--txt3);padding:2px 6px;border-radius:8px}
+.si{
+  background:var(--sur);border:1px solid var(--bord);
+  border-radius:var(--rsm);display:flex;align-items:center;
+  gap:8px;padding:8px 11px;margin-bottom:5px;cursor:pointer;
+  transition:all .15s;animation:fi .2s ease both;
 }
-.s-day-name{font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap}
-.s-day-line{flex:1;height:1px;background:var(--border)}
-.s-day-count{font-size:10px;background:var(--surface2);color:var(--text3);padding:2px 7px;border-radius:10px}
-.s-item{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-sm);display:flex;align-items:center;
-  gap:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;
-  transition:all 0.15s;animation:fadeIn 0.2s ease both;
+.si:hover{border-color:var(--bord2)}
+.si-time{font-size:10px;color:var(--txt2);min-width:68px;font-weight:600}
+.si-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.si-info .sn{font-size:12px;font-weight:700}
+.si-info .ss{font-size:10px;color:var(--txt2)}
+.conflict-w{
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);
+  border-radius:var(--rsm);padding:6px 10px;margin-bottom:8px;
+  font-size:11px;color:#f87171;display:flex;align-items:center;gap:6px;
 }
-.s-item:hover{border-color:var(--border2)}
-.s-time{font-size:11px;color:var(--text2);min-width:75px;font-weight:600}
-.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.s-info .sn{font-size:13px;font-weight:700}
-.s-info .ss{font-size:11px;color:var(--text2)}
-.s-conflict{
-  font-size:10px;background:rgba(239,68,68,0.15);color:#f87171;
-  padding:2px 7px;border-radius:6px;margin-right:auto;
-}
+.conflict-w svg{width:12px;height:12px;stroke:#f87171;fill:none;stroke-width:2;flex-shrink:0}
 
-/* EMPTY */
-.empty{text-align:center;padding:48px 20px;color:var(--text2)}
-.empty-icon{width:56px;height:56px;margin:0 auto 14px;background:var(--surface2);border-radius:16px;display:flex;align-items:center;justify-content:center}
-.empty-icon svg{width:28px;height:28px;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.empty p{font-size:14px;line-height:1.6}
-.empty small{font-size:12px;color:var(--text3)}
+/* ===== EMPTY ===== */
+.empty{text-align:center;padding:40px 20px;color:var(--txt2)}
+.empty-ico{width:48px;height:48px;margin:0 auto 12px;background:var(--sur2);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.empty-ico svg{width:24px;height:24px;stroke:var(--txt3);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.empty p{font-size:13px}.empty small{font-size:11px;color:var(--txt3)}
 
-/* BOTTOM NAV */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;
-  background:var(--bg2);border-top:1px solid var(--border);
-  display:flex;justify-content:center;gap:0;padding:8px 12px 20px;
-  z-index:100;backdrop-filter:blur(12px);
-}
-
-/* ===== MODALS ===== */
-.overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);
+/* ===== OVERLAYS ===== */
+.ov{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
   z-index:300;align-items:flex-end;justify-content:center;
-  backdrop-filter:blur(4px);
+  backdrop-filter:blur(5px);
 }
-.overlay.open{display:flex;animation:fadeOverlay 0.2s ease}
-@keyframes fadeOverlay{from{opacity:0}to{opacity:1}}
-
+.ov.open{display:flex;animation:fov .18s ease}
+@keyframes fov{from{opacity:0}to{opacity:1}}
 .sheet{
-  background:var(--bg2);border-radius:24px 24px 0 0;
-  width:100%;max-width:480px;padding:16px 18px 40px;
-  max-height:92vh;overflow-y:auto;
-  animation:slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  background:var(--bg2);border-radius:22px 22px 0 0;
+  width:100%;max-width:480px;padding:14px 16px 38px;
+  max-height:90vh;overflow-y:auto;
+  animation:su .25s cubic-bezier(.34,1.3,.64,1);
 }
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.sheet-handle{width:38px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px}
-.sheet-title{font-size:17px;font-weight:700;margin-bottom:18px;color:var(--text)}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sh{width:36px;height:4px;background:var(--bord2);border-radius:2px;margin:0 auto 16px}
+.st{font-size:16px;font-weight:700;margin-bottom:15px;color:var(--txt)}
 
-.field{margin-bottom:13px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
 .field input,.field select,.field textarea{
-  width:100%;padding:10px 13px;
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:var(--r-sm);font-size:14px;font-family:'Cairo',sans-serif;
-  color:var(--text);outline:none;transition:border-color 0.15s;
+  width:100%;padding:9px 12px;
+  background:var(--sur);border:1px solid var(--bord2);
+  border-radius:var(--rsm);font-size:13px;font-family:'Cairo',sans-serif;
+  color:var(--txt);outline:none;transition:border-color .15s;
 }
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
-.field textarea{resize:none;height:72px}
-.field select option{background:var(--bg2);color:var(--text)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--acc)}
+.field textarea{resize:none;height:60px}
+.field select option{background:var(--bg2);color:var(--txt)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.crow{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.cdot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.cdot.sel{border-color:var(--txt);transform:scale(1.18)}
+.mbtns{display:flex;gap:7px;margin-top:16px}
+.mb{flex:1;padding:11px;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .15s;border:none}
+.mb-c{background:var(--sur2);color:var(--txt2)}
+.mb-s{background:var(--acc);color:#fff}
+.mb-d{background:rgba(239,68,68,.12);color:#f87171;flex:.55}
+.mb:hover{opacity:.88}
 
-.color-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
-.cdot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.15s,border-color 0.15s}
-.cdot.sel{border-color:var(--text);transform:scale(1.2)}
-
-.modal-btns{display:flex;gap:8px;margin-top:18px}
-.mbtn{
-  flex:1;padding:12px;border-radius:var(--r-sm);
-  font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;
-  cursor:pointer;transition:all 0.15s;border:none;
-}
-.mbtn-cancel{background:var(--surface2);color:var(--text2)}
-.mbtn-save{background:var(--accent);color:#fff}
-.mbtn-del{background:rgba(239,68,68,0.15);color:#f87171;flex:0.6}
-.mbtn:hover{opacity:0.88}
-
-/* DETAIL SHEET */
-.detail-top{height:6px;border-radius:3px;width:60px;margin:0 auto 14px}
-.detail-icon-row{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.detail-icon{
-  width:52px;height:52px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.detail-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.detail-name{font-size:20px;font-weight:900;color:var(--text);line-height:1.2}
-.detail-dept{font-size:13px;color:var(--text2);margin-top:3px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
-.d-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px}
-.d-cell-lbl{font-size:10px;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px}
-.d-cell-val{font-size:14px;font-weight:700;color:var(--text)}
-.detail-notes{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:18px}
-.detail-notes-lbl{font-size:10px;color:var(--text3);margin-bottom:5px}
-.detail-notes-val{font-size:13px;color:var(--text2);line-height:1.7}
-.detail-actions{display:flex;gap:8px}
-.d-btn{
-  flex:1;padding:12px;border-radius:var(--r-sm);font-size:13px;
+/* ===== DETAIL ===== */
+.det-top{height:5px;border-radius:3px;width:56px;margin:0 auto 12px}
+.det-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.det-ico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.det-ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.det-name{font-size:18px;font-weight:900;color:var(--txt);line-height:1.2}
+.det-dept{font-size:12px;color:var(--txt2);margin-top:2px}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+.dc{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:9px 11px}
+.dcl{font-size:9px;color:var(--txt3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+.dcv{font-size:13px;font-weight:700;color:var(--txt)}
+.det-notes{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:10px 12px;margin-bottom:14px}
+.det-nl{font-size:9px;color:var(--txt3);margin-bottom:4px}
+.det-nv{font-size:12px;color:var(--txt2);line-height:1.7}
+.det-acts{display:flex;gap:7px}
+.da{
+  flex:1;padding:11px;border-radius:var(--rsm);font-size:12px;
   font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;
-  border:1px solid var(--border2);background:var(--surface);color:var(--text2);
-  transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--bord2);background:var(--sur);color:var(--txt2);
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;
 }
-.d-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.d-btn.edit{background:var(--accent);border-color:var(--accent);color:#fff}
-.d-btn.del{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:#f87171}
+.da svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.da.edit{background:var(--acc);border-color:var(--acc);color:#fff}
+.da.del{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#f87171}
 
-/* THEME PICKER */
-.theme-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:6px}
-.theme-swatch{
-  aspect-ratio:1;border-radius:10px;cursor:pointer;
-  border:2px solid transparent;transition:all 0.15s;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;
+/* ===== SETTINGS ===== */
+.theme-row{display:flex;gap:8px;margin-top:6px}
+.tsw{
+  flex:1;aspect-ratio:1.3;border-radius:10px;cursor:pointer;
+  border:2px solid transparent;transition:all .15s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;font-size:9px;font-weight:700;font-family:'Cairo',sans-serif;
 }
-.theme-swatch.sel{border-color:var(--text);transform:scale(1.1)}
+.tsw.sel{border-color:var(--acc)}
+.tsw-icon{font-size:18px}
+.lang-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:6px}
+.lo{
+  padding:9px 4px;border-radius:var(--rsm);
+  background:var(--sur);border:1px solid var(--bord2);
+  text-align:center;cursor:pointer;transition:all .15s;
+}
+.lo.sel{background:var(--acc);border-color:var(--acc);color:#fff}
+.lo-flag{font-size:20px;margin-bottom:3px}
+.lo-name{font-size:11px;font-weight:600}
 
-/* LANG PICKER */
-.lang-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
-.lang-opt{
-  padding:10px 6px;border-radius:var(--r-sm);
-  background:var(--surface);border:1px solid var(--border2);
-  text-align:center;cursor:pointer;transition:all 0.15s;
+/* ===== INSTALL BANNER ===== */
+.install-banner{
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  border-radius:var(--r);padding:12px 14px;margin-bottom:10px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:opacity .15s;
 }
-.lang-opt.sel{background:var(--accent);border-color:var(--accent);color:#fff}
-.lang-flag{font-size:22px;margin-bottom:4px}
-.lang-name{font-size:12px;font-weight:600}
-
-/* CONFLICT BADGE */
-.conflict-warn{
-  background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);
-  border-radius:var(--r-sm);padding:8px 12px;margin-bottom:10px;
-  font-size:12px;color:#f87171;display:flex;align-items:center;gap:8px;
-}
-.conflict-warn svg{width:14px;height:14px;stroke:#f87171;fill:none;stroke-width:2;flex-shrink:0}
+.install-banner:hover{opacity:.9}
+.install-banner svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ib-text .ib-t{font-size:13px;font-weight:700;color:#fff}
+.ib-text .ib-s{font-size:11px;color:rgba(255,255,255,.75)}
+.ib-arrow{margin-right:auto;color:#fff;font-size:16px}
 </style>
 </head>
-<body class="theme-dark">
-<div class="app-shell">
+<body class="th-dark">
+
+<div style="max-width:480px;margin:0 auto">
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="app-logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
+  <div class="topbar-row">
+    <div class="app-wordmark" id="app-wordmark">موادي</div>
+    <div class="topbar-right">
+      <div class="ib" onclick="playClick();openSettings()" title="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="ib add-ib" onclick="playClick();openAdd()" title="add">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
     </div>
-    <div class="logo-text" id="app-title">مواد<span>ي</span></div>
   </div>
-  <div class="topbar-actions">
-    <button class="icon-btn" onclick="openSettings()" title="settings">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+  <div class="main-tabs">
+    <button class="main-tab active" id="tab-c" onclick="playClick();switchTab('courses')">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      <span id="t-c">المواد</span>
+      <span class="tab-badge" id="tc-c">0</span>
     </button>
-    <button class="add-fab-btn" onclick="openAdd()" title="add">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <button class="main-tab" id="tab-e" onclick="playClick();switchTab('exams')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>
+      <span id="t-e">الاختبارات</span>
+      <span class="tab-badge" id="tc-e">0</span>
     </button>
   </div>
 </div>
 
-<!-- MAIN TABS -->
-<div class="main-tabs">
-  <button class="main-tab active" id="tab-courses" onclick="switchTab('courses')">
-    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-    <span id="t-courses">المواد</span>
-    <span class="tab-count" id="tc-courses">0</span>
-  </button>
-  <button class="main-tab" id="tab-exams" onclick="switchTab('exams')">
-    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="15" x2="9" y2="15"/><path d="M12 15l2 2 4-4"/></svg>
-    <span id="t-exams">الاختبارات</span>
-    <span class="tab-count" id="tc-exams">0</span>
-  </button>
+<div class="content" id="content"></div>
 </div>
 
-<!-- CONTENT -->
-<div class="content" id="main-content"></div>
-
-</div><!-- end app-shell -->
-
-<!-- ===== ADD/EDIT MODAL ===== -->
-<div class="overlay" id="add-overlay" onclick="handleOvClick(event,'add-overlay')">
-<div class="sheet" id="add-sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title" id="add-title">إضافة مادة</div>
-  <input type="hidden" id="edit-id" value="">
-  <div class="field">
-    <label id="lbl-name">اسم المادة</label>
-    <input type="text" id="f-name" placeholder="">
-  </div>
-  <div id="course-fields">
-    <div class="field">
-      <label id="lbl-doctor">الدكتور</label>
-      <input type="text" id="f-doctor">
-    </div>
-    <div class="field">
-      <label id="lbl-dept">القسم</label>
-      <input type="text" id="f-dept">
-    </div>
-    <div class="row2">
-      <div class="field">
-        <label id="lbl-day">اليوم</label>
-        <select id="f-day">
-          <option>الاثنين</option><option>الثلاثاء</option>
-          <option>الأربعاء</option><option>الخميس</option><option>الجمعة</option>
-        </select>
-      </div>
-      <div class="field">
-        <label id="lbl-room">القاعة</label>
-        <input type="text" id="f-room">
-      </div>
-    </div>
-    <div class="row2">
-      <div class="field">
-        <label id="lbl-start">البداية</label>
-        <input type="time" id="f-start" value="08:00">
-      </div>
-      <div class="field">
-        <label id="lbl-end">النهاية</label>
-        <input type="time" id="f-end" value="10:00">
-      </div>
-    </div>
-  </div>
-  <div id="exam-fields" style="display:none">
-    <div class="row2">
-      <div class="field">
-        <label id="lbl-date">التاريخ</label>
-        <input type="date" id="f-date">
-      </div>
-      <div class="field">
-        <label id="lbl-etime">الساعة</label>
-        <input type="time" id="f-etime" value="09:00">
-      </div>
-    </div>
-    <div class="field">
-      <label id="lbl-room2">القاعة</label>
-      <input type="text" id="f-room2">
-    </div>
-  </div>
-  <div class="field">
-    <label id="lbl-notes">ملاحظات</label>
-    <textarea id="f-notes" rows="2"></textarea>
-  </div>
-  <div class="field">
-    <label id="lbl-color">اللون</label>
-    <div class="color-row" id="color-row"></div>
-  </div>
-  <div class="modal-btns">
-    <button class="mbtn mbtn-del" id="del-btn" style="display:none" onclick="deleteItem()">حذف</button>
-    <button class="mbtn mbtn-cancel" onclick="closeAdd()" id="cancel-btn">إلغاء</button>
-    <button class="mbtn mbtn-save" onclick="saveItem()" id="save-btn">حفظ</button>
-  </div>
-</div>
-</div>
-
-<!-- DETAIL MODAL -->
-<div class="overlay" id="detail-overlay" onclick="handleOvClick(event,'detail-overlay')">
-<div class="sheet" id="detail-sheet">
-  <div class="sheet-handle"></div>
-  <div id="detail-content"></div>
-</div>
-</div>
-
-<!-- SETTINGS MODAL -->
-<div class="overlay" id="settings-overlay" onclick="handleOvClick(event,'settings-overlay')">
+<!-- ADD/EDIT OVERLAY -->
+<div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title" id="s-title">الإعدادات</div>
+  <div class="sh"></div>
+  <div class="st" id="add-title">إضافة مادة</div>
+  <input type="hidden" id="eid">
+  <div class="field"><label id="l-name">الاسم</label><input id="f-name" type="text"></div>
+  <div id="cf">
+    <div class="field"><label id="l-doc">الدكتور</label><input id="f-doc" type="text"></div>
+    <div class="field"><label id="l-dept">القسم</label><input id="f-dept" type="text"></div>
+    <div class="r2">
+      <div class="field"><label id="l-day">اليوم</label><select id="f-day"></select></div>
+      <div class="field"><label id="l-room">القاعة</label><input id="f-room" type="text"></div>
+    </div>
+    <div class="r2">
+      <div class="field"><label id="l-s">البداية</label><input id="f-s" type="time" value="08:00"></div>
+      <div class="field"><label id="l-e">النهاية</label><input id="f-e" type="time" value="10:00"></div>
+    </div>
+  </div>
+  <div id="ef" style="display:none">
+    <div class="r2">
+      <div class="field"><label id="l-dt">التاريخ</label><input id="f-dt" type="date"></div>
+      <div class="field"><label id="l-et">الوقت</label><input id="f-et" type="time" value="09:00"></div>
+    </div>
+    <div class="field"><label id="l-room2">القاعة</label><input id="f-room2" type="text"></div>
+  </div>
+  <div class="field"><label id="l-notes">ملاحظات</label><textarea id="f-notes"></textarea></div>
+  <div class="field"><label id="l-color">اللون</label><div class="crow" id="crow"></div></div>
+  <div class="mbtns">
+    <button class="mb mb-d" id="del-btn" style="display:none" onclick="playClick();delItem()">حذف</button>
+    <button class="mb mb-c" onclick="playClick();closeAdd()" id="btn-cancel">إلغاء</button>
+    <button class="mb mb-s" onclick="playClick();saveItem()" id="btn-save">حفظ</button>
+  </div>
+</div>
+</div>
 
+<!-- DETAIL OVERLAY -->
+<div class="ov" id="ov-det" onclick="ovClick(event,'ov-det')">
+<div class="sheet"><div class="sh"></div><div id="det-body"></div></div>
+</div>
+
+<!-- SETTINGS OVERLAY -->
+<div class="ov" id="ov-set" onclick="ovClick(event,'ov-set')">
+<div class="sheet">
+  <div class="sh"></div>
+  <div class="st" id="s-title">الإعدادات</div>
   <div class="field">
-    <label id="s-theme-lbl">الثيم</label>
-    <div class="theme-grid">
-      <div class="theme-swatch sel" style="background:#1a1a2e" data-t="theme-dark" onclick="setTheme('theme-dark',this)">🌙</div>
-      <div class="theme-swatch" style="background:#f0eff8;border:1px solid #ddd" data-t="theme-light" onclick="setTheme('theme-light',this)">☀️</div>
-      <div class="theme-swatch" style="background:#0a0a12" data-t="theme-midnight" onclick="setTheme('theme-midnight',this)">✨</div>
-      <div class="theme-swatch" style="background:#0d1a0f" data-t="theme-forest" onclick="setTheme('theme-forest',this)">🌿</div>
-      <div class="theme-swatch" style="background:#1a0d14" data-t="theme-rose" onclick="setTheme('theme-rose',this)">🌸</div>
-    </div>
-  </div>
-
-  <div class="field" style="margin-top:16px">
-    <label id="s-lang-lbl">اللغة / Language / Dil</label>
-    <div class="lang-opts">
-      <div class="lang-opt sel" data-lang="ar" onclick="setLang('ar',this)">
-        <div class="lang-flag">🇸🇦</div>
-        <div class="lang-name">العربية</div>
+    <label id="s-tl">الثيم</label>
+    <div class="theme-row">
+      <div class="tsw sel" style="background:#16162a;color:#a78bfa" data-t="th-dark" onclick="playClick();setTheme('th-dark',this)">
+        <div class="tsw-icon">🌙</div><span>داكن</span>
       </div>
-      <div class="lang-opt" data-lang="en" onclick="setLang('en',this)">
-        <div class="lang-flag">🇬🇧</div>
-        <div class="lang-name">English</div>
+      <div class="tsw" style="background:#e8e7f4;color:#6c63ff" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
+        <div class="tsw-icon">☀️</div><span>فاتح</span>
       </div>
-      <div class="lang-opt" data-lang="tr" onclick="setLang('tr',this)">
-        <div class="lang-flag">🇹🇷</div>
-        <div class="lang-name">Türkçe</div>
+      <div class="tsw" style="background:#0e0c06;color:#d4a017;border:1px solid rgba(212,160,23,.3)" data-t="th-gold" onclick="playClick();setTheme('th-gold',this)">
+        <div class="tsw-icon">✦</div><span style="color:#d4a017">ذهبي</span>
       </div>
     </div>
   </div>
-
-  <div class="modal-btns" style="margin-top:20px">
-    <button class="mbtn mbtn-save" onclick="closeSettings()">
-      <span id="s-close-btn">تم</span>
-    </button>
+  <div class="field" style="margin-top:14px">
+    <label id="s-ll">اللغة</label>
+    <div class="lang-row">
+      <div class="lo sel" data-l="ar" onclick="playClick();setLang('ar',this)"><div class="lo-flag">🇸🇦</div><div class="lo-name">العربية</div></div>
+      <div class="lo" data-l="en" onclick="playClick();setLang('en',this)"><div class="lo-flag">🇬🇧</div><div class="lo-name">English</div></div>
+      <div class="lo" data-l="tr" onclick="playClick();setLang('tr',this)"><div class="lo-flag">🇹🇷</div><div class="lo-name">Türkçe</div></div>
+    </div>
   </div>
+  <!-- PWA install hint -->
+  <div class="field" style="margin-top:14px">
+    <label id="s-il">تثبيت التطبيق</label>
+    <div style="background:var(--sur);border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--txt2);line-height:1.8" id="install-hint">
+      لتثبيت التطبيق على هاتفك:<br>
+      <strong style="color:var(--txt)">Android Chrome:</strong> اضغط ⋮ ثم "تثبيت التطبيق"<br>
+      <strong style="color:var(--txt)">iPhone Safari:</strong> اضغط 📤 ثم "إضافة إلى الشاشة الرئيسية"
+    </div>
+    <div id="install-btn-wrap" style="display:none;margin-top:8px">
+      <button class="mb mb-s" style="width:100%" onclick="installApp()" id="install-btn">تثبيت التطبيق</button>
+    </div>
+  </div>
+  <div class="mbtns"><button class="mb mb-s" onclick="playClick();closeSettings()" id="s-done">تم</button></div>
 </div>
 </div>
 
 <script>
+// ===== AUDIO =====
+let audioCtx=null;
+function playClick(){
+  try{
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);
+    o.type='sine';o.frequency.setValueAtTime(880,audioCtx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(440,audioCtx.currentTime+0.06);
+    g.gain.setValueAtTime(0.08,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.08);
+    o.start();o.stop(audioCtx.currentTime+0.08);
+  }catch(e){}
+}
+function playSuccess(){
+  try{
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    [440,554,659].forEach((f,i)=>{
+      const o=audioCtx.createOscillator();
+      const g=audioCtx.createGain();
+      o.connect(g);g.connect(audioCtx.destination);
+      o.type='sine';o.frequency.value=f;
+      const t=audioCtx.currentTime+i*0.1;
+      g.gain.setValueAtTime(0.07,t);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.15);
+      o.start(t);o.stop(t+0.15);
+    });
+  }catch(e){}
+}
+
+// ===== PWA =====
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('install-btn-wrap').style.display='block';
+  document.getElementById('install-hint').style.display='none';
+});
+async function installApp(){
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  const r=await deferredPrompt.userChoice;
+  deferredPrompt=null;
+  document.getElementById('install-btn-wrap').style.display='none';
+}
+if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){
+  document.getElementById('install-hint').innerHTML='<span style="color:var(--acc)">✓</span> التطبيق مثبت بنجاح!';
+}
+
 // ===== DATA =====
-const COLORS=[
-  {bar:'#6c63ff',bg:'rgba(108,99,255,0.15)',text:'#a78bfa'},
-  {bar:'#10b981',bg:'rgba(16,185,129,0.15)',text:'#6ee7b7'},
-  {bar:'#f59e0b',bg:'rgba(245,158,11,0.15)',text:'#fcd34d'},
-  {bar:'#ef4444',bg:'rgba(239,68,68,0.15)',text:'#fca5a5'},
-  {bar:'#3b82f6',bg:'rgba(59,130,246,0.15)',text:'#93c5fd'},
-  {bar:'#ec4899',bg:'rgba(236,72,153,0.15)',text:'#f9a8d4'},
-  {bar:'#14b8a6',bg:'rgba(20,184,166,0.15)',text:'#99f6e4'},
-  {bar:'#f97316',bg:'rgba(249,115,22,0.15)',text:'#fdba74'},
-  {bar:'#8b5cf6',bg:'rgba(139,92,246,0.15)',text:'#c4b5fd'},
-  {bar:'#64748b',bg:'rgba(100,116,139,0.15)',text:'#94a3b8'},
+const COLS=[
+  {b:'#6c63ff',bg:'rgba(108,99,255,.18)',tx:'#a78bfa'},
+  {b:'#10b981',bg:'rgba(16,185,129,.18)',tx:'#6ee7b7'},
+  {b:'#f59e0b',bg:'rgba(245,158,11,.18)',tx:'#fcd34d'},
+  {b:'#ef4444',bg:'rgba(239,68,68,.18)',tx:'#fca5a5'},
+  {b:'#3b82f6',bg:'rgba(59,130,246,.18)',tx:'#93c5fd'},
+  {b:'#ec4899',bg:'rgba(236,72,153,.18)',tx:'#f9a8d4'},
+  {b:'#14b8a6',bg:'rgba(20,184,166,.18)',tx:'#99f6e4'},
+  {b:'#f97316',bg:'rgba(249,115,22,.18)',tx:'#fdba74'},
+  {b:'#8b5cf6',bg:'rgba(139,92,246,.18)',tx:'#c4b5fd'},
+  {b:'#64748b',bg:'rgba(100,116,139,.18)',tx:'#94a3b8'},
 ];
-
-const DAYS_AR=['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
-const DAYS_EN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
-const DAYS_TR=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma'];
-
-const I18N={
-  ar:{
-    appTitle:'موادي',courses:'المواد',exams:'الاختبارات',
-    addCourse:'إضافة مادة',addExam:'إضافة اختبار',
-    editCourse:'تعديل المادة',editExam:'تعديل الاختبار',
-    name:'الاسم',doctor:'الدكتور',dept:'القسم',day:'اليوم',
-    room:'القاعة',startT:'البداية',endT:'النهاية',
-    date:'التاريخ',time:'الوقت',notes:'ملاحظات',color:'اللون',
-    cancel:'إلغاء',save:'حفظ',del:'حذف',edit:'تعديل',
-    all:'الكل',settings:'الإعدادات',theme:'الثيم',lang:'اللغة',done:'تم',
-    grid:'مربعات',list:'قائمة',schedule:'جدول',
-    small:'صغير',medium:'متوسط',large:'كبير',cardSize:'حجم البطاقات',
-    totalCourses:'مادة',days:'أيام',dept2:'تخصص',
-    noItems:'لا توجد عناصر',noItemsSub:'اضغط + لإضافة',
-    conflict:'تعارض في الوقت',
-    monday:'الاثنين',tuesday:'الثلاثاء',wednesday:'الأربعاء',thursday:'الخميس',friday:'الجمعة',
-  },
-  en:{
-    appTitle:'Mawadi',courses:'Courses',exams:'Exams',
-    addCourse:'Add Course',addExam:'Add Exam',
-    editCourse:'Edit Course',editExam:'Edit Exam',
-    name:'Name',doctor:'Instructor',dept:'Department',day:'Day',
-    room:'Room',startT:'Start',endT:'End',
-    date:'Date',time:'Time',notes:'Notes',color:'Color',
-    cancel:'Cancel',save:'Save',del:'Delete',edit:'Edit',
-    all:'All',settings:'Settings',theme:'Theme',lang:'Language',done:'Done',
-    grid:'Grid',list:'List',schedule:'Schedule',
-    small:'Small',medium:'Medium',large:'Large',cardSize:'Card Size',
-    totalCourses:'courses',days:'days',dept2:'depts',
-    noItems:'No items yet',noItemsSub:'Tap + to add',
-    conflict:'Time conflict',
-    monday:'Monday',tuesday:'Tuesday',wednesday:'Wednesday',thursday:'Thursday',friday:'Friday',
-  },
-  tr:{
-    appTitle:'Derslerim',courses:'Dersler',exams:'Sınavlar',
-    addCourse:'Ders Ekle',addExam:'Sınav Ekle',
-    editCourse:'Dersi Düzenle',editExam:'Sınavı Düzenle',
-    name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',
-    room:'Derslik',startT:'Başlangıç',endT:'Bitiş',
-    date:'Tarih',time:'Saat',notes:'Notlar',color:'Renk',
-    cancel:'İptal',save:'Kaydet',del:'Sil',edit:'Düzenle',
-    all:'Tümü',settings:'Ayarlar',theme:'Tema',lang:'Dil',done:'Tamam',
-    grid:'Izgara',list:'Liste',schedule:'Takvim',
-    small:'Küçük',medium:'Orta',large:'Büyük',cardSize:'Kart Boyutu',
-    totalCourses:'ders',days:'gün',dept2:'bölüm',
-    noItems:'Henüz öğe yok',noItemsSub:'Eklemek için + tıkla',
-    conflict:'Çakışma',
-    monday:'Pazartesi',tuesday:'Salı',wednesday:'Çarşamba',thursday:'Perşembe',friday:'Cuma',
-  }
+const DAR=['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+const DEN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+const DTR=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma'];
+const L={
+  ar:{courses:'المواد',exams:'الاختبارات',addCourse:'إضافة مادة',addExam:'إضافة اختبار',editCourse:'تعديل المادة',editExam:'تعديل الاختبار',name:'الاسم',doctor:'الدكتور',dept:'القسم',day:'اليوم',room:'القاعة',start:'البداية',end:'النهاية',date:'التاريخ',time:'الوقت',notes:'ملاحظات',color:'اللون',cancel:'إلغاء',save:'حفظ',del:'حذف',edit:'تعديل',all:'الكل',settings:'الإعدادات',theme:'الثيم',lang:'اللغة',done:'تم',grid:'مربعات',list:'قائمة',schedule:'جدول',small:'صغير',medium:'وسط',large:'كبير',size:'الحجم',total:'مادة',days:'أيام',depts:'تخصص',empty:'لا توجد عناصر',emptySub:'اضغط + للإضافة',conflict:'تعارض في الوقت',install:'تثبيت',},
+  en:{courses:'Courses',exams:'Exams',addCourse:'Add Course',addExam:'Add Exam',editCourse:'Edit Course',editExam:'Edit Exam',name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',start:'Start',end:'End',date:'Date',time:'Time',notes:'Notes',color:'Color',cancel:'Cancel',save:'Save',del:'Delete',edit:'Edit',all:'All',settings:'Settings',theme:'Theme',lang:'Language',done:'Done',grid:'Grid',list:'List',schedule:'Schedule',small:'Small',medium:'Medium',large:'Large',size:'Size',total:'courses',days:'days',depts:'depts',empty:'No items yet',emptySub:'Tap + to add',conflict:'Time conflict',install:'Install',},
+  tr:{courses:'Dersler',exams:'Sınavlar',addCourse:'Ders Ekle',addExam:'Sınav Ekle',editCourse:'Düzenle',editExam:'Düzenle',name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',start:'Başlangıç',end:'Bitiş',date:'Tarih',time:'Saat',notes:'Notlar',color:'Renk',cancel:'İptal',save:'Kaydet',del:'Sil',edit:'Düzenle',all:'Tümü',settings:'Ayarlar',theme:'Tema',lang:'Dil',done:'Tamam',grid:'Izgara',list:'Liste',schedule:'Takvim',small:'Küçük',medium:'Orta',large:'Büyük',size:'Boyut',total:'ders',days:'gün',depts:'bölüm',empty:'Henüz yok',emptySub:'+ ile ekle',conflict:'Çakışma',install:'Yükle',},
 };
-
-let lang='ar';
-let currentTab='courses';
-let view='grid';
-let filter='all';
-let cardSize='md';
-let currentTheme='theme-dark';
-let editingId=null;
-let addingType='course';
-
+let lang='ar',tab='courses',view='grid',filter='all',sz='md';
+let eid=null,addType='course',selC=0;
 let courses=[
-  {id:1,type:'course',name:'رياضيات 2',doctor:'د. محمد علي',dept:'علوم حاسوب',day:'الاثنين',start:'08:00',end:'10:00',room:'A101',notes:'',ci:0},
-  {id:2,type:'course',name:'برمجة متقدمة',doctor:'د. سارة خالد',dept:'علوم حاسوب',day:'الثلاثاء',start:'10:00',end:'12:00',room:'B204',notes:'',ci:1},
-  {id:3,type:'course',name:'قواعد بيانات',doctor:'د. أحمد سالم',dept:'علوم حاسوب',day:'الأربعاء',start:'12:00',end:'14:00',room:'C305',notes:'',ci:2},
-  {id:4,type:'course',name:'شبكات حاسوب',doctor:'د. فيصل العمري',dept:'هندسة',day:'الاثنين',start:'10:00',end:'12:00',room:'A202',notes:'',ci:3},
+  {id:1,type:'course',name:'رياضيات 2',doc:'د. محمد علي',dept:'علوم حاسوب',day:'الاثنين',s:'08:00',e:'10:00',room:'A101',notes:'',ci:0},
+  {id:2,type:'course',name:'برمجة متقدمة',doc:'د. سارة خالد',dept:'علوم حاسوب',day:'الثلاثاء',s:'10:00',e:'12:00',room:'B204',notes:'',ci:1},
+  {id:3,type:'course',name:'قواعد بيانات',doc:'د. أحمد سالم',dept:'علوم حاسوب',day:'الأربعاء',s:'12:00',e:'14:00',room:'C305',notes:'',ci:2},
+  {id:4,type:'course',name:'شبكات حاسوب',doc:'د. فيصل',dept:'هندسة',day:'الاثنين',s:'10:00',e:'12:00',room:'A202',notes:'',ci:3},
 ];
 let exams=[
-  {id:10,type:'exam',name:'اختبار رياضيات',doctor:'',dept:'',date:'2025-06-10',etime:'09:00',room:'A101',notes:'الفصول 1-5',ci:2},
+  {id:10,type:'exam',name:'اختبار رياضيات',dept:'',date:'2025-06-10',et:'09:00',room:'A101',notes:'الفصول 1-5',ci:2},
 ];
 let nid=20;
 
-function t(k){return I18N[lang][k]||k}
-function getDays(){return lang==='en'?DAYS_EN:lang==='tr'?DAYS_TR:DAYS_AR}
-function dayLabel(d){
-  const idx=DAYS_AR.indexOf(d);
-  if(idx<0)return d;
-  return getDays()[idx];
-}
-
-function items(){return currentTab==='courses'?courses:exams}
+const t=k=>L[lang][k]||k;
+function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
+function dLabel(d){const i=DAR.indexOf(d);return i<0?d:getDays()[i]}
+function items(){return tab==='courses'?courses:exams}
 
 // ===== RENDER =====
 function render(){
-  updateI18N();
-  renderStats();
-  renderContent();
-}
-
-function updateI18N(){
-  document.getElementById('app-title').innerHTML=lang==='ar'?'مواد<span>ي</span>':t('appTitle');
-  document.getElementById('t-courses').textContent=t('courses');
-  document.getElementById('t-exams').textContent=t('exams');
-  document.getElementById('tc-courses').textContent=courses.length;
-  document.getElementById('tc-exams').textContent=exams.length;
-  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.documentElement.lang=lang;
-}
-
-function renderStats(){
+  updateLabels();
   const list=items();
-  const uniqDays=new Set(list.map(c=>c.day||c.date)).size;
-  const uniqDepts=new Set(list.map(c=>c.dept).filter(Boolean)).size;
-  const s=document.getElementById('main-content');
-  // stats injected in renderContent
-}
+  const fil=filter==='all'?list:list.filter(c=>(c.day||c.date)===filter);
+  let h='';
 
-function getFilteredItems(){
-  const list=items();
-  if(filter==='all')return list;
-  return list.filter(c=>(c.day===filter)||(c.date&&c.date===filter));
-}
-
-function detectConflicts(day,start,end,excludeId){
-  return courses.filter(c=>
-    c.day===day && c.id!==excludeId &&
-    c.start<end && c.end>start
-  );
-}
-
-function renderContent(){
-  const list=items();
-  const filtered=getFilteredItems();
-  const content=document.getElementById('main-content');
-
-  let html='';
+  // Install banner (if prompt available)
+  if(deferredPrompt){
+    h+=`<div class="install-banner" onclick="installApp()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <div class="ib-text"><div class="ib-t">${t('install')} موادي</div><div class="ib-s">كتطبيق على هاتفك</div></div>
+      <div class="ib-arrow">›</div>
+    </div>`;
+  }
 
   // Stats
-  const uniqDays=new Set(list.map(c=>c.day||'').filter(Boolean)).size;
-  const uniqDepts=new Set(list.map(c=>c.dept||'').filter(Boolean)).size;
-  html+=`<div class="stats-row">
-    <div class="stat"><div class="stat-num">${list.length}</div><div class="stat-lbl">${t('totalCourses')}</div></div>
-    <div class="stat"><div class="stat-num">${uniqDays}</div><div class="stat-lbl">${t('days')}</div></div>
-    <div class="stat"><div class="stat-num">${uniqDepts||'—'}</div><div class="stat-lbl">${t('dept2')}</div></div>
+  const ud=new Set(list.map(c=>c.day||'').filter(Boolean)).size;
+  const ude=new Set(list.map(c=>c.dept||'').filter(Boolean)).size;
+  h+=`<div class="stats-row">
+    <div class="stat"><div class="stat-num">${list.length}</div><div class="stat-lbl">${t('total')}</div></div>
+    <div class="stat"><div class="stat-num">${ud}</div><div class="stat-lbl">${t('days')}</div></div>
+    <div class="stat"><div class="stat-num">${ude||'—'}</div><div class="stat-lbl">${t('depts')}</div></div>
   </div>`;
 
   // View switcher
-  html+=`<div class="view-switcher">
-    <button class="view-btn${view==='grid'?' active':''}" onclick="setView('grid')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>${t('grid')}
-    </button>
-    <button class="view-btn${view==='list'?' active':''}" onclick="setView('list')">
-      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>${t('list')}
-    </button>
-    <button class="view-btn${view==='schedule'?' active':''}" onclick="setView('schedule')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('schedule')}
-    </button>
+  h+=`<div class="vsw">
+    <button class="vbtn${view==='grid'?' active':''}" onclick="playClick();setView('grid')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>${t('grid')}</button>
+    <button class="vbtn${view==='list'?' active':''}" onclick="playClick();setView('list')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>${t('list')}</button>
+    <button class="vbtn${view==='schedule'?' active':''}" onclick="playClick();setView('schedule')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('schedule')}</button>
   </div>`;
 
   // Day filter
   const days=getDays();
-  html+=`<div class="day-scroll">
-    <button class="day-chip${filter==='all'?' active':''}" onclick="setFilter('all')">${t('all')}</button>
-    ${DAYS_AR.map((d,i)=>`<button class="day-chip${filter===d?' active':''}" onclick="setFilter('${d}')">${days[i]}</button>`).join('')}
-  </div>`;
+  h+=`<div class="day-scroll"><button class="dchip${filter==='all'?' active':''}" onclick="playClick();setFilter('all')">${t('all')}</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();setFilter('${d}')">${days[i]}</button>`).join('')}</div>`;
 
-  // Size toggle (grid only)
+  // Size toggle
   if(view==='grid'){
-    html+=`<div class="size-row">
-      <span class="size-lbl">${t('cardSize')}</span>
-      <div class="size-pills">
-        <button class="size-pill${cardSize==='sm'?' active':''}" onclick="setCardSize('sm')">${t('small')}</button>
-        <button class="size-pill${cardSize==='md'?' active':''}" onclick="setCardSize('md')">${t('medium')}</button>
-        <button class="size-pill${cardSize==='lg'?' active':''}" onclick="setCardSize('lg')">${t('large')}</button>
-      </div>
-    </div>`;
+    h+=`<div class="size-row"><span class="size-lbl">${t('size')}</span><div class="size-pills"><button class="spill${sz==='sm'?' active':''}" onclick="playClick();setSz('sm')">${t('small')}</button><button class="spill${sz==='md'?' active':''}" onclick="playClick();setSz('md')">${t('medium')}</button><button class="spill${sz==='lg'?' active':''}" onclick="playClick();setSz('lg')">${t('large')}</button></div></div>`;
   }
 
-  // Empty state
-  if(!filtered.length){
-    html+=`<div class="empty">
-      <div class="empty-icon">
-        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/></svg>
-      </div>
-      <p>${t('noItems')}</p>
-      <small>${t('noItemsSub')}</small>
-    </div>`;
+  if(!fil.length){
+    h+=`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/></svg></div><p>${t('empty')}</p><small>${t('emptySub')}</small></div>`;
   } else if(view==='grid'){
-    html+=`<div class="grid ${cardSize}">${filtered.map((c,i)=>cardHTML(c,i)).join('')}</div>`;
+    h+=`<div class="grid ${sz}">${fil.map((c,i)=>cardH(c,i)).join('')}</div>`;
   } else if(view==='list'){
-    html+=`<div class="list-wrap">${filtered.map((c,i)=>listHTML(c,i)).join('')}</div>`;
+    h+=`<div class="lw">${fil.map((c,i)=>listH(c,i)).join('')}</div>`;
   } else {
-    html+=scheduleHTML(filtered);
+    h+=schedH(fil);
   }
-
-  content.innerHTML=html;
+  document.getElementById('content').innerHTML=h;
 }
 
-function cardHTML(c,i){
-  const col=COLORS[c.ci||0];
-  const bodyClass=cardSize==='sm'?'sm':cardSize==='lg'?'lg':'';
-  const isExam=c.type==='exam';
-  const timeStr=isExam?`${c.date||''} ${c.etime||''}`:`${c.start||''}–${c.end||''}`;
-  const subInfo=isExam?c.room:(c.doctor||'');
-  const dayStr=isExam?'':dayLabel(c.day);
-  return `<div class="c-card${isExam?' exam':''}" onclick="openDetail(${c.id})" style="animation-delay:${i*0.04}s">
-    <div class="c-top" style="background:${col.bar}"></div>
-    <div class="c-body ${bodyClass}">
-      <div class="c-name" title="${c.name}">${c.name}</div>
-      <div class="c-sub">${subInfo}</div>
-      <div class="c-tags">
-        ${c.dept?`<span class="c-tag" style="background:${col.bg};color:${col.text}">${c.dept}</span>`:''}
-        ${dayStr?`<span class="c-tag" style="background:var(--surface3);color:var(--text2)">${dayStr}</span>`:''}
-      </div>
-      <div class="c-time">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
-        ${timeStr}
-      </div>
-    </div>
-  </div>`;
+function cardH(c,i){
+  const col=COLS[c.ci||0];
+  const bc=sz==='sm'?'sm':sz==='lg'?'lg':'';
+  const isE=c.type==='exam';
+  const ts=isE?`${c.date||''} ${c.et||''}`:`${c.s||''}–${c.e||''}`;
+  const sub=isE?c.room:(c.doc||'');
+  const dl=isE?'':dLabel(c.day||'');
+  return`<div class="cc${isE?' exam':''}" onclick="playClick();openDet(${c.id})" style="animation-delay:${i*.04}s">
+    <div class="cc-bar" style="background:${col.b}"></div>
+    <div class="cc-body ${bc}">
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-sub">${sub}</div>
+      <div class="cc-tags">${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}${dl?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt2)">${dl}</span>`:''}</div>
+      <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${ts}</div>
+    </div></div>`;
 }
 
-function listHTML(c,i){
-  const col=COLORS[c.ci||0];
-  const isExam=c.type==='exam';
-  const timeStr=isExam?`${c.etime||''}`:`${c.start||''}–${c.end||''}`;
-  const dayStr=isExam?(c.date||''):dayLabel(c.day||'');
-  return `<div class="l-item" onclick="openDetail(${c.id})" style="animation-delay:${i*0.04}s">
-    <div class="l-stripe" style="background:${col.bar}"></div>
-    <div class="l-body">
-      <div class="l-left">
-        <div class="ln">${c.name}</div>
-        <div class="ls">${[c.doctor,c.dept].filter(Boolean).join(' · ')}</div>
-      </div>
-      <div class="l-right">
-        <div class="l-day">${dayStr}</div>
-        <div class="l-time">${timeStr}</div>
-        ${c.room?`<div class="l-room">${c.room}</div>`:''}
-      </div>
-    </div>
-  </div>`;
+function listH(c,i){
+  const col=COLS[c.ci||0];
+  const isE=c.type==='exam';
+  const ts=isE?c.et:`${c.s||''}–${c.e||''}`;
+  const dl=isE?(c.date||''):dLabel(c.day||'');
+  return`<div class="li" onclick="playClick();openDet(${c.id})" style="animation-delay:${i*.04}s">
+    <div class="li-stripe" style="background:${col.b}"></div>
+    <div class="li-body">
+      <div class="li-left"><div class="ln">${c.name}</div><div class="ls">${[c.doc,c.dept].filter(Boolean).join(' · ')}</div></div>
+      <div class="li-right"><div class="li-day">${dl}</div><div class="li-time">${ts}</div>${c.room?`<div class="li-room">${c.room}</div>`:''}</div>
+    </div></div>`;
 }
 
-function scheduleHTML(filtered){
-  // Group by day, sort by time, detect conflicts
-  const byDay={};
-  DAYS_AR.forEach(d=>{byDay[d]=[]});
-  filtered.forEach(c=>{
-    const d=c.day||'الاثنين';
-    if(!byDay[d])byDay[d]=[];
-    byDay[d].push(c);
-  });
-
-  const activeDays=DAYS_AR.filter(d=>byDay[d].length>0&&(filter==='all'||filter===d));
-  if(!activeDays.length)return'<div class="empty"><p>—</p></div>';
-
-  let html='<div class="sched-wrap">';
-  activeDays.forEach(day=>{
-    const dc=byDay[day].sort((a,b)=>(a.start||'').localeCompare(b.start||''));
-    const count=dc.length;
-    html+=`<div class="s-day-block">
-      <div class="s-day-header">
-        <span class="s-day-name">${dayLabel(day)}</span>
-        <div class="s-day-line"></div>
-        <span class="s-day-count">${count}</span>
-      </div>`;
-
-    // detect conflicts
-    const conflicts=new Set();
+function schedH(fil){
+  const byDay={};DAR.forEach(d=>{byDay[d]=[]});
+  fil.forEach(c=>{const d=c.day||DAR[0];if(byDay[d])byDay[d].push(c)});
+  const active=DAR.filter(d=>byDay[d].length>0&&(filter==='all'||filter===d));
+  if(!active.length)return'';
+  let h='<div class="sw">';
+  active.forEach(day=>{
+    const dc=byDay[day].sort((a,b)=>(a.s||'').localeCompare(b.s||''));
+    const conf=new Set();
     for(let a=0;a<dc.length;a++)for(let b=a+1;b<dc.length;b++){
-      if(dc[a].start<dc[b].end&&dc[a].end>dc[b].start){conflicts.add(dc[a].id);conflicts.add(dc[b].id)}
+      if((dc[a].s||'')<(dc[b].e||'')&&(dc[a].e||'')>(dc[b].s||'')){conf.add(dc[a].id);conf.add(dc[b].id)}
     }
-
-    if(conflicts.size>0){
-      html+=`<div class="conflict-warn">
-        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        ${t('conflict')}
-      </div>`;
-    }
-
+    h+=`<div><div class="s-dh"><span class="s-dn">${dLabel(day)}</span><div class="s-dl"></div><span class="s-dc">${dc.length}</span></div>`;
+    if(conf.size)h+=`<div class="conflict-w"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${t('conflict')}</div>`;
     dc.forEach(c=>{
-      const col=COLORS[c.ci||0];
-      const timeStr=`${c.start||''}–${c.end||''}`;
-      html+=`<div class="s-item" onclick="openDetail(${c.id})">
-        <div class="s-time">${timeStr}</div>
-        <div class="s-dot" style="background:${col.bar}"></div>
-        <div class="s-info">
-          <div class="sn">${c.name}</div>
-          <div class="ss">${[c.room?`${c.room}`:'',(c.doctor||'')].filter(Boolean).join(' · ')}</div>
-        </div>
-        ${conflicts.has(c.id)?`<span class="s-conflict">⚠</span>`:''}
+      const col=COLS[c.ci||0];
+      h+=`<div class="si" onclick="playClick();openDet(${c.id})">
+        <div class="si-time">${c.s||''}–${c.e||''}</div>
+        <div class="si-dot" style="background:${col.b}"></div>
+        <div class="si-info"><div class="sn">${c.name}</div><div class="ss">${[c.room,c.doc].filter(Boolean).join(' · ')}</div></div>
+        ${conf.has(c.id)?`<span style="font-size:12px;color:#f87171">⚠</span>`:''}
       </div>`;
     });
-    html+='</div>';
+    h+='</div>';
   });
-  html+='</div>';
-  return html;
-}
-
-// ===== ACTIONS =====
-function setView(v){view=v;render()}
-function setFilter(f){filter=f;render()}
-function setCardSize(s){cardSize=s;render()}
-function switchTab(tab){
-  currentTab=tab;
-  filter='all';
-  document.getElementById('tab-courses').classList.toggle('active',tab==='courses');
-  document.getElementById('tab-exams').classList.toggle('active',tab==='exams');
-  render();
+  return h+'</div>';
 }
 
 // ===== DETAIL =====
-function findItem(id){return [...courses,...exams].find(c=>c.id===id)}
-
-function openDetail(id){
-  const c=findItem(id);
-  if(!c)return;
-  const col=COLORS[c.ci||0];
-  const isExam=c.type==='exam';
-  const rows=isExam?[
-    {lbl:t('date'),val:c.date||'—'},
-    {lbl:t('time'),val:c.etime||'—'},
-    {lbl:t('room'),val:c.room||'—'},
-    {lbl:t('dept'),val:c.dept||'—'},
+function findItem(id){return[...courses,...exams].find(c=>c.id===id)}
+function openDet(id){
+  const c=findItem(id);if(!c)return;
+  const col=COLS[c.ci||0];
+  const isE=c.type==='exam';
+  const icon=isE?`<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>`:`<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>`;
+  const rows=isE?[
+    {l:t('date'),v:c.date||'—'},{l:t('time'),v:c.et||'—'},
+    {l:t('room'),v:c.room||'—'},{l:t('dept'),v:c.dept||'—'},
   ]:[
-    {lbl:t('day'),val:dayLabel(c.day||'')},
-    {lbl:`${t('startT')} – ${t('endT')}`,val:`${c.start||''}–${c.end||''}`},
-    {lbl:t('room'),val:c.room||'—'},
-    {lbl:t('doctor'),val:c.doctor||'—'},
+    {l:t('day'),v:dLabel(c.day||'')},{l:`${t('start')}–${t('end')}`,v:`${c.s||''}–${c.e||''}`},
+    {l:t('room'),v:c.room||'—'},{l:t('doctor'),v:c.doc||'—'},
   ];
-
-  const icon=isExam?
-    `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 15l2 2 4-4"/></svg>`:
-    `<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>`;
-
-  document.getElementById('detail-content').innerHTML=`
-    <div class="detail-top" style="background:${col.bar}"></div>
-    <div class="detail-icon-row">
-      <div class="detail-icon" style="background:${col.bar}">${icon}</div>
-      <div>
-        <div class="detail-name">${c.name}</div>
-        <div class="detail-dept">${c.dept||''}</div>
-      </div>
+  document.getElementById('det-body').innerHTML=`
+    <div class="det-top" style="background:${col.b}"></div>
+    <div class="det-head">
+      <div class="det-ico" style="background:${col.b}">${icon}</div>
+      <div><div class="det-name">${c.name}</div><div class="det-dept">${c.dept||''}</div></div>
     </div>
-    <div class="detail-grid">
-      ${rows.map(r=>`<div class="d-cell"><div class="d-cell-lbl">${r.lbl}</div><div class="d-cell-val">${r.val}</div></div>`).join('')}
-    </div>
-    ${c.notes?`<div class="detail-notes"><div class="detail-notes-lbl">${t('notes')}</div><div class="detail-notes-val">${c.notes}</div></div>`:''}
-    <div class="detail-actions">
-      <button class="d-btn del" onclick="closeDetail();openEdit(${c.id});setTimeout(()=>document.getElementById('del-btn').click(),100)">
-        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1V6"/></svg>
-        ${t('del')}
+    <div class="det-grid">${rows.map(r=>`<div class="dc"><div class="dcl">${r.l}</div><div class="dcv">${r.v}</div></div>`).join('')}</div>
+    ${c.notes?`<div class="det-notes"><div class="det-nl">${t('notes')}</div><div class="det-nv">${c.notes}</div></div>`:''}
+    <div class="det-acts">
+      <button class="da del" onclick="playClick();closeDet();setTimeout(()=>{openEdit(${c.id});setTimeout(()=>delItem(),50)},100)">
+        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/></svg>${t('del')}
       </button>
-      <button class="d-btn edit" onclick="closeDetail();openEdit(${c.id})">
-        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        ${t('edit')}
+      <button class="da edit" onclick="playClick();closeDet();openEdit(${c.id})">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>${t('edit')}
       </button>
-    </div>
-  `;
-  document.getElementById('detail-overlay').classList.add('open');
+    </div>`;
+  document.getElementById('ov-det').classList.add('open');
 }
-function closeDetail(){document.getElementById('detail-overlay').classList.remove('open')}
+function closeDet(){document.getElementById('ov-det').classList.remove('open')}
 
-// ===== ADD / EDIT =====
+// ===== ADD/EDIT =====
+function buildDaySelect(){
+  const s=document.getElementById('f-day');
+  if(!s)return;
+  const cur=s.value;
+  const days=getDays();
+  s.innerHTML=DAR.map((d,i)=>`<option value="${d}"${d===cur?' selected':''}>${days[i]}</option>`).join('');
+}
 function openAdd(){
-  addingType=currentTab==='exams'?'exam':'course';
-  editingId=null;
-  document.getElementById('edit-id').value='';
-  document.getElementById('add-title').textContent=addingType==='exam'?t('addExam'):t('addCourse');
-  document.getElementById('course-fields').style.display=addingType==='course'?'':'none';
-  document.getElementById('exam-fields').style.display=addingType==='exam'?'':'none';
+  addType=tab==='exams'?'exam':'course';eid=null;
+  document.getElementById('eid').value='';
+  document.getElementById('add-title').textContent=addType==='exam'?t('addExam'):t('addCourse');
+  document.getElementById('cf').style.display=addType==='course'?'':'none';
+  document.getElementById('ef').style.display=addType==='exam'?'':'none';
   document.getElementById('del-btn').style.display='none';
-  clearForm();
-  buildColorRow(0);
-  document.getElementById('add-overlay').classList.add('open');
+  clearForm();buildColorRow(0);buildDaySelect();
+  document.getElementById('ov-add').classList.add('open');
 }
-
 function openEdit(id){
-  const c=findItem(id);
-  if(!c)return;
-  addingType=c.type;
-  editingId=id;
-  document.getElementById('edit-id').value=id;
+  const c=findItem(id);if(!c)return;
+  addType=c.type;eid=id;
+  document.getElementById('eid').value=id;
   document.getElementById('add-title').textContent=c.type==='exam'?t('editExam'):t('editCourse');
-  document.getElementById('course-fields').style.display=c.type==='course'?'':'none';
-  document.getElementById('exam-fields').style.display=c.type==='exam'?'':'none';
+  document.getElementById('cf').style.display=c.type==='course'?'':'none';
+  document.getElementById('ef').style.display=c.type==='exam'?'':'none';
   document.getElementById('del-btn').style.display='inline-flex';
-
   document.getElementById('f-name').value=c.name||'';
   document.getElementById('f-notes').value=c.notes||'';
   if(c.type==='course'){
-    document.getElementById('f-doctor').value=c.doctor||'';
+    document.getElementById('f-doc').value=c.doc||'';
     document.getElementById('f-dept').value=c.dept||'';
-    document.getElementById('f-day').value=c.day||'الاثنين';
     document.getElementById('f-room').value=c.room||'';
-    document.getElementById('f-start').value=c.start||'08:00';
-    document.getElementById('f-end').value=c.end||'10:00';
+    document.getElementById('f-s').value=c.s||'08:00';
+    document.getElementById('f-e').value=c.e||'10:00';
+    buildDaySelect();document.getElementById('f-day').value=c.day||DAR[0];
   } else {
-    document.getElementById('f-date').value=c.date||'';
-    document.getElementById('f-etime').value=c.etime||'09:00';
+    document.getElementById('f-dt').value=c.date||'';
+    document.getElementById('f-et').value=c.et||'09:00';
     document.getElementById('f-room2').value=c.room||'';
   }
   buildColorRow(c.ci||0);
-  document.getElementById('add-overlay').classList.add('open');
+  document.getElementById('ov-add').classList.add('open');
 }
-
 function clearForm(){
-  ['f-name','f-doctor','f-dept','f-room','f-room2','f-notes'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('f-start').value='08:00';
-  document.getElementById('f-end').value='10:00';
-  const today=new Date().toISOString().split('T')[0];
-  const fd=document.getElementById('f-date');if(fd)fd.value=today;
-  document.getElementById('f-etime').value='09:00';
+  ['f-name','f-doc','f-dept','f-room','f-room2','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('f-s').value='08:00';document.getElementById('f-e').value='10:00';
+  document.getElementById('f-dt').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-et').value='09:00';
 }
-
-let selColor=0;
 function buildColorRow(sel){
-  selColor=sel;
-  document.getElementById('color-row').innerHTML=COLORS.map((c,i)=>
-    `<div class="cdot${i===sel?' sel':''}" style="background:${c.bar}" onclick="pickColor(${i})"></div>`
-  ).join('');
+  selC=sel;
+  document.getElementById('crow').innerHTML=COLS.map((c,i)=>`<div class="cdot${i===sel?' sel':''}" style="background:${c.b}" onclick="pickC(${i})"></div>`).join('');
 }
-function pickColor(i){selColor=i;buildColorRow(i)}
-
+function pickC(i){selC=i;buildColorRow(i)}
 function saveItem(){
   const name=document.getElementById('f-name').value.trim();
-  if(!name){alert(lang==='ar'?'أدخل الاسم':lang==='tr'?'Ad girin':'Enter a name');return}
-
-  if(editingId!==null){
-    const arr=addingType==='course'?courses:exams;
-    const idx=arr.findIndex(c=>c.id===editingId);
+  if(!name)return;
+  if(eid!==null){
+    const arr=addType==='course'?courses:exams;
+    const idx=arr.findIndex(c=>c.id===eid);
     if(idx>=0){
-      if(addingType==='course'){
-        arr[idx]={...arr[idx],name,doctor:document.getElementById('f-doctor').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,start:document.getElementById('f-start').value,end:document.getElementById('f-end').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selColor};
-      } else {
-        arr[idx]={...arr[idx],name,date:document.getElementById('f-date').value,etime:document.getElementById('f-etime').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selColor};
-      }
+      if(addType==='course')arr[idx]={...arr[idx],name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC};
+      else arr[idx]={...arr[idx],name,date:document.getElementById('f-dt').value,et:document.getElementById('f-et').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC};
     }
   } else {
-    if(addingType==='course'){
-      courses.push({id:nid++,type:'course',name,doctor:document.getElementById('f-doctor').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,start:document.getElementById('f-start').value,end:document.getElementById('f-end').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selColor});
-    } else {
-      exams.push({id:nid++,type:'exam',name,dept:document.getElementById('f-dept')?document.getElementById('f-dept').value.trim():'',date:document.getElementById('f-date').value,etime:document.getElementById('f-etime').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selColor});
-    }
+    if(addType==='course')courses.push({id:nid++,type:'course',name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
+    else exams.push({id:nid++,type:'exam',name,dept:'',date:document.getElementById('f-dt').value,et:document.getElementById('f-et').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
   }
-  closeAdd();
-  render();
+  playSuccess();closeAdd();render();
 }
-
-function deleteItem(){
-  if(!confirm(lang==='ar'?'حذف هذا العنصر؟':lang==='tr'?'Silmek istiyor musunuz?':'Delete this item?'))return;
-  courses=courses.filter(c=>c.id!==editingId);
-  exams=exams.filter(c=>c.id!==editingId);
-  closeAdd();
-  render();
+function delItem(){
+  if(!confirm(lang==='ar'?'حذف؟':lang==='tr'?'Sil?':'Delete?'))return;
+  courses=courses.filter(c=>c.id!==eid);exams=exams.filter(c=>c.id!==eid);
+  closeAdd();render();
 }
-
-function closeAdd(){document.getElementById('add-overlay').classList.remove('open')}
+function closeAdd(){document.getElementById('ov-add').classList.remove('open')}
 
 // ===== SETTINGS =====
-function openSettings(){document.getElementById('settings-overlay').classList.add('open')}
-function closeSettings(){document.getElementById('settings-overlay').classList.remove('open')}
-
+function openSettings(){document.getElementById('ov-set').classList.add('open')}
+function closeSettings(){document.getElementById('ov-set').classList.remove('open')}
 function setTheme(cls,el){
   document.body.className=cls;
-  currentTheme=cls;
-  document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('sel'));
+  document.querySelectorAll('.tsw').forEach(s=>s.classList.remove('sel'));
   el.classList.add('sel');
+  document.getElementById('meta-theme').content=getComputedStyle(document.body).getPropertyValue('--bg').trim();
 }
-
 function setLang(l,el){
   lang=l;
-  document.querySelectorAll('.lang-opt').forEach(s=>s.classList.remove('sel'));
-  el.classList.add('sel');
-  // update day select options
-  const sel=document.getElementById('f-day');
-  if(sel){
-    const cur=sel.value;
-    const days=getDays();
-    sel.innerHTML=DAYS_AR.map((d,i)=>`<option value="${d}"${d===cur?' selected':''}>${days[i]}</option>`).join('');
-  }
-  render();
-  // update settings labels
+  document.querySelectorAll('.lo').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');
+  document.documentElement.dir=l==='ar'?'rtl':'ltr';document.documentElement.lang=l;
+  buildDaySelect();updateLabels();render();
+}
+function updateLabels(){
+  document.getElementById('app-wordmark').textContent=lang==='en'?'Mawadi':lang==='tr'?'Derslerim':'موادي';
+  document.getElementById('t-c').textContent=t('courses');
+  document.getElementById('t-e').textContent=t('exams');
+  document.getElementById('tc-c').textContent=courses.length;
+  document.getElementById('tc-e').textContent=exams.length;
   document.getElementById('s-title').textContent=t('settings');
-  document.getElementById('s-theme-lbl').textContent=t('theme');
-  document.getElementById('s-close-btn').textContent=t('done');
+  document.getElementById('s-tl').textContent=t('theme');
+  document.getElementById('s-ll').textContent=t('lang');
+  document.getElementById('s-done').textContent=t('done');
+  // install hint label
+  const sil=document.getElementById('s-il');if(sil)sil.textContent=t('install');
+  // update add modal labels if open
+  ['l-name','l-doc','l-dept','l-day','l-room','l-s','l-e','l-dt','l-et','l-room2','l-notes','l-color'].forEach((id,i)=>{
+    const keys=['name','doctor','dept','day','room','start','end','date','time','room','notes','color'];
+    const el=document.getElementById(id);if(el)el.textContent=t(keys[i]||'');
+  });
+  const bc=document.getElementById('btn-cancel');if(bc)bc.textContent=t('cancel');
+  const bs=document.getElementById('btn-save');if(bs)bs.textContent=t('save');
+  const db=document.getElementById('del-btn');if(db)db.textContent=t('del');
 }
+// ===== MISC =====
+function setView(v){view=v;render()}
+function setFilter(f){filter=f;render()}
+function setSz(s){sz=s;render()}
+function switchTab(t2){tab=t2;filter='all';document.getElementById('tab-c').classList.toggle('active',t2==='courses');document.getElementById('tab-e').classList.toggle('active',t2==='exams');render()}
+function ovClick(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open')}
 
-// ===== BACKDROP CLICK =====
-function handleOvClick(e,id){
-  if(e.target===document.getElementById(id)){
-    document.getElementById(id).classList.remove('open');
-  }
-}
-
-// ===== INIT =====
 render();
 </script>
 </body>
