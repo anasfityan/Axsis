@@ -38,11 +38,11 @@
   --acc:#6c63ff;--acc2:#a78bfa;
 }
 .th-gold{
-  --bg:#0e0c06;--bg2:#16130a;--bg3:#1f1a0e;
-  --sur:#1f1a0e;--sur2:#27210f;--sur3:#302816;
-  --bord:rgba(255,210,80,0.1);--bord2:rgba(255,210,80,0.2);
-  --txt:#fff8e0;--txt2:#c8a84b;--txt3:#806830;
-  --acc:#d4a017;--acc2:#f5c842;
+  --bg:#111008;--bg2:#191508;--bg3:#201c0c;
+  --sur:#201c0c;--sur2:#272110;--sur3:#2e2614;
+  --bord:rgba(196,160,80,0.1);--bord2:rgba(196,160,80,0.18);
+  --txt:#f0e8d0;--txt2:#8a7850;--txt3:#504530;
+  --acc:#b89050;--acc2:#d4b070;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -515,18 +515,18 @@ if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').
 }
 
 // ===== DATA =====
-// Soft muted palette — elegant, not loud
+// Calm muted palette — unified low-saturation tones
 const COLS=[
-  {b:'#7c8fa8',bg:'rgba(124,143,168,.15)',tx:'#a8bdd4'},  // slate blue
-  {b:'#8a9e8a',bg:'rgba(138,158,138,.15)',tx:'#b0c4b0'},  // sage green
-  {b:'#a89070',bg:'rgba(168,144,112,.15)',tx:'#c9b090'},  // warm sand
-  {b:'#9080a8',bg:'rgba(144,128,168,.15)',tx:'#b8a8cc'},  // muted lavender
-  {b:'#7a9a96',bg:'rgba(122,154,150,.15)',tx:'#a4c4c0'},  // dusty teal
-  {b:'#a08888',bg:'rgba(160,136,136,.15)',tx:'#c4a8a8'},  // muted rose
-  {b:'#7888a4',bg:'rgba(120,136,164,.15)',tx:'#a0b4cc'},  // steel blue
-  {b:'#9a9478',bg:'rgba(154,148,120,.15)',tx:'#bab49a'},  // olive
-  {b:'#8898a8',bg:'rgba(136,152,168,.15)',tx:'#aabbc8'},  // grayish blue
-  {b:'#787878',bg:'rgba(120,120,120,.15)',tx:'#a8a8a8'},  // neutral gray
+  {b:'#7a8e98',bg:'rgba(122,142,152,.13)',tx:'#9eb4be'},
+  {b:'#7e9880',bg:'rgba(126,152,128,.13)',tx:'#a0bca2'},
+  {b:'#9a8a74',bg:'rgba(154,138,116,.13)',tx:'#b8a890'},
+  {b:'#887898',bg:'rgba(136,120,152,.13)',tx:'#a89cb8'},
+  {b:'#749490',bg:'rgba(116,148,144,.13)',tx:'#96b2ae'},
+  {b:'#988080',bg:'rgba(152,128,128,.13)',tx:'#b89e9e'},
+  {b:'#708490',bg:'rgba(112,132,144,.13)',tx:'#92a8b4'},
+  {b:'#909076',bg:'rgba(144,144,118,.13)',tx:'#b0b094'},
+  {b:'#807890',bg:'rgba(128,120,144,.13)',tx:'#a09ab2'},
+  {b:'#808080',bg:'rgba(128,128,128,.13)',tx:'#a0a0a0'},
 ];
 const DAR=['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
 const DEN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
@@ -538,16 +538,38 @@ const L={
 };
 let lang='ar',tab='courses',view='grid',filter='all',sz='md';
 let eid=null,addType='course',selC=0;
-let courses=[
+
+// localStorage helpers
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):def;}catch(e){return def;}}
+function lsSave(){
+  try{
+    localStorage.setItem('mawadi_courses',JSON.stringify(courses));
+    localStorage.setItem('mawadi_exams',JSON.stringify(exams));
+    localStorage.setItem('mawadi_nid',JSON.stringify(nid));
+    localStorage.setItem('mawadi_lang',lang);
+    localStorage.setItem('mawadi_theme',document.body.className);
+    localStorage.setItem('mawadi_view',view);
+    localStorage.setItem('mawadi_sz',sz);
+  }catch(e){}
+}
+
+// Load saved data or use defaults
+let courses=lsGet('mawadi_courses',[
   {id:1,type:'course',name:'رياضيات 2',doc:'د. محمد علي',dept:'علوم حاسوب',day:'الاثنين',s:'08:00',e:'10:00',room:'A101',notes:'',ci:0},
   {id:2,type:'course',name:'برمجة متقدمة',doc:'د. سارة خالد',dept:'علوم حاسوب',day:'الثلاثاء',s:'10:00',e:'12:00',room:'B204',notes:'',ci:1},
-  {id:3,type:'course',name:'قواعد بيانات',doc:'د. أحمد سالم',dept:'علوم حاسوب',day:'الأربعاء',s:'12:00',e:'14:00',room:'C305',notes:'',ci:2},
-  {id:4,type:'course',name:'شبكات حاسوب',doc:'د. فيصل',dept:'هندسة',day:'الاثنين',s:'10:00',e:'12:00',room:'A202',notes:'',ci:3},
-];
-let exams=[
-  {id:10,type:'exam',name:'اختبار رياضيات',dept:'',date:'2025-06-10',et:'09:00',room:'A101',notes:'الفصول 1-5',ci:2},
-];
-let nid=20;
+]);
+let exams=lsGet('mawadi_exams',[]);
+let nid=lsGet('mawadi_nid',20);
+
+// Restore settings
+const savedTheme=localStorage.getItem('mawadi_theme');
+if(savedTheme)document.body.className=savedTheme;
+const savedLang=localStorage.getItem('mawadi_lang');
+if(savedLang)lang=savedLang;
+const savedView=localStorage.getItem('mawadi_view');
+if(savedView)view=savedView;
+const savedSz=localStorage.getItem('mawadi_sz');
+if(savedSz)sz=savedSz;
 
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -767,12 +789,12 @@ function saveItem(){
     if(addType==='course')courses.push({id:nid++,type:'course',name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
     else exams.push({id:nid++,type:'exam',name,dept:'',date:document.getElementById('f-dt').value,et:document.getElementById('f-et').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
   }
-  playSuccess();closeAdd();render();
+  playSuccess();lsSave();closeAdd();render();
 }
 function delItem(){
   if(!confirm(lang==='ar'?'حذف؟':lang==='tr'?'Sil?':'Delete?'))return;
   courses=courses.filter(c=>c.id!==eid);exams=exams.filter(c=>c.id!==eid);
-  closeAdd();render();
+  lsSave();closeAdd();render();
 }
 function closeAdd(){document.getElementById('ov-add').classList.remove('open')}
 
@@ -783,13 +805,13 @@ function setTheme(cls,el){
   document.body.className=cls;
   document.querySelectorAll('.tsw').forEach(s=>s.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('meta-theme').content=getComputedStyle(document.body).getPropertyValue('--bg').trim();
+  document.getElementById('meta-theme').content=getComputedStyle(document.body).getPropertyValue('--bg').trim();lsSave();
 }
 function setLang(l,el){
   lang=l;
   document.querySelectorAll('.lo').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');
   document.documentElement.dir=l==='ar'?'rtl':'ltr';document.documentElement.lang=l;
-  buildDaySelect();updateLabels();render();
+  buildDaySelect();updateLabels();lsSave();render();
 }
 function updateLabels(){
   // Two-color wordmark
