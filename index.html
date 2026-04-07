@@ -66,12 +66,10 @@ body{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:10px;
 }
-.app-wordmark{
-  font-size:22px;font-weight:900;letter-spacing:-1px;
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
+.app-wordmark{font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1}
+.wm1{color:var(--txt)}
+.wm2{color:var(--acc)}
+.app-greeting{font-size:11px;color:var(--txt2);margin-top:1px;font-weight:400}
 .topbar-right{display:flex;align-items:center;gap:6px}
 .ib{
   width:34px;height:34px;border-radius:9px;
@@ -352,7 +350,10 @@ body{
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-row">
-    <div class="app-wordmark" id="app-wordmark">موادي</div>
+    <div>
+      <div class="app-wordmark"><span class="wm1" id="wm1">موا</span><span class="wm2" id="wm2">دي</span></div>
+      <div class="app-greeting" id="app-greeting">صباح الخير</div>
+    </div>
     <div class="topbar-right">
       <div class="ib" onclick="playClick();openSettings()" title="settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -514,17 +515,18 @@ if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').
 }
 
 // ===== DATA =====
+// Soft muted palette — elegant, not loud
 const COLS=[
-  {b:'#6c63ff',bg:'rgba(108,99,255,.18)',tx:'#a78bfa'},
-  {b:'#10b981',bg:'rgba(16,185,129,.18)',tx:'#6ee7b7'},
-  {b:'#f59e0b',bg:'rgba(245,158,11,.18)',tx:'#fcd34d'},
-  {b:'#ef4444',bg:'rgba(239,68,68,.18)',tx:'#fca5a5'},
-  {b:'#3b82f6',bg:'rgba(59,130,246,.18)',tx:'#93c5fd'},
-  {b:'#ec4899',bg:'rgba(236,72,153,.18)',tx:'#f9a8d4'},
-  {b:'#14b8a6',bg:'rgba(20,184,166,.18)',tx:'#99f6e4'},
-  {b:'#f97316',bg:'rgba(249,115,22,.18)',tx:'#fdba74'},
-  {b:'#8b5cf6',bg:'rgba(139,92,246,.18)',tx:'#c4b5fd'},
-  {b:'#64748b',bg:'rgba(100,116,139,.18)',tx:'#94a3b8'},
+  {b:'#7c8fa8',bg:'rgba(124,143,168,.15)',tx:'#a8bdd4'},  // slate blue
+  {b:'#8a9e8a',bg:'rgba(138,158,138,.15)',tx:'#b0c4b0'},  // sage green
+  {b:'#a89070',bg:'rgba(168,144,112,.15)',tx:'#c9b090'},  // warm sand
+  {b:'#9080a8',bg:'rgba(144,128,168,.15)',tx:'#b8a8cc'},  // muted lavender
+  {b:'#7a9a96',bg:'rgba(122,154,150,.15)',tx:'#a4c4c0'},  // dusty teal
+  {b:'#a08888',bg:'rgba(160,136,136,.15)',tx:'#c4a8a8'},  // muted rose
+  {b:'#7888a4',bg:'rgba(120,136,164,.15)',tx:'#a0b4cc'},  // steel blue
+  {b:'#9a9478',bg:'rgba(154,148,120,.15)',tx:'#bab49a'},  // olive
+  {b:'#8898a8',bg:'rgba(136,152,168,.15)',tx:'#aabbc8'},  // grayish blue
+  {b:'#787878',bg:'rgba(120,120,120,.15)',tx:'#a8a8a8'},  // neutral gray
 ];
 const DAR=['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
 const DEN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
@@ -790,7 +792,15 @@ function setLang(l,el){
   buildDaySelect();updateLabels();render();
 }
 function updateLabels(){
-  document.getElementById('app-wordmark').textContent=lang==='en'?'Mawadi':lang==='tr'?'Derslerim':'موادي';
+  // Two-color wordmark
+  const wmData={ar:['موا','دي'],en:['Mawa','di'],tr:['Ders','lerim']};
+  const wm=wmData[lang]||wmData.ar;
+  const wm1=document.getElementById('wm1');const wm2=document.getElementById('wm2');
+  if(wm1)wm1.textContent=wm[0];if(wm2)wm2.textContent=wm[1];
+  // Greeting by time
+  const h=new Date().getHours();
+  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi öğlenler ☀️':'İyi akşamlar 🌙'};
+  const gel=document.getElementById('app-greeting');if(gel)gel.textContent=greet[lang];
   document.getElementById('t-c').textContent=t('courses');
   document.getElementById('t-e').textContent=t('exams');
   document.getElementById('tc-c').textContent=courses.length;
