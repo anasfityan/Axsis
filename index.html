@@ -7,372 +7,307 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
-<meta name="application-name" content="موادي">
-<meta name="theme-color" id="meta-theme" content="#0f0f1a">
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;موادي — University Planner&quot;,&quot;short_name&quot;:&quot;موادي&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0f0f1a&quot;,&quot;theme_color&quot;:&quot;#6c63ff&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%236c63ff'/><text y='340' font-size='280' text-anchor='middle' x='256' fill='white' font-family='serif'>م</text></svg>&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any maskable&quot;}]}">
+<meta name="theme-color" id="meta-theme" content="#1c1c1e">
 <title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-/* ===== THEMES ===== */
+/* ===== iOS SYSTEM COLORS ===== */
+/* dark (default) */
 :root{
-  --bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;
-  --sur:#1e1e35;--sur2:#252540;--sur3:#2e2e50;
-  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.14);
-  --txt:#f0f0ff;--txt2:#8888b8;--txt3:#4a4a70;
-  --acc:#6c63ff;--acc2:#a78bfa;
-  --r:12px;--rsm:8px;--rlg:18px;
+  --bg:#000000;--bg2:#1c1c1e;--bg3:#2c2c2e;
+  --sur:#1c1c1e;--sur2:#2c2c2e;--sur3:#3a3a3c;
+  --bord:rgba(255,255,255,0.08);--bord2:rgba(255,255,255,0.15);
+  --txt:#ffffff;--txt2:#ebebf5cc;--txt3:#ebebf599;
+  --acc:#0a84ff;--acc2:#5e5ce6;
+  --red:#ff453a;--grn:#30d158;--ylw:#ffd60a;--org:#ff9f0a;
+  --r:12px;--rsm:8px;
 }
 .th-light{
-  --bg:#f0eff8;--bg2:#e8e7f4;--bg3:#fff;
-  --sur:#fff;--sur2:#f0eff8;--sur3:#e4e3f5;
-  --bord:rgba(0,0,0,0.07);--bord2:rgba(0,0,0,0.13);
-  --txt:#1a1a2e;--txt2:#6060a0;--txt3:#9898c0;
-  --acc:#6c63ff;--acc2:#7c6fef;
-}
-.th-dark{
-  --bg:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;
-  --sur:#1e1e35;--sur2:#252540;--sur3:#2e2e50;
-  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.14);
-  --txt:#f0f0ff;--txt2:#8888b8;--txt3:#4a4a70;
-  --acc:#6c63ff;--acc2:#a78bfa;
+  --bg:#f2f2f7;--bg2:#ffffff;--bg3:#f2f2f7;
+  --sur:#ffffff;--sur2:#f2f2f7;--sur3:#e5e5ea;
+  --bord:rgba(0,0,0,0.08);--bord2:rgba(0,0,0,0.14);
+  --txt:#000000;--txt2:#3c3c4399;--txt3:#3c3c4366;
+  --acc:#007aff;--acc2:#5856d6;
+  --red:#ff3b30;--grn:#34c759;--ylw:#ffcc00;--org:#ff9500;
 }
 .th-gold{
-  --bg:#111008;--bg2:#191508;--bg3:#201c0c;
-  --sur:#201c0c;--sur2:#272110;--sur3:#2e2614;
-  --bord:rgba(196,160,80,0.1);--bord2:rgba(196,160,80,0.18);
-  --txt:#f0e8d0;--txt2:#8a7850;--txt3:#504530;
-  --acc:#b89050;--acc2:#d4b070;
+  --bg:#0d0d08;--bg2:#1a1810;--bg3:#222018;
+  --sur:#1a1810;--sur2:#222018;--sur3:#2a2820;
+  --bord:rgba(184,152,80,0.12);--bord2:rgba(184,152,80,0.22);
+  --txt:#f5edd8;--txt2:#a08858;--txt3:#5a4e30;
+  --acc:#b89850;--acc2:#d4b870;
+  --red:#c87060;--grn:#70a870;--ylw:#b89850;--org:#c89060;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overscroll-behavior:none}
-body{
-  font-family:'Cairo',sans-serif;
-  background:var(--bg);color:var(--txt);
-  min-height:100vh;overflow-x:hidden;
-  transition:background .25s,color .25s;
-}
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .2s,color .2s}
+::-webkit-scrollbar{width:0;height:0}
 
-/* ===== TOPBAR ===== */
+/* ===== TOP BAR ===== */
 .topbar{
-  padding:10px 14px 0;
-  background:var(--bg2);
-  position:sticky;top:0;z-index:100;
+  background:var(--bg2);border-bottom:0.5px solid var(--bord);
+  padding:12px 16px 0;position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 }
-.topbar-row{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:10px;
-}
-.app-wordmark{font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.wordmark{font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1}
 .wm1{color:var(--txt)}
 .wm2{color:var(--acc)}
-.app-greeting{font-size:11px;color:var(--txt2);margin-top:1px;font-weight:400}
-.topbar-right{display:flex;align-items:center;gap:6px}
+.greeting{font-size:11px;color:var(--txt3);margin-top:1px}
+.topbar-btns{display:flex;gap:7px;align-items:center}
 .ib{
-  width:34px;height:34px;border-radius:9px;
-  background:var(--sur2);border:1px solid var(--bord);
+  width:34px;height:34px;border-radius:10px;
+  background:var(--sur3);border:none;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--txt2);transition:all .15s;
+  cursor:pointer;color:var(--txt2);transition:opacity .15s;
 }
-.ib:hover{background:var(--sur3);color:var(--txt)}
-.ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.add-ib{background:var(--acc);border-color:var(--acc);color:#fff}
-.add-ib:hover{opacity:.88}
-.add-ib svg{stroke:#fff}
+.ib:active{opacity:.6}
+.ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ib-acc{background:var(--acc)}
+.ib-acc svg{stroke:#fff}
 
-/* ===== MAIN TABS (glassmorphism) ===== */
-.main-tabs{
-  display:flex;gap:4px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--bord);
-  border-radius:10px;
-  padding:3px;
-  backdrop-filter:blur(10px);
-  margin:0 0 0;
+/* ===== MAIN TABS ===== */
+.tabs-bar{
+  display:flex;gap:3px;padding:3px;
+  background:var(--sur3);border-radius:10px;margin-bottom:0;
 }
-.main-tab{
-  flex:1;padding:7px 0;border:none;border-radius:7px;
+.tab-btn{
+  flex:1;padding:7px 0;border:none;border-radius:8px;background:transparent;
   font-family:'Cairo',sans-serif;font-size:12px;font-weight:600;
-  color:var(--txt2);cursor:pointer;background:transparent;
+  color:var(--txt3);cursor:pointer;transition:all .18s;
   display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .18s;
 }
-.main-tab.active{
-  background:var(--acc);color:#fff;
-}
-.main-tab svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tab-badge{
-  font-size:10px;padding:1px 5px;border-radius:8px;
-  background:rgba(255,255,255,0.15);
-}
-.main-tab:not(.active) .tab-badge{background:var(--sur3);color:var(--txt3)}
+.tab-btn.active{background:var(--bg2);color:var(--acc);box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.tab-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab-badge{font-size:10px;padding:1px 5px;border-radius:8px;background:var(--sur2);color:var(--txt3)}
+.tab-btn.active .tab-badge{background:var(--acc);color:#fff}
 
 /* ===== CONTENT ===== */
-.content{padding:12px 12px 90px;max-width:480px;margin:0 auto}
+.content{padding:12px 12px 100px}
 
 /* ===== STATS ===== */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.stat{
-  background:var(--sur);border:1px solid var(--bord);
-  border-radius:var(--r);padding:8px 10px;text-align:center;
-}
-.stat-num{font-size:18px;font-weight:900;color:var(--acc)}
-.stat-lbl{font-size:10px;color:var(--txt2);margin-top:1px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.stat{background:var(--sur);border:0.5px solid var(--bord);border-radius:var(--r);padding:8px 10px;text-align:center}
+.stat-n{font-size:20px;font-weight:800;color:var(--acc)}
+.stat-l{font-size:10px;color:var(--txt3);margin-top:1px}
 
 /* ===== VIEW SWITCHER ===== */
-.vsw{
-  display:flex;gap:0;margin-bottom:10px;
-  background:var(--sur);border:1px solid var(--bord);
-  border-radius:var(--rsm);padding:3px;
-}
-.vbtn{
+.vsw{display:flex;background:var(--sur2);border-radius:9px;padding:2px;margin-bottom:9px;gap:2px}
+.vb{
   flex:1;padding:6px 0;border:none;background:transparent;
   font-family:'Cairo',sans-serif;font-size:11px;font-weight:600;
-  color:var(--txt2);cursor:pointer;border-radius:5px;
+  color:var(--txt3);cursor:pointer;border-radius:7px;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .15s;
 }
-.vbtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.vbtn.active{background:var(--acc);color:#fff}
+.vb svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.vb.active{background:var(--bg2);color:var(--acc);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 
 /* ===== DAY FILTER ===== */
-.day-scroll{
-  display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;
-  margin-bottom:10px;scrollbar-width:none;
-}
-.day-scroll::-webkit-scrollbar{display:none}
+.dscroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;margin-bottom:9px;scrollbar-width:none}
+.dscroll::-webkit-scrollbar{display:none}
 .dchip{
-  flex-shrink:0;padding:4px 11px;border-radius:16px;
-  background:var(--sur);border:1px solid var(--bord);
+  flex-shrink:0;padding:4px 12px;border-radius:14px;
+  background:var(--sur2);border:0.5px solid var(--bord);
   font-size:11px;font-weight:600;font-family:'Cairo',sans-serif;
-  color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap;
+  color:var(--txt3);cursor:pointer;transition:all .15s;white-space:nowrap;
 }
 .dchip.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
-/* ===== SIZE TOGGLE ===== */
-.size-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.size-lbl{font-size:10px;color:var(--txt3)}
-.size-pills{display:flex;gap:3px;background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:2px}
-.spill{
-  padding:3px 9px;border-radius:5px;border:none;background:transparent;
-  font-size:10px;font-weight:600;font-family:'Cairo',sans-serif;
-  color:var(--txt2);cursor:pointer;transition:all .15s;
-}
-.spill.active{background:var(--acc);color:#fff}
+/* ===== SIZE ROW ===== */
+.szrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.szlbl{font-size:10px;color:var(--txt3)}
+.szpills{display:flex;gap:2px;background:var(--sur2);border-radius:7px;padding:2px}
+.szp{padding:3px 9px;border-radius:5px;border:none;background:transparent;font-size:10px;font-weight:600;font-family:'Cairo',sans-serif;color:var(--txt3);cursor:pointer;transition:all .15s}
+.szp.active{background:var(--acc);color:#fff}
 
-/* ===== CARDS ===== */
+/* ===== GRID ===== */
 .grid{display:grid;gap:8px}
 .grid.sm{grid-template-columns:repeat(3,minmax(0,1fr))}
 .grid.md{grid-template-columns:repeat(2,minmax(0,1fr))}
 .grid.lg{grid-template-columns:1fr}
 
+/* ===== CARD ===== */
 .cc{
-  background:var(--sur);border:1px solid var(--bord);
+  background:var(--sur);border:0.5px solid var(--bord);
   border-radius:var(--r);overflow:hidden;cursor:pointer;
-  transition:transform .18s,border-color .18s;
+  transition:transform .18s,opacity .15s;
   animation:fi .22s ease both;
 }
-@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.cc:hover{transform:translateY(-2px);border-color:var(--bord2)}
-.cc:active{transform:scale(.97)}
-.cc-bar{height:4px;width:100%}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cc:active{opacity:.7;transform:scale(.97)}
+.cc-bar{height:3px}
 .cc-body{padding:10px 11px}
-.cc-body.sm{padding:7px 8px}
-.cc-body.lg{padding:13px 14px}
+.sm .cc-body{padding:7px 8px}
+.lg .cc-body{padding:13px 14px}
 .cc-name{font-weight:700;color:var(--txt);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.grid.sm .cc-name{font-size:10px;-webkit-line-clamp:1}
-.grid.md .cc-name{font-size:12px}
-.grid.lg .cc-name{font-size:14px}
-.cc-sub{font-size:10px;color:var(--txt2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.grid.sm .cc-sub{display:none}
+.sm .cc-name{font-size:11px;-webkit-line-clamp:1}
+.md .cc-name{font-size:13px}
+.lg .cc-name{font-size:15px}
+.cc-sub{font-size:10px;color:var(--txt3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm .cc-sub{display:none}
 .cc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
-.grid.sm .cc-tags{display:none}
+.sm .cc-tags{display:none}
 .cc-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px}
-.cc-time{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:var(--txt2)}
+.cc-time{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:var(--txt3)}
 .cc-time svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
-.grid.sm .cc-time{font-size:9px;margin-top:3px}
-.grid.sm .cc-time svg{display:none}
+.sm .cc-time{font-size:9px;margin-top:3px}
+.sm .cc-time svg{display:none}
+/* exam card accent */
+.exam-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;margin-top:5px;background:rgba(255,159,10,.15);color:var(--org)}
 
-/* ===== LIST VIEW ===== */
+/* ===== LIST ===== */
 .lw{display:flex;flex-direction:column;gap:7px}
-.li{
-  background:var(--sur);border:1px solid var(--bord);
-  border-radius:var(--r);display:flex;align-items:stretch;
-  overflow:hidden;cursor:pointer;transition:all .15s;
-  animation:fi .2s ease both;
-}
-.li:hover{border-color:var(--bord2)}
+.li{background:var(--sur);border:0.5px solid var(--bord);border-radius:var(--r);display:flex;align-items:stretch;overflow:hidden;cursor:pointer;transition:opacity .15s;animation:fi .2s ease both}
+.li:active{opacity:.6}
 .li-stripe{width:4px;flex-shrink:0}
 .li-body{flex:1;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;align-items:center}
-.li-left .ln{font-size:13px;font-weight:700}
-.li-left .ls{font-size:11px;color:var(--txt2);margin-top:1px}
-.li-right{text-align:left;flex-shrink:0}
-.li-day{font-size:11px;font-weight:700;color:var(--acc)}
-.li-time{font-size:10px;color:var(--txt2)}
+.li-ln{font-size:13px;font-weight:700;color:var(--txt)}
+.li-ls{font-size:11px;color:var(--txt3);margin-top:1px}
+.li-day{font-size:11px;font-weight:700;color:var(--acc);text-align:left}
+.li-time{font-size:10px;color:var(--txt3)}
 .li-room{font-size:9px;color:var(--txt3);margin-top:1px}
 
 /* ===== SCHEDULE ===== */
 .sw{display:flex;flex-direction:column;gap:12px}
 .s-dh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.s-dn{font-size:11px;font-weight:700;color:var(--txt2);white-space:nowrap}
-.s-dl{flex:1;height:1px;background:var(--bord)}
+.s-dn{font-size:11px;font-weight:700;color:var(--txt3);white-space:nowrap}
+.s-dl{flex:1;height:0.5px;background:var(--bord2)}
 .s-dc{font-size:9px;background:var(--sur2);color:var(--txt3);padding:2px 6px;border-radius:8px}
-.si{
-  background:var(--sur);border:1px solid var(--bord);
-  border-radius:var(--rsm);display:flex;align-items:center;
-  gap:8px;padding:8px 11px;margin-bottom:5px;cursor:pointer;
-  transition:all .15s;animation:fi .2s ease both;
-}
-.si:hover{border-color:var(--bord2)}
-.si-time{font-size:10px;color:var(--txt2);min-width:68px;font-weight:600}
+.si{background:var(--sur);border:0.5px solid var(--bord);border-radius:9px;display:flex;align-items:center;gap:8px;padding:8px 11px;margin-bottom:5px;cursor:pointer;transition:opacity .15s;animation:fi .2s ease both}
+.si:active{opacity:.6}
+.si-time{font-size:10px;color:var(--txt3);min-width:68px;font-weight:600}
 .si-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.si-info .sn{font-size:12px;font-weight:700}
-.si-info .ss{font-size:10px;color:var(--txt2)}
-.conflict-w{
-  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);
-  border-radius:var(--rsm);padding:6px 10px;margin-bottom:8px;
-  font-size:11px;color:#f87171;display:flex;align-items:center;gap:6px;
-}
-.conflict-w svg{width:12px;height:12px;stroke:#f87171;fill:none;stroke-width:2;flex-shrink:0}
+.si-n{font-size:12px;font-weight:700;color:var(--txt)}
+.si-s{font-size:10px;color:var(--txt3)}
+.conflict-w{background:rgba(255,69,58,.1);border:0.5px solid rgba(255,69,58,.25);border-radius:9px;padding:6px 10px;margin-bottom:7px;font-size:11px;color:var(--red);display:flex;align-items:center;gap:6px}
+.conflict-w svg{width:12px;height:12px;stroke:var(--red);fill:none;stroke-width:2;flex-shrink:0}
+
+/* ===== EXAM INFO ROW (in schedule) ===== */
+.si-exam-date{font-size:9px;color:var(--org);font-weight:600;margin-top:2px}
 
 /* ===== EMPTY ===== */
-.empty{text-align:center;padding:40px 20px;color:var(--txt2)}
-.empty-ico{width:48px;height:48px;margin:0 auto 12px;background:var(--sur2);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.empty{text-align:center;padding:48px 20px;color:var(--txt3)}
+.empty-ico{width:50px;height:50px;margin:0 auto 12px;background:var(--sur2);border-radius:14px;display:flex;align-items:center;justify-content:center}
 .empty-ico svg{width:24px;height:24px;stroke:var(--txt3);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.empty p{font-size:13px}.empty small{font-size:11px;color:var(--txt3)}
+.empty p{font-size:13px;color:var(--txt2)}.empty small{font-size:11px;color:var(--txt3)}
 
 /* ===== OVERLAYS ===== */
-.ov{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
-  z-index:300;align-items:flex-end;justify-content:center;
-  backdrop-filter:blur(5px);
-}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .ov.open{display:flex;animation:fov .18s ease}
 @keyframes fov{from{opacity:0}to{opacity:1}}
-.sheet{
-  background:var(--bg2);border-radius:22px 22px 0 0;
-  width:100%;max-width:480px;padding:14px 16px 38px;
-  max-height:90vh;overflow-y:auto;
-  animation:su .25s cubic-bezier(.34,1.3,.64,1);
-}
+.sheet{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:12px 16px 40px;max-height:92vh;overflow-y:auto;animation:su .26s cubic-bezier(.32,1.1,.64,1)}
 @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.sh{width:36px;height:4px;background:var(--bord2);border-radius:2px;margin:0 auto 16px}
-.st{font-size:16px;font-weight:700;margin-bottom:15px;color:var(--txt)}
-
+.sh{width:36px;height:4px;background:var(--sur3);border-radius:2px;margin:0 auto 14px}
+.st{font-size:16px;font-weight:700;margin-bottom:14px;color:var(--txt)}
 .field{margin-bottom:11px}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--txt3);margin-bottom:4px;letter-spacing:.2px}
 .field input,.field select,.field textarea{
-  width:100%;padding:9px 12px;
-  background:var(--sur);border:1px solid var(--bord2);
-  border-radius:var(--rsm);font-size:13px;font-family:'Cairo',sans-serif;
-  color:var(--txt);outline:none;transition:border-color .15s;
+  width:100%;padding:10px 13px;background:var(--sur3);
+  border:0.5px solid var(--bord2);border-radius:10px;
+  font-size:14px;font-family:'Cairo',sans-serif;color:var(--txt);
+  outline:none;transition:border-color .15s;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--acc)}
 .field textarea{resize:none;height:60px}
 .field select option{background:var(--bg2);color:var(--txt)}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.crow{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.crow{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px}
 .cdot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
 .cdot.sel{border-color:var(--txt);transform:scale(1.18)}
 .mbtns{display:flex;gap:7px;margin-top:16px}
-.mb{flex:1;padding:11px;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .15s;border:none}
-.mb-c{background:var(--sur2);color:var(--txt2)}
+.mb{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:opacity .15s;border:none}
+.mb:active{opacity:.7}
+.mb-c{background:var(--sur3);color:var(--txt2)}
 .mb-s{background:var(--acc);color:#fff}
-.mb-d{background:rgba(239,68,68,.12);color:#f87171;flex:.55}
-.mb:hover{opacity:.88}
+.mb-d{background:rgba(255,69,58,.15);color:var(--red);flex:.5}
 
 /* ===== DETAIL ===== */
-.det-top{height:5px;border-radius:3px;width:56px;margin:0 auto 12px}
+.det-bar{height:4px;border-radius:2px;width:52px;margin:0 auto 12px}
 .det-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .det-ico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .det-ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .det-name{font-size:18px;font-weight:900;color:var(--txt);line-height:1.2}
-.det-dept{font-size:12px;color:var(--txt2);margin-top:2px}
-.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
-.dc{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:9px 11px}
-.dcl{font-size:9px;color:var(--txt3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+.det-dept{font-size:12px;color:var(--txt3);margin-top:2px}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px}
+.dc{background:var(--sur3);border-radius:10px;padding:9px 11px}
+.dcl{font-size:9px;color:var(--txt3);margin-bottom:2px;letter-spacing:.4px}
 .dcv{font-size:13px;font-weight:700;color:var(--txt)}
-.det-notes{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:10px 12px;margin-bottom:14px}
-.det-nl{font-size:9px;color:var(--txt3);margin-bottom:4px}
-.det-nv{font-size:12px;color:var(--txt2);line-height:1.7}
+.det-notes{background:var(--sur3);border-radius:10px;padding:10px 12px;margin-bottom:14px}
 .det-acts{display:flex;gap:7px}
-.da{
-  flex:1;padding:11px;border-radius:var(--rsm);font-size:12px;
-  font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;
-  border:1px solid var(--bord2);background:var(--sur);color:var(--txt2);
-  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;
-}
+.da{flex:1;padding:12px;border-radius:10px;font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;border:0.5px solid var(--bord2);background:var(--sur3);color:var(--txt2);transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:5px}
 .da svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.da:active{opacity:.6}
 .da.edit{background:var(--acc);border-color:var(--acc);color:#fff}
-.da.del{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#f87171}
+.da.del{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.25);color:var(--red)}
 
 /* ===== SETTINGS ===== */
-.theme-row{display:flex;gap:8px;margin-top:6px}
-.tsw{
-  flex:1;aspect-ratio:1.3;border-radius:10px;cursor:pointer;
-  border:2px solid transparent;transition:all .15s;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:4px;font-size:9px;font-weight:700;font-family:'Cairo',sans-serif;
+.set-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--sur3);border-radius:10px;padding:12px 14px;
+  margin-bottom:8px;cursor:pointer;transition:opacity .15s;
 }
-.tsw.sel{border-color:var(--acc)}
-.tsw-icon{font-size:18px}
-.lang-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:6px}
-.lo{
-  padding:9px 4px;border-radius:var(--rsm);
-  background:var(--sur);border:1px solid var(--bord2);
-  text-align:center;cursor:pointer;transition:all .15s;
-}
-.lo.sel{background:var(--acc);border-color:var(--acc);color:#fff}
-.lo-flag{font-size:20px;margin-bottom:3px}
-.lo-name{font-size:11px;font-weight:600}
+.set-row:active{opacity:.6}
+.set-row-left{display:flex;align-items:center;gap:10px}
+.set-row-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.set-row-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.set-row-lbl{font-size:14px;font-weight:600;color:var(--txt)}
+.set-row-val{font-size:12px;color:var(--txt3)}
+.set-row-arrow{color:var(--txt3);font-size:14px}
+.set-credit{text-align:center;margin-top:20px;font-size:11px;color:var(--txt3)}
 
-/* ===== INSTALL BANNER ===== */
-.install-banner{
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  border-radius:var(--r);padding:12px 14px;margin-bottom:10px;
-  display:flex;align-items:center;gap:12px;cursor:pointer;
-  transition:opacity .15s;
+/* ===== THEME PICKER (compact) ===== */
+.theme-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.theme-opt{
+  display:flex;align-items:center;gap:12px;padding:11px 13px;
+  background:var(--sur3);border-radius:10px;cursor:pointer;
+  border:1.5px solid transparent;transition:all .15s;
 }
-.install-banner:hover{opacity:.9}
-.install-banner svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.ib-text .ib-t{font-size:13px;font-weight:700;color:#fff}
-.ib-text .ib-s{font-size:11px;color:rgba(255,255,255,.75)}
-.ib-arrow{margin-right:auto;color:#fff;font-size:16px}
+.theme-opt.sel{border-color:var(--acc)}
+.theme-swatch{width:28px;height:28px;border-radius:8px;flex-shrink:0}
+.theme-opt-name{font-size:13px;font-weight:600;color:var(--txt);flex:1}
+.theme-check{color:var(--acc);font-size:16px}
+
+/* ===== LANG PICKER (compact) ===== */
+.lang-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.lang-opt{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--sur3);border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+.lang-opt.sel{border-color:var(--acc)}
+.lang-flag{font-size:20px;line-height:1}
+.lang-name{font-size:13px;font-weight:600;color:var(--txt);flex:1}
+
+/* ===== SUB SHEET (for theme/lang picker) ===== */
+.sub-sheet{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:12px 16px 40px;max-height:70vh;overflow-y:auto;animation:su .26s cubic-bezier(.32,1.1,.64,1)}
 </style>
 </head>
 <body class="th-dark">
-
 <div style="max-width:480px;margin:0 auto">
 
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-row">
     <div>
-      <div class="app-wordmark"><span class="wm1" id="wm1">موا</span><span class="wm2" id="wm2">دي</span></div>
-      <div class="app-greeting" id="app-greeting">صباح الخير</div>
+      <div class="wordmark"><span class="wm1" id="wm1">موا</span><span class="wm2" id="wm2">دي</span></div>
+      <div class="greeting" id="greeting">صباح الخير</div>
     </div>
-    <div class="topbar-right">
-      <div class="ib" onclick="playClick();openSettings()" title="settings">
+    <div class="topbar-btns">
+      <div class="ib" onclick="playClick();openSettings()">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </div>
-      <div class="ib add-ib" onclick="playClick();openAdd()" title="add">
+      <div class="ib ib-acc" onclick="playClick();openAdd()">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </div>
     </div>
   </div>
-  <div class="main-tabs">
-    <button class="main-tab active" id="tab-c" onclick="playClick();switchTab('courses')">
+  <div class="tabs-bar">
+    <button class="tab-btn active" id="tab-c" onclick="playClick();switchTab('courses')">
       <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-      <span id="t-c">المواد</span>
-      <span class="tab-badge" id="tc-c">0</span>
+      <span id="tc-lbl">المواد</span><span class="tab-badge" id="tc-n">0</span>
     </button>
-    <button class="main-tab" id="tab-e" onclick="playClick();switchTab('exams')">
+    <button class="tab-btn" id="tab-e" onclick="playClick();switchTab('exams')">
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>
-      <span id="t-e">الاختبارات</span>
-      <span class="tab-badge" id="tc-e">0</span>
+      <span id="te-lbl">الاختبارات</span><span class="tab-badge" id="te-n">0</span>
     </button>
   </div>
 </div>
@@ -380,38 +315,55 @@ body{
 <div class="content" id="content"></div>
 </div>
 
-<!-- ADD/EDIT OVERLAY -->
+<!-- ADD/EDIT COURSE OVERLAY -->
 <div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
   <div class="sh"></div>
   <div class="st" id="add-title">إضافة مادة</div>
   <input type="hidden" id="eid">
   <div class="field"><label id="l-name">الاسم</label><input id="f-name" type="text"></div>
-  <div id="cf">
-    <div class="field"><label id="l-doc">الدكتور</label><input id="f-doc" type="text"></div>
-    <div class="field"><label id="l-dept">القسم</label><input id="f-dept" type="text"></div>
-    <div class="r2">
-      <div class="field"><label id="l-day">اليوم</label><select id="f-day"></select></div>
-      <div class="field"><label id="l-room">القاعة</label><input id="f-room" type="text"></div>
-    </div>
-    <div class="r2">
-      <div class="field"><label id="l-s">البداية</label><input id="f-s" type="time" value="08:00"></div>
-      <div class="field"><label id="l-e">النهاية</label><input id="f-e" type="time" value="10:00"></div>
-    </div>
+  <div class="field"><label id="l-doc">الدكتور</label><input id="f-doc" type="text"></div>
+  <div class="field"><label id="l-dept">القسم</label><input id="f-dept" type="text"></div>
+  <div class="r2">
+    <div class="field"><label id="l-day">اليوم</label><select id="f-day"></select></div>
+    <div class="field"><label id="l-room">القاعة</label><input id="f-room" type="text"></div>
   </div>
-  <div id="ef" style="display:none">
-    <div class="r2">
-      <div class="field"><label id="l-dt">التاريخ</label><input id="f-dt" type="date"></div>
-      <div class="field"><label id="l-et">الوقت</label><input id="f-et" type="time" value="09:00"></div>
-    </div>
-    <div class="field"><label id="l-room2">القاعة</label><input id="f-room2" type="text"></div>
+  <div class="r2">
+    <div class="field"><label id="l-s">البداية</label><input id="f-s" type="time" value="08:00"></div>
+    <div class="field"><label id="l-e">النهاية</label><input id="f-e" type="time" value="10:00"></div>
   </div>
   <div class="field"><label id="l-notes">ملاحظات</label><textarea id="f-notes"></textarea></div>
-  <div class="field"><label id="l-color">اللون</label><div class="crow" id="crow"></div></div>
+  <div class="field"><label id="l-color">اللون</label><div class="crow" id="crow-c"></div></div>
   <div class="mbtns">
-    <button class="mb mb-d" id="del-btn" style="display:none" onclick="playClick();delItem()">حذف</button>
+    <button class="mb mb-d" id="del-btn" style="display:none" onclick="playClick();delCourse()">حذف</button>
     <button class="mb mb-c" onclick="playClick();closeAdd()" id="btn-cancel">إلغاء</button>
-    <button class="mb mb-s" onclick="playClick();saveItem()" id="btn-save">حفظ</button>
+    <button class="mb mb-s" onclick="playClick();saveCourse()" id="btn-save">حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- ADD/EDIT EXAM INFO OVERLAY (only exam-specific fields) -->
+<div class="ov" id="ov-exam" onclick="ovClick(event,'ov-exam')">
+<div class="sheet">
+  <div class="sh"></div>
+  <div class="st" id="exam-sheet-title">موعد الاختبار</div>
+  <input type="hidden" id="exam-cid">
+  <div style="background:var(--sur3);border-radius:10px;padding:10px 13px;margin-bottom:12px">
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:2px" id="exam-course-lbl-lbl">المادة</div>
+    <div style="font-size:15px;font-weight:700;color:var(--txt)" id="exam-course-name">—</div>
+  </div>
+  <div class="r2">
+    <div class="field"><label id="l-edate">التاريخ</label><input id="f-edate" type="date"></div>
+    <div class="field"><label id="l-eday">اليوم</label><input id="f-eday" type="text" placeholder="مثال: الثلاثاء" readonly id="f-eday"></div>
+  </div>
+  <div class="r2">
+    <div class="field"><label id="l-etime">الساعة</label><input id="f-etime" type="time" value="09:00"></div>
+    <div class="field"><label id="l-eroom">القاعة</label><input id="f-eroom" type="text"></div>
+  </div>
+  <div class="field"><label id="l-enotes">ملاحظات</label><textarea id="f-enotes"></textarea></div>
+  <div class="mbtns">
+    <button class="mb mb-c" onclick="playClick();closeExam()" id="ebtn-cancel">إلغاء</button>
+    <button class="mb mb-s" onclick="playClick();saveExam()" id="ebtn-save">حفظ</button>
   </div>
 </div>
 </div>
@@ -426,260 +378,306 @@ body{
 <div class="sheet">
   <div class="sh"></div>
   <div class="st" id="s-title">الإعدادات</div>
-  <div class="field">
-    <label id="s-tl">الثيم</label>
-    <div class="theme-row">
-      <div class="tsw sel" style="background:#16162a;color:#a78bfa" data-t="th-dark" onclick="playClick();setTheme('th-dark',this)">
-        <div class="tsw-icon">🌙</div><span>داكن</span>
+  <div class="set-row" onclick="playClick();openThemePicker()">
+    <div class="set-row-left">
+      <div class="set-row-icon" style="background:var(--acc)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </div>
-      <div class="tsw" style="background:#e8e7f4;color:#6c63ff" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
-        <div class="tsw-icon">☀️</div><span>فاتح</span>
-      </div>
-      <div class="tsw" style="background:#0e0c06;color:#d4a017;border:1px solid rgba(212,160,23,.3)" data-t="th-gold" onclick="playClick();setTheme('th-gold',this)">
-        <div class="tsw-icon">✦</div><span style="color:#d4a017">ذهبي</span>
-      </div>
+      <span class="set-row-lbl" id="s-theme-lbl">الثيم</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="set-row-val" id="s-theme-val">داكن</span>
+      <span class="set-row-arrow">›</span>
     </div>
   </div>
-  <div class="field" style="margin-top:14px">
-    <label id="s-ll">اللغة</label>
-    <div class="lang-row">
-      <div class="lo sel" data-l="ar" onclick="playClick();setLang('ar',this)"><div class="lo-flag">🇸🇦</div><div class="lo-name">العربية</div></div>
-      <div class="lo" data-l="en" onclick="playClick();setLang('en',this)"><div class="lo-flag">🇬🇧</div><div class="lo-name">English</div></div>
-      <div class="lo" data-l="tr" onclick="playClick();setLang('tr',this)"><div class="lo-flag">🇹🇷</div><div class="lo-name">Türkçe</div></div>
+  <div class="set-row" onclick="playClick();openLangPicker()">
+    <div class="set-row-left">
+      <div class="set-row-icon" style="background:#30d158">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+      </div>
+      <span class="set-row-lbl" id="s-lang-lbl">اللغة</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="set-row-val" id="s-lang-val">العربية</span>
+      <span class="set-row-arrow">›</span>
     </div>
   </div>
-  <!-- PWA install hint -->
-  <div class="field" style="margin-top:14px">
-    <label id="s-il">تثبيت التطبيق</label>
-    <div style="background:var(--sur);border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--txt2);line-height:1.8" id="install-hint">
-      لتثبيت التطبيق على هاتفك:<br>
-      <strong style="color:var(--txt)">Android Chrome:</strong> اضغط ⋮ ثم "تثبيت التطبيق"<br>
-      <strong style="color:var(--txt)">iPhone Safari:</strong> اضغط 📤 ثم "إضافة إلى الشاشة الرئيسية"
+  <div class="set-credit">Designed by Anas Fatian</div>
+  <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeSettings()" id="s-done">تم</button></div>
+</div>
+</div>
+
+<!-- THEME PICKER SUB-SHEET -->
+<div class="ov" id="ov-theme" onclick="ovClick(event,'ov-theme')">
+<div class="sub-sheet">
+  <div class="sh"></div>
+  <div class="st" id="sp-theme-title">اختر الثيم</div>
+  <div class="theme-opts">
+    <div class="theme-opt sel" data-t="th-dark" onclick="playClick();setTheme('th-dark',this)">
+      <div class="theme-swatch" style="background:#1c1c1e;border:1px solid #3a3a3c"></div>
+      <span class="theme-opt-name" id="th-dark-name">داكن</span>
+      <span class="theme-check" id="thc-dark">✓</span>
     </div>
-    <div id="install-btn-wrap" style="display:none;margin-top:8px">
-      <button class="mb mb-s" style="width:100%" onclick="installApp()" id="install-btn">تثبيت التطبيق</button>
+    <div class="theme-opt" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
+      <div class="theme-swatch" style="background:#f2f2f7;border:1px solid #e5e5ea"></div>
+      <span class="theme-opt-name" id="th-light-name">فاتح</span>
+      <span class="theme-check" style="display:none" id="thc-light">✓</span>
+    </div>
+    <div class="theme-opt" data-t="th-gold" onclick="playClick();setTheme('th-gold',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a1810,#2a2820);border:1px solid rgba(184,152,80,.4)"></div>
+      <span class="theme-opt-name" id="th-gold-name">ذهبي</span>
+      <span class="theme-check" style="display:none" id="thc-gold">✓</span>
     </div>
   </div>
-  <div class="mbtns"><button class="mb mb-s" onclick="playClick();closeSettings()" id="s-done">تم</button></div>
+  <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()" id="sp-done">تم</button></div>
+</div>
+</div>
+
+<!-- LANG PICKER SUB-SHEET -->
+<div class="ov" id="ov-lang" onclick="ovClick(event,'ov-lang')">
+<div class="sub-sheet">
+  <div class="sh"></div>
+  <div class="st" id="sp-lang-title">اللغة / Language / Dil</div>
+  <div class="lang-opts">
+    <div class="lang-opt sel" data-l="ar" onclick="playClick();setLang('ar',this)">
+      <span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span><span class="theme-check" id="lc-ar">✓</span>
+    </div>
+    <div class="lang-opt" data-l="en" onclick="playClick();setLang('en',this)">
+      <span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="theme-check" style="display:none" id="lc-en">✓</span>
+    </div>
+    <div class="lang-opt" data-l="tr" onclick="playClick();setLang('tr',this)">
+      <span class="lang-flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="theme-check" style="display:none" id="lc-tr">✓</span>
+    </div>
+  </div>
+  <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeLangPicker()" id="sp-ldone">تم</button></div>
 </div>
 </div>
 
 <script>
 // ===== AUDIO =====
-let audioCtx=null;
+let actx=null;
 function playClick(){
   try{
-    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    const o=audioCtx.createOscillator();
-    const g=audioCtx.createGain();
-    o.connect(g);g.connect(audioCtx.destination);
-    o.type='sine';o.frequency.setValueAtTime(880,audioCtx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(440,audioCtx.currentTime+0.06);
-    g.gain.setValueAtTime(0.08,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.08);
-    o.start();o.stop(audioCtx.currentTime+0.08);
+    if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.connect(g);g.connect(actx.destination);
+    o.type='sine';o.frequency.setValueAtTime(800,actx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(500,actx.currentTime+.07);
+    g.gain.setValueAtTime(.06,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.09);
+    o.start();o.stop(actx.currentTime+.09);
   }catch(e){}
 }
-function playSuccess(){
+function playOk(){
   try{
-    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
     [440,554,659].forEach((f,i)=>{
-      const o=audioCtx.createOscillator();
-      const g=audioCtx.createGain();
-      o.connect(g);g.connect(audioCtx.destination);
-      o.type='sine';o.frequency.value=f;
-      const t=audioCtx.currentTime+i*0.1;
-      g.gain.setValueAtTime(0.07,t);
-      g.gain.exponentialRampToValueAtTime(0.001,t+0.15);
-      o.start(t);o.stop(t+0.15);
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.connect(g);g.connect(actx.destination);o.type='sine';o.frequency.value=f;
+      const t=actx.currentTime+i*.1;
+      g.gain.setValueAtTime(.06,t);g.gain.exponentialRampToValueAtTime(.001,t+.15);
+      o.start(t);o.stop(t+.15);
     });
   }catch(e){}
 }
 
-// ===== PWA =====
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredPrompt=e;
-  document.getElementById('install-btn-wrap').style.display='block';
-  document.getElementById('install-hint').style.display='none';
-});
-async function installApp(){
-  if(!deferredPrompt)return;
-  deferredPrompt.prompt();
-  const r=await deferredPrompt.userChoice;
-  deferredPrompt=null;
-  document.getElementById('install-btn-wrap').style.display='none';
-}
-if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){
-  document.getElementById('install-hint').innerHTML='<span style="color:var(--acc)">✓</span> التطبيق مثبت بنجاح!';
-}
-
-// ===== DATA =====
-// Calm muted palette — unified low-saturation tones
+// ===== iOS SYSTEM COLORS for cards =====
+// Exact iOS system colors — muted, elegant
 const COLS=[
-  {b:'#7a8e98',bg:'rgba(122,142,152,.13)',tx:'#9eb4be'},
-  {b:'#7e9880',bg:'rgba(126,152,128,.13)',tx:'#a0bca2'},
-  {b:'#9a8a74',bg:'rgba(154,138,116,.13)',tx:'#b8a890'},
-  {b:'#887898',bg:'rgba(136,120,152,.13)',tx:'#a89cb8'},
-  {b:'#749490',bg:'rgba(116,148,144,.13)',tx:'#96b2ae'},
-  {b:'#988080',bg:'rgba(152,128,128,.13)',tx:'#b89e9e'},
-  {b:'#708490',bg:'rgba(112,132,144,.13)',tx:'#92a8b4'},
-  {b:'#909076',bg:'rgba(144,144,118,.13)',tx:'#b0b094'},
-  {b:'#807890',bg:'rgba(128,120,144,.13)',tx:'#a09ab2'},
-  {b:'#808080',bg:'rgba(128,128,128,.13)',tx:'#a0a0a0'},
+  {b:'#636366',bg:'rgba(99,99,102,.15)',tx:'#aeaeb2'},   // System Gray
+  {b:'#48484a',bg:'rgba(72,72,74,.15)',tx:'#98989d'},    // System Gray 2
+  {b:'#5e5ce6',bg:'rgba(94,92,230,.15)',tx:'#9b8fef'},   // Indigo
+  {b:'#0a84ff',bg:'rgba(10,132,255,.14)',tx:'#5ac8fa'},  // Blue
+  {b:'#30d158',bg:'rgba(48,209,88,.13)',tx:'#34c759'},   // Green
+  {b:'#64d2ff',bg:'rgba(100,210,255,.13)',tx:'#5ac8fa'}, // Teal
+  {b:'#bf5af2',bg:'rgba(191,90,242,.13)',tx:'#da8fff'},  // Purple
+  {b:'#ff6961',bg:'rgba(255,105,97,.13)',tx:'#ff8a80'},  // Soft Red
+  {b:'#ff9f0a',bg:'rgba(255,159,10,.13)',tx:'#ffb340'},  // Orange
+  {b:'#ffd60a',bg:'rgba(255,214,10,.13)',tx:'#ffe566'},  // Yellow
 ];
+
 const DAR=['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
 const DEN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
 const DTR=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma'];
-const L={
-  ar:{courses:'المواد',exams:'الاختبارات',addCourse:'إضافة مادة',addExam:'إضافة اختبار',editCourse:'تعديل المادة',editExam:'تعديل الاختبار',name:'الاسم',doctor:'الدكتور',dept:'القسم',day:'اليوم',room:'القاعة',start:'البداية',end:'النهاية',date:'التاريخ',time:'الوقت',notes:'ملاحظات',color:'اللون',cancel:'إلغاء',save:'حفظ',del:'حذف',edit:'تعديل',all:'الكل',settings:'الإعدادات',theme:'الثيم',lang:'اللغة',done:'تم',grid:'مربعات',list:'قائمة',schedule:'جدول',small:'صغير',medium:'وسط',large:'كبير',size:'الحجم',total:'مادة',days:'أيام',depts:'تخصص',empty:'لا توجد عناصر',emptySub:'اضغط + للإضافة',conflict:'تعارض في الوقت',install:'تثبيت',},
-  en:{courses:'Courses',exams:'Exams',addCourse:'Add Course',addExam:'Add Exam',editCourse:'Edit Course',editExam:'Edit Exam',name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',start:'Start',end:'End',date:'Date',time:'Time',notes:'Notes',color:'Color',cancel:'Cancel',save:'Save',del:'Delete',edit:'Edit',all:'All',settings:'Settings',theme:'Theme',lang:'Language',done:'Done',grid:'Grid',list:'List',schedule:'Schedule',small:'Small',medium:'Medium',large:'Large',size:'Size',total:'courses',days:'days',depts:'depts',empty:'No items yet',emptySub:'Tap + to add',conflict:'Time conflict',install:'Install',},
-  tr:{courses:'Dersler',exams:'Sınavlar',addCourse:'Ders Ekle',addExam:'Sınav Ekle',editCourse:'Düzenle',editExam:'Düzenle',name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',start:'Başlangıç',end:'Bitiş',date:'Tarih',time:'Saat',notes:'Notlar',color:'Renk',cancel:'İptal',save:'Kaydet',del:'Sil',edit:'Düzenle',all:'Tümü',settings:'Ayarlar',theme:'Tema',lang:'Dil',done:'Tamam',grid:'Izgara',list:'Liste',schedule:'Takvim',small:'Küçük',medium:'Orta',large:'Büyük',size:'Boyut',total:'ders',days:'gün',depts:'bölüm',empty:'Henüz yok',emptySub:'+ ile ekle',conflict:'Çakışma',install:'Yükle',},
+
+const TH_NAMES={
+  'th-dark':{ar:'داكن',en:'Dark',tr:'Koyu'},
+  'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},
+  'th-gold':{ar:'ذهبي',en:'Gold',tr:'Altın'},
 };
-let lang='ar',tab='courses',view='grid',filter='all',sz='md';
-let eid=null,addType='course',selC=0;
+const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 
-// localStorage helpers
-function lsGet(k,def){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):def;}catch(e){return def;}}
-function lsSave(){
-  try{
-    localStorage.setItem('mawadi_courses',JSON.stringify(courses));
-    localStorage.setItem('mawadi_exams',JSON.stringify(exams));
-    localStorage.setItem('mawadi_nid',JSON.stringify(nid));
-    localStorage.setItem('mawadi_lang',lang);
-    localStorage.setItem('mawadi_theme',document.body.className);
-    localStorage.setItem('mawadi_view',view);
-    localStorage.setItem('mawadi_sz',sz);
-  }catch(e){}
-}
-
-// Load saved data or use defaults
-let courses=lsGet('mawadi_courses',[
-  {id:1,type:'course',name:'رياضيات 2',doc:'د. محمد علي',dept:'علوم حاسوب',day:'الاثنين',s:'08:00',e:'10:00',room:'A101',notes:'',ci:0},
-  {id:2,type:'course',name:'برمجة متقدمة',doc:'د. سارة خالد',dept:'علوم حاسوب',day:'الثلاثاء',s:'10:00',e:'12:00',room:'B204',notes:'',ci:1},
-]);
-let exams=lsGet('mawadi_exams',[]);
-let nid=lsGet('mawadi_nid',20);
-
-// Restore settings
-const savedTheme=localStorage.getItem('mawadi_theme');
-if(savedTheme)document.body.className=savedTheme;
-const savedLang=localStorage.getItem('mawadi_lang');
-if(savedLang)lang=savedLang;
-const savedView=localStorage.getItem('mawadi_view');
-if(savedView)view=savedView;
-const savedSz=localStorage.getItem('mawadi_sz');
-if(savedSz)sz=savedSz;
+const L={
+  ar:{courses:'المواد',exams:'الاختبارات',addCourse:'إضافة مادة',editCourse:'تعديل المادة',
+    name:'الاسم',doctor:'الدكتور',dept:'القسم',day:'اليوم',room:'القاعة',
+    start:'البداية',end:'النهاية',notes:'ملاحظات',color:'اللون',
+    cancel:'إلغاء',save:'حفظ',del:'حذف',edit:'تعديل',all:'الكل',
+    settings:'الإعدادات',theme:'الثيم',lang:'اللغة',done:'تم',
+    grid:'مربعات',list:'قائمة',schedule:'جدول',
+    small:'صغير',medium:'وسط',large:'كبير',size:'الحجم',
+    total:'مادة',days:'أيام',depts:'تخصص',
+    empty:'لا توجد عناصر',emptySub:'اضغط + للإضافة',conflict:'تعارض في الوقت',
+    examDate:'تاريخ الاختبار',examTime:'ساعة الاختبار',examRoom:'قاعة الاختبار',
+    editExam:'تعديل موعد الاختبار',setExam:'تحديد موعد الاختبار',
+    noExam:'لم يُحدد موعد بعد',course:'المادة',
+  },
+  en:{courses:'Courses',exams:'Exams',addCourse:'Add Course',editCourse:'Edit Course',
+    name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',
+    start:'Start',end:'End',notes:'Notes',color:'Color',
+    cancel:'Cancel',save:'Save',del:'Delete',edit:'Edit',all:'All',
+    settings:'Settings',theme:'Theme',lang:'Language',done:'Done',
+    grid:'Grid',list:'List',schedule:'Schedule',
+    small:'Small',medium:'Medium',large:'Large',size:'Size',
+    total:'courses',days:'days',depts:'depts',
+    empty:'No items yet',emptySub:'Tap + to add',conflict:'Time conflict',
+    examDate:'Exam Date',examTime:'Exam Time',examRoom:'Exam Room',
+    editExam:'Edit Exam',setExam:'Set Exam',
+    noExam:'Not scheduled yet',course:'Course',
+  },
+  tr:{courses:'Dersler',exams:'Sınavlar',addCourse:'Ders Ekle',editCourse:'Düzenle',
+    name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',
+    start:'Başlangıç',end:'Bitiş',notes:'Notlar',color:'Renk',
+    cancel:'İptal',save:'Kaydet',del:'Sil',edit:'Düzenle',all:'Tümü',
+    settings:'Ayarlar',theme:'Tema',lang:'Dil',done:'Tamam',
+    grid:'Izgara',list:'Liste',schedule:'Takvim',
+    small:'Küçük',medium:'Orta',large:'Büyük',size:'Boyut',
+    total:'ders',days:'gün',depts:'bölüm',
+    empty:'Henüz yok',emptySub:'+ ile ekle',conflict:'Çakışma',
+    examDate:'Sınav Tarihi',examTime:'Sınav Saati',examRoom:'Sınav Salonu',
+    editExam:'Sınavı Düzenle',setExam:'Sınav Ekle',
+    noExam:'Henüz belirlenmedi',course:'Ders',
+  },
+};
 
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
 function dLabel(d){const i=DAR.indexOf(d);return i<0?d:getDays()[i]}
-function items(){return tab==='courses'?courses:exams}
+
+// ===== LOCALSTORAGE =====
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):def}catch(e){return def}}
+function lsSave(){
+  try{
+    localStorage.setItem('mw_courses',JSON.stringify(courses));
+    localStorage.setItem('mw_exams',JSON.stringify(exams));
+    localStorage.setItem('mw_nid',''+nid);
+    localStorage.setItem('mw_lang',lang);
+    localStorage.setItem('mw_theme',currentTheme);
+    localStorage.setItem('mw_view',view);
+    localStorage.setItem('mw_sz',sz);
+  }catch(e){}
+}
+
+// ===== STATE =====
+let lang=localStorage.getItem('mw_lang')||'ar';
+let currentTheme=localStorage.getItem('mw_theme')||'th-dark';
+let view=localStorage.getItem('mw_view')||'grid';
+let sz=localStorage.getItem('mw_sz')||'md';
+let tab='courses',filter='all';
+let eid=null,selC=0;
+
+// Apply saved theme immediately
+document.body.className=currentTheme;
+
+// courses: each has id,name,doc,dept,day,s,e,room,notes,ci
+let courses=lsGet('mw_courses',[
+  {id:1,name:'رياضيات 2',doc:'د. محمد علي',dept:'علوم حاسوب',day:'الاثنين',s:'08:00',e:'10:00',room:'A101',notes:'',ci:0},
+  {id:2,name:'برمجة متقدمة',doc:'د. سارة خالد',dept:'علوم حاسوب',day:'الثلاثاء',s:'10:00',e:'12:00',room:'B204',notes:'',ci:1},
+]);
+// exams: keyed by course id — {date,day,time,room,notes}
+// each exam links to a course by courseId
+let exams=lsGet('mw_exams',{});
+let nid=parseInt(localStorage.getItem('mw_nid')||'10');
 
 // ===== RENDER =====
 function render(){
   updateLabels();
-  const list=items();
-  const fil=filter==='all'?list:list.filter(c=>(c.day||c.date)===filter);
+  const cont=document.getElementById('content');
+  const list=courses;
+  const ud=new Set(list.map(c=>c.day)).size;
+  const ude=new Set(list.map(c=>c.dept||'').filter(Boolean)).size;
+
   let h='';
 
-  // Install banner (if prompt available)
-  if(deferredPrompt){
-    h+=`<div class="install-banner" onclick="installApp()">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      <div class="ib-text"><div class="ib-t">${t('install')} موادي</div><div class="ib-s">كتطبيق على هاتفك</div></div>
-      <div class="ib-arrow">›</div>
-    </div>`;
-  }
-
   // Stats
-  const ud=new Set(list.map(c=>c.day||'').filter(Boolean)).size;
-  const ude=new Set(list.map(c=>c.dept||'').filter(Boolean)).size;
-  h+=`<div class="stats-row">
-    <div class="stat"><div class="stat-num">${list.length}</div><div class="stat-lbl">${t('total')}</div></div>
-    <div class="stat"><div class="stat-num">${ud}</div><div class="stat-lbl">${t('days')}</div></div>
-    <div class="stat"><div class="stat-num">${ude||'—'}</div><div class="stat-lbl">${t('depts')}</div></div>
+  const examCount=Object.keys(exams).length;
+  h+=`<div class="stats">
+    <div class="stat"><div class="stat-n">${list.length}</div><div class="stat-l">${t('total')}</div></div>
+    <div class="stat"><div class="stat-n">${ud}</div><div class="stat-l">${t('days')}</div></div>
+    <div class="stat"><div class="stat-n">${examCount}</div><div class="stat-l">${t('exams')}</div></div>
   </div>`;
 
   // View switcher
   h+=`<div class="vsw">
-    <button class="vbtn${view==='grid'?' active':''}" onclick="playClick();setView('grid')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>${t('grid')}</button>
-    <button class="vbtn${view==='list'?' active':''}" onclick="playClick();setView('list')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>${t('list')}</button>
-    <button class="vbtn${view==='schedule'?' active':''}" onclick="playClick();setView('schedule')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('schedule')}</button>
+    <button class="vb${view==='grid'?' active':''}" onclick="playClick();setView('grid')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>${t('grid')}</button>
+    <button class="vb${view==='list'?' active':''}" onclick="playClick();setView('list')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>${t('list')}</button>
+    <button class="vb${view==='schedule'?' active':''}" onclick="playClick();setView('schedule')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('schedule')}</button>
   </div>`;
 
-  // Day filter
-  const days=getDays();
-  h+=`<div class="day-scroll"><button class="dchip${filter==='all'?' active':''}" onclick="playClick();setFilter('all')">${t('all')}</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();setFilter('${d}')">${days[i]}</button>`).join('')}</div>`;
-
-  // Size toggle
-  if(view==='grid'){
-    h+=`<div class="size-row"><span class="size-lbl">${t('size')}</span><div class="size-pills"><button class="spill${sz==='sm'?' active':''}" onclick="playClick();setSz('sm')">${t('small')}</button><button class="spill${sz==='md'?' active':''}" onclick="playClick();setSz('md')">${t('medium')}</button><button class="spill${sz==='lg'?' active':''}" onclick="playClick();setSz('lg')">${t('large')}</button></div></div>`;
-  }
-
-  if(!fil.length){
-    h+=`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/></svg></div><p>${t('empty')}</p><small>${t('emptySub')}</small></div>`;
-  } else if(view==='grid'){
-    h+=`<div class="grid ${sz}">${fil.map((c,i)=>cardH(c,i)).join('')}</div>`;
-  } else if(view==='list'){
-    h+=`<div class="lw">${fil.map((c,i)=>listH(c,i)).join('')}</div>`;
+  if(tab==='courses'){
+    // Day filter
+    const days=getDays();
+    h+=`<div class="dscroll"><button class="dchip${filter==='all'?' active':''}" onclick="playClick();setFilter('all')">${t('all')}</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();setFilter('${d}')">${days[i]}</button>`).join('')}</div>`;
+    // Size toggle
+    if(view==='grid')h+=`<div class="szrow"><span class="szlbl">${t('size')}</span><div class="szpills"><button class="szp${sz==='sm'?' active':''}" onclick="playClick();setSz('sm')">${t('small')}</button><button class="szp${sz==='md'?' active':''}" onclick="playClick();setSz('md')">${t('medium')}</button><button class="szp${sz==='lg'?' active':''}" onclick="playClick();setSz('lg')">${t('large')}</button></div></div>`;
+    const fil=filter==='all'?list:list.filter(c=>c.day===filter);
+    if(!fil.length){h+=emptyHTML();} else if(view==='grid'){h+=`<div class="grid ${sz}">${fil.map((c,i)=>courseCardH(c,i)).join('')}</div>`;}
+    else if(view==='list'){h+=`<div class="lw">${fil.map((c,i)=>courseListH(c,i)).join('')}</div>`;}
+    else{h+=courseSchedH(fil);}
   } else {
-    h+=schedH(fil);
+    // EXAMS TAB — show all courses with their exam info
+    if(view==='grid'){h+=`<div class="grid ${sz}">${list.map((c,i)=>examCardH(c,i)).join('')}</div>`;}
+    else if(view==='list'){h+=`<div class="lw">${list.map((c,i)=>examListH(c,i)).join('')}</div>`;}
+    else{h+=examSchedH();}
   }
-  document.getElementById('content').innerHTML=h;
+
+  cont.innerHTML=h;
 }
 
-function cardH(c,i){
+// ===== COURSE CARD HTML =====
+function courseCardH(c,i){
   const col=COLS[c.ci||0];
   const bc=sz==='sm'?'sm':sz==='lg'?'lg':'';
-  const isE=c.type==='exam';
-  const ts=isE?`${c.date||''} ${c.et||''}`:`${c.s||''}–${c.e||''}`;
-  const sub=isE?c.room:(c.doc||'');
-  const dl=isE?'':dLabel(c.day||'');
-  return`<div class="cc${isE?' exam':''}" onclick="playClick();openDet(${c.id})" style="animation-delay:${i*.04}s">
+  return`<div class="cc" onclick="playClick();openCourseDet(${c.id})" style="animation-delay:${i*.04}s">
     <div class="cc-bar" style="background:${col.b}"></div>
     <div class="cc-body ${bc}">
       <div class="cc-name">${c.name}</div>
-      <div class="cc-sub">${sub}</div>
-      <div class="cc-tags">${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}${dl?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt2)">${dl}</span>`:''}</div>
-      <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${ts}</div>
+      <div class="cc-sub">${c.doc||''}</div>
+      <div class="cc-tags">${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}
+        <span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${dLabel(c.day)}</span>
+      </div>
+      <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
     </div></div>`;
 }
-
-function listH(c,i){
+function courseListH(c,i){
   const col=COLS[c.ci||0];
-  const isE=c.type==='exam';
-  const ts=isE?c.et:`${c.s||''}–${c.e||''}`;
-  const dl=isE?(c.date||''):dLabel(c.day||'');
-  return`<div class="li" onclick="playClick();openDet(${c.id})" style="animation-delay:${i*.04}s">
+  return`<div class="li" onclick="playClick();openCourseDet(${c.id})" style="animation-delay:${i*.04}s">
     <div class="li-stripe" style="background:${col.b}"></div>
     <div class="li-body">
-      <div class="li-left"><div class="ln">${c.name}</div><div class="ls">${[c.doc,c.dept].filter(Boolean).join(' · ')}</div></div>
-      <div class="li-right"><div class="li-day">${dl}</div><div class="li-time">${ts}</div>${c.room?`<div class="li-room">${c.room}</div>`:''}</div>
+      <div><div class="li-ln">${c.name}</div><div class="li-ls">${[c.doc,c.dept].filter(Boolean).join(' · ')}</div></div>
+      <div style="text-align:left"><div class="li-day">${dLabel(c.day)}</div><div class="li-time">${c.s}–${c.e}</div>${c.room?`<div class="li-room">${c.room}</div>`:''}</div>
     </div></div>`;
 }
-
-function schedH(fil){
+function courseSchedH(fil){
   const byDay={};DAR.forEach(d=>{byDay[d]=[]});
-  fil.forEach(c=>{const d=c.day||DAR[0];if(byDay[d])byDay[d].push(c)});
+  fil.forEach(c=>{if(byDay[c.day])byDay[c.day].push(c)});
   const active=DAR.filter(d=>byDay[d].length>0&&(filter==='all'||filter===d));
-  if(!active.length)return'';
+  if(!active.length)return emptyHTML();
   let h='<div class="sw">';
   active.forEach(day=>{
-    const dc=byDay[day].sort((a,b)=>(a.s||'').localeCompare(b.s||''));
+    const dc=byDay[day].sort((a,b)=>a.s.localeCompare(b.s));
     const conf=new Set();
     for(let a=0;a<dc.length;a++)for(let b=a+1;b<dc.length;b++){
-      if((dc[a].s||'')<(dc[b].e||'')&&(dc[a].e||'')>(dc[b].s||'')){conf.add(dc[a].id);conf.add(dc[b].id)}
+      if(dc[a].s<dc[b].e&&dc[a].e>dc[b].s){conf.add(dc[a].id);conf.add(dc[b].id)}
     }
     h+=`<div><div class="s-dh"><span class="s-dn">${dLabel(day)}</span><div class="s-dl"></div><span class="s-dc">${dc.length}</span></div>`;
     if(conf.size)h+=`<div class="conflict-w"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${t('conflict')}</div>`;
     dc.forEach(c=>{
       const col=COLS[c.ci||0];
-      h+=`<div class="si" onclick="playClick();openDet(${c.id})">
-        <div class="si-time">${c.s||''}–${c.e||''}</div>
+      h+=`<div class="si" onclick="playClick();openCourseDet(${c.id})">
+        <div class="si-time">${c.s}–${c.e}</div>
         <div class="si-dot" style="background:${col.b}"></div>
-        <div class="si-info"><div class="sn">${c.name}</div><div class="ss">${[c.room,c.doc].filter(Boolean).join(' · ')}</div></div>
-        ${conf.has(c.id)?`<span style="font-size:12px;color:#f87171">⚠</span>`:''}
+        <div><div class="si-n">${c.name}</div><div class="si-s">${[c.room,c.doc].filter(Boolean).join(' · ')}</div></div>
+        ${conf.has(c.id)?`<span style="font-size:12px;color:var(--red)">⚠</span>`:''}
       </div>`;
     });
     h+='</div>';
@@ -687,33 +685,97 @@ function schedH(fil){
   return h+'</div>';
 }
 
-// ===== DETAIL =====
-function findItem(id){return[...courses,...exams].find(c=>c.id===id)}
-function openDet(id){
-  const c=findItem(id);if(!c)return;
+// ===== EXAM CARD HTML =====
+function examCardH(c,i){
   const col=COLS[c.ci||0];
-  const isE=c.type==='exam';
-  const icon=isE?`<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>`:`<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>`;
-  const rows=isE?[
-    {l:t('date'),v:c.date||'—'},{l:t('time'),v:c.et||'—'},
-    {l:t('room'),v:c.room||'—'},{l:t('dept'),v:c.dept||'—'},
-  ]:[
-    {l:t('day'),v:dLabel(c.day||'')},{l:`${t('start')}–${t('end')}`,v:`${c.s||''}–${c.e||''}`},
-    {l:t('room'),v:c.room||'—'},{l:t('doctor'),v:c.doc||'—'},
-  ];
+  const ex=exams[c.id];
+  const bc=sz==='sm'?'sm':sz==='lg'?'lg':'';
+  const hasExam=ex&&ex.date;
+  return`<div class="cc" onclick="playClick();openExamEdit(${c.id})" style="animation-delay:${i*.04}s">
+    <div class="cc-bar" style="background:${hasExam?'var(--org)':col.b}"></div>
+    <div class="cc-body ${bc}">
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-sub">${c.doc||''}</div>
+      <div class="cc-tags">
+        ${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}
+      </div>
+      ${hasExam
+        ?`<div class="exam-badge">📅 ${ex.date} ${ex.time||''}</div>`
+        :`<div style="font-size:10px;color:var(--txt3);margin-top:5px">+ ${t('setExam')}</div>`
+      }
+    </div></div>`;
+}
+function examListH(c,i){
+  const col=COLS[c.ci||0];
+  const ex=exams[c.id];
+  const hasExam=ex&&ex.date;
+  return`<div class="li" onclick="playClick();openExamEdit(${c.id})" style="animation-delay:${i*.04}s">
+    <div class="li-stripe" style="background:${hasExam?'var(--org)':col.b}"></div>
+    <div class="li-body">
+      <div><div class="li-ln">${c.name}</div><div class="li-ls">${c.dept||''}</div></div>
+      <div style="text-align:left">
+        ${hasExam?`<div class="li-day" style="color:var(--org)">${ex.date}</div><div class="li-time">${ex.time||''}${ex.room?' · '+ex.room:''}</div>`
+          :`<div style="font-size:11px;color:var(--txt3)">${t('noExam')}</div>`}
+      </div>
+    </div></div>`;
+}
+function examSchedH(){
+  // Group exams by date
+  const byDate={};
+  courses.forEach(c=>{
+    const ex=exams[c.id];
+    if(ex&&ex.date){
+      if(!byDate[ex.date])byDate[ex.date]=[];
+      byDate[ex.date].push({c,ex});
+    }
+  });
+  const dates=Object.keys(byDate).sort();
+  if(!dates.length){
+    return`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><p>${t('noExam')}</p><small>${t('emptySub')}</small></div>`;
+  }
+  let h='<div class="sw">';
+  dates.forEach(date=>{
+    const items=byDate[date].sort((a,b)=>(a.ex.time||'').localeCompare(b.ex.time||''));
+    h+=`<div><div class="s-dh"><span class="s-dn">${date}</span><div class="s-dl"></div><span class="s-dc">${items.length}</span></div>`;
+    items.forEach(({c,ex})=>{
+      const col=COLS[c.ci||0];
+      h+=`<div class="si" onclick="playClick();openExamEdit(${c.id})">
+        <div class="si-time">${ex.time||'—'}</div>
+        <div class="si-dot" style="background:var(--org)"></div>
+        <div><div class="si-n">${c.name}</div><div class="si-s">${[ex.room,c.dept].filter(Boolean).join(' · ')}</div></div>
+      </div>`;
+    });
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+
+function emptyHTML(){
+  return`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/></svg></div><p>${t('empty')}</p><small>${t('emptySub')}</small></div>`;
+}
+
+// ===== COURSE DETAIL =====
+function openCourseDet(id){
+  const c=courses.find(x=>x.id===id);if(!c)return;
+  const col=COLS[c.ci||0];
   document.getElementById('det-body').innerHTML=`
-    <div class="det-top" style="background:${col.b}"></div>
+    <div class="det-bar" style="background:${col.b}"></div>
     <div class="det-head">
-      <div class="det-ico" style="background:${col.b}">${icon}</div>
+      <div class="det-ico" style="background:${col.b}"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
       <div><div class="det-name">${c.name}</div><div class="det-dept">${c.dept||''}</div></div>
     </div>
-    <div class="det-grid">${rows.map(r=>`<div class="dc"><div class="dcl">${r.l}</div><div class="dcv">${r.v}</div></div>`).join('')}</div>
-    ${c.notes?`<div class="det-notes"><div class="det-nl">${t('notes')}</div><div class="det-nv">${c.notes}</div></div>`:''}
+    <div class="det-grid">
+      <div class="dc"><div class="dcl">${t('day')}</div><div class="dcv">${dLabel(c.day)}</div></div>
+      <div class="dc"><div class="dcl">${t('start')}–${t('end')}</div><div class="dcv">${c.s}–${c.e}</div></div>
+      <div class="dc"><div class="dcl">${t('room')}</div><div class="dcv">${c.room||'—'}</div></div>
+      <div class="dc"><div class="dcl">${t('doctor')}</div><div class="dcv">${c.doc||'—'}</div></div>
+    </div>
+    ${c.notes?`<div class="det-notes"><div style="font-size:9px;color:var(--txt3);margin-bottom:4px">${t('notes')}</div><div style="font-size:12px;color:var(--txt2);line-height:1.7">${c.notes}</div></div>`:''}
     <div class="det-acts">
-      <button class="da del" onclick="playClick();closeDet();setTimeout(()=>{openEdit(${c.id});setTimeout(()=>delItem(),50)},100)">
-        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/></svg>${t('del')}
+      <button class="da del" onclick="playClick();closeDet();eid=${c.id};delCourse()">
+        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>${t('del')}
       </button>
-      <button class="da edit" onclick="playClick();closeDet();openEdit(${c.id})">
+      <button class="da edit" onclick="playClick();closeDet();openEditCourse(${c.id})">
         <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>${t('edit')}
       </button>
     </div>`;
@@ -721,135 +783,171 @@ function openDet(id){
 }
 function closeDet(){document.getElementById('ov-det').classList.remove('open')}
 
-// ===== ADD/EDIT =====
+// ===== ADD COURSE =====
 function buildDaySelect(){
-  const s=document.getElementById('f-day');
-  if(!s)return;
+  const s=document.getElementById('f-day');if(!s)return;
   const cur=s.value;
-  const days=getDays();
-  s.innerHTML=DAR.map((d,i)=>`<option value="${d}"${d===cur?' selected':''}>${days[i]}</option>`).join('');
+  s.innerHTML=DAR.map((d,i)=>`<option value="${d}"${d===cur?' selected':''}>${getDays()[i]}</option>`).join('');
 }
+function buildColorRow(sel,rowId){
+  selC=sel;
+  document.getElementById(rowId).innerHTML=COLS.map((c,i)=>
+    `<div class="cdot${i===sel?' sel':''}" style="background:${c.b}" onclick="pickC(${i},'${rowId}')"></div>`
+  ).join('');
+}
+function pickC(i,rowId){selC=i;buildColorRow(i,rowId)}
+
 function openAdd(){
-  addType=tab==='exams'?'exam':'course';eid=null;
+  eid=null;
   document.getElementById('eid').value='';
-  document.getElementById('add-title').textContent=addType==='exam'?t('addExam'):t('addCourse');
-  document.getElementById('cf').style.display=addType==='course'?'':'none';
-  document.getElementById('ef').style.display=addType==='exam'?'':'none';
+  document.getElementById('add-title').textContent=t('addCourse');
   document.getElementById('del-btn').style.display='none';
-  clearForm();buildColorRow(0);buildDaySelect();
+  clearCourseForm();buildColorRow(0,'crow-c');buildDaySelect();
   document.getElementById('ov-add').classList.add('open');
 }
-function openEdit(id){
-  const c=findItem(id);if(!c)return;
-  addType=c.type;eid=id;
+function openEditCourse(id){
+  const c=courses.find(x=>x.id===id);if(!c)return;
+  eid=id;
   document.getElementById('eid').value=id;
-  document.getElementById('add-title').textContent=c.type==='exam'?t('editExam'):t('editCourse');
-  document.getElementById('cf').style.display=c.type==='course'?'':'none';
-  document.getElementById('ef').style.display=c.type==='exam'?'':'none';
+  document.getElementById('add-title').textContent=t('editCourse');
   document.getElementById('del-btn').style.display='inline-flex';
   document.getElementById('f-name').value=c.name||'';
+  document.getElementById('f-doc').value=c.doc||'';
+  document.getElementById('f-dept').value=c.dept||'';
+  document.getElementById('f-room').value=c.room||'';
+  document.getElementById('f-s').value=c.s||'08:00';
+  document.getElementById('f-e').value=c.e||'10:00';
   document.getElementById('f-notes').value=c.notes||'';
-  if(c.type==='course'){
-    document.getElementById('f-doc').value=c.doc||'';
-    document.getElementById('f-dept').value=c.dept||'';
-    document.getElementById('f-room').value=c.room||'';
-    document.getElementById('f-s').value=c.s||'08:00';
-    document.getElementById('f-e').value=c.e||'10:00';
-    buildDaySelect();document.getElementById('f-day').value=c.day||DAR[0];
-  } else {
-    document.getElementById('f-dt').value=c.date||'';
-    document.getElementById('f-et').value=c.et||'09:00';
-    document.getElementById('f-room2').value=c.room||'';
-  }
-  buildColorRow(c.ci||0);
+  buildDaySelect();document.getElementById('f-day').value=c.day||DAR[0];
+  buildColorRow(c.ci||0,'crow-c');
   document.getElementById('ov-add').classList.add('open');
 }
-function clearForm(){
-  ['f-name','f-doc','f-dept','f-room','f-room2','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+function clearCourseForm(){
+  ['f-name','f-doc','f-dept','f-room','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('f-s').value='08:00';document.getElementById('f-e').value='10:00';
-  document.getElementById('f-dt').value=new Date().toISOString().split('T')[0];
-  document.getElementById('f-et').value='09:00';
 }
-function buildColorRow(sel){
-  selC=sel;
-  document.getElementById('crow').innerHTML=COLS.map((c,i)=>`<div class="cdot${i===sel?' sel':''}" style="background:${c.b}" onclick="pickC(${i})"></div>`).join('');
-}
-function pickC(i){selC=i;buildColorRow(i)}
-function saveItem(){
+function saveCourse(){
   const name=document.getElementById('f-name').value.trim();
   if(!name)return;
   if(eid!==null){
-    const arr=addType==='course'?courses:exams;
-    const idx=arr.findIndex(c=>c.id===eid);
-    if(idx>=0){
-      if(addType==='course')arr[idx]={...arr[idx],name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC};
-      else arr[idx]={...arr[idx],name,date:document.getElementById('f-dt').value,et:document.getElementById('f-et').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC};
-    }
+    const idx=courses.findIndex(c=>c.id===eid);
+    if(idx>=0)courses[idx]={...courses[idx],name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC};
   } else {
-    if(addType==='course')courses.push({id:nid++,type:'course',name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
-    else exams.push({id:nid++,type:'exam',name,dept:'',date:document.getElementById('f-dt').value,et:document.getElementById('f-et').value,room:document.getElementById('f-room2').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
+    courses.push({id:nid++,name,doc:document.getElementById('f-doc').value.trim(),dept:document.getElementById('f-dept').value.trim(),day:document.getElementById('f-day').value,s:document.getElementById('f-s').value,e:document.getElementById('f-e').value,room:document.getElementById('f-room').value.trim(),notes:document.getElementById('f-notes').value.trim(),ci:selC});
   }
-  playSuccess();lsSave();closeAdd();render();
+  playOk();lsSave();closeAdd();render();
 }
-function delItem(){
-  if(!confirm(lang==='ar'?'حذف؟':lang==='tr'?'Sil?':'Delete?'))return;
-  courses=courses.filter(c=>c.id!==eid);exams=exams.filter(c=>c.id!==eid);
+function delCourse(){
+  if(!confirm(lang==='ar'?'حذف هذه المادة؟':lang==='tr'?'Sil?':'Delete?'))return;
+  const id=eid;
+  courses=courses.filter(c=>c.id!==id);
+  delete exams[id];
   lsSave();closeAdd();render();
 }
 function closeAdd(){document.getElementById('ov-add').classList.remove('open')}
 
+// ===== EXAM EDIT =====
+function openExamEdit(courseId){
+  const c=courses.find(x=>x.id===courseId);if(!c)return;
+  const ex=exams[courseId]||{};
+  document.getElementById('exam-cid').value=courseId;
+  document.getElementById('exam-course-name').textContent=c.name;
+  document.getElementById('exam-sheet-title').textContent=ex.date?t('editExam'):t('setExam');
+  document.getElementById('f-edate').value=ex.date||new Date().toISOString().split('T')[0];
+  document.getElementById('f-etime').value=ex.time||'09:00';
+  document.getElementById('f-eroom').value=ex.room||c.room||'';
+  document.getElementById('f-enotes').value=ex.notes||'';
+  // auto-fill day from date
+  const fd=document.getElementById('f-edate');
+  fd.oninput=()=>{
+    const d=new Date(fd.value);
+    if(!isNaN(d)){
+      const dayNames=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      document.getElementById('f-eday').value=dayNames[d.getDay()];
+    }
+  };
+  fd.oninput();
+  document.getElementById('ov-exam').classList.add('open');
+}
+function saveExam(){
+  const cid=parseInt(document.getElementById('exam-cid').value);
+  const date=document.getElementById('f-edate').value;
+  if(!date)return;
+  exams[cid]={date,day:document.getElementById('f-eday').value,time:document.getElementById('f-etime').value,room:document.getElementById('f-eroom').value.trim(),notes:document.getElementById('f-enotes').value.trim()};
+  playOk();lsSave();closeExam();render();
+}
+function closeExam(){document.getElementById('ov-exam').classList.remove('open')}
+
 // ===== SETTINGS =====
 function openSettings(){document.getElementById('ov-set').classList.add('open')}
 function closeSettings(){document.getElementById('ov-set').classList.remove('open')}
+function openThemePicker(){document.getElementById('ov-theme').classList.add('open')}
+function closeThemePicker(){document.getElementById('ov-theme').classList.remove('open')}
+function openLangPicker(){document.getElementById('ov-lang').classList.add('open')}
+function closeLangPicker(){document.getElementById('ov-lang').classList.remove('open')}
+
 function setTheme(cls,el){
-  document.body.className=cls;
-  document.querySelectorAll('.tsw').forEach(s=>s.classList.remove('sel'));
+  document.body.className=cls;currentTheme=cls;
+  document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('meta-theme').content=getComputedStyle(document.body).getPropertyValue('--bg').trim();lsSave();
+  ['dark','light','gold'].forEach(n=>{
+    const chk=document.getElementById('thc-'+n);
+    if(chk)chk.style.display=cls==='th-'+n?'':'none';
+  });
+  document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
+  lsSave();
 }
 function setLang(l,el){
   lang=l;
-  document.querySelectorAll('.lo').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');
-  document.documentElement.dir=l==='ar'?'rtl':'ltr';document.documentElement.lang=l;
-  buildDaySelect();updateLabels();lsSave();render();
+  document.querySelectorAll('.lang-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===l?'':'none'});
+  document.documentElement.dir=l==='ar'?'rtl':'ltr';
+  document.documentElement.lang=l;
+  document.getElementById('s-lang-val').textContent=LANG_NAMES[l];
+  buildDaySelect();lsSave();updateLabels();render();
 }
 function updateLabels(){
-  // Two-color wordmark
-  const wmData={ar:['موا','دي'],en:['Mawa','di'],tr:['Ders','lerim']};
-  const wm=wmData[lang]||wmData.ar;
-  const wm1=document.getElementById('wm1');const wm2=document.getElementById('wm2');
-  if(wm1)wm1.textContent=wm[0];if(wm2)wm2.textContent=wm[1];
-  // Greeting by time
   const h=new Date().getHours();
-  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi öğlenler ☀️':'İyi akşamlar 🌙'};
-  const gel=document.getElementById('app-greeting');if(gel)gel.textContent=greet[lang];
-  document.getElementById('t-c').textContent=t('courses');
-  document.getElementById('t-e').textContent=t('exams');
-  document.getElementById('tc-c').textContent=courses.length;
-  document.getElementById('tc-e').textContent=exams.length;
+  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi günler ☀️':'İyi akşamlar 🌙'};
+  const wms={ar:['موا','دي'],en:['Mawa','di'],tr:['Ders','lerim']};
+  const wm=wms[lang]||wms.ar;
+  document.getElementById('wm1').textContent=wm[0];
+  document.getElementById('wm2').textContent=wm[1];
+  document.getElementById('greeting').textContent=greet[lang];
+  document.getElementById('tc-lbl').textContent=t('courses');
+  document.getElementById('te-lbl').textContent=t('exams');
+  document.getElementById('tc-n').textContent=courses.length;
+  document.getElementById('te-n').textContent=Object.keys(exams).length;
   document.getElementById('s-title').textContent=t('settings');
-  document.getElementById('s-tl').textContent=t('theme');
-  document.getElementById('s-ll').textContent=t('lang');
   document.getElementById('s-done').textContent=t('done');
-  // install hint label
-  const sil=document.getElementById('s-il');if(sil)sil.textContent=t('install');
-  // update add modal labels if open
-  ['l-name','l-doc','l-dept','l-day','l-room','l-s','l-e','l-dt','l-et','l-room2','l-notes','l-color'].forEach((id,i)=>{
-    const keys=['name','doctor','dept','day','room','start','end','date','time','room','notes','color'];
-    const el=document.getElementById(id);if(el)el.textContent=t(keys[i]||'');
-  });
-  const bc=document.getElementById('btn-cancel');if(bc)bc.textContent=t('cancel');
-  const bs=document.getElementById('btn-save');if(bs)bs.textContent=t('save');
-  const db=document.getElementById('del-btn');if(db)db.textContent=t('del');
+  document.getElementById('s-theme-lbl').textContent=t('theme');
+  document.getElementById('s-lang-lbl').textContent=t('lang');
+  document.getElementById('s-theme-val').textContent=TH_NAMES[currentTheme]?.[lang]||'';
+  document.getElementById('s-lang-val').textContent=LANG_NAMES[lang];
+  // theme/lang picker
+  ['dark','light','gold'].forEach(n=>{const el=document.getElementById('th-'+n+'-name');if(el)el.textContent=TH_NAMES['th-'+n][lang]});
+  // restore lang selection UI
+  document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
+  ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
+  // restore theme selection UI
+  document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
+  ['dark','light','gold'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
 }
 // ===== MISC =====
-function setView(v){view=v;render()}
+function setView(v){view=v;lsSave();render()}
 function setFilter(f){filter=f;render()}
-function setSz(s){sz=s;render()}
-function switchTab(t2){tab=t2;filter='all';document.getElementById('tab-c').classList.toggle('active',t2==='courses');document.getElementById('tab-e').classList.toggle('active',t2==='exams');render()}
+function setSz(s){sz=s;lsSave();render()}
+function switchTab(t2){
+  tab=t2;filter='all';
+  document.getElementById('tab-c').classList.toggle('active',t2==='courses');
+  document.getElementById('tab-e').classList.toggle('active',t2==='exams');
+  render();
+}
 function ovClick(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open')}
 
-render();
+// ===== INIT =====
+updateLabels();render();
 </script>
 </body>
 </html>
