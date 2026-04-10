@@ -40,6 +40,197 @@
   --acc:#f9a825;--acc2:#ff8f00;
   --red:#bf360c;--grn:#558b2f;--ylw:#f9a825;--org:#e65100;
 }
+.th-gray{
+  --bg:#1a1a1a;--bg2:#242424;--bg3:#2e2e2e;
+  --sur:#2e2e2e;--sur2:#383838;--sur3:#424242;
+  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.13);
+  --txt:#f5f5f5;--txt2:#bdbdbd;--txt3:#757575;
+  --acc:#90a4ae;--acc2:#78909c;
+  --red:#ef5350;--grn:#66bb6a;--ylw:#ffca28;--org:#ffa726;
+}
+.th-green{
+  --bg:#0a1a0f;--bg2:#0f2318;--bg3:#152e20;
+  --sur:#152e20;--sur2:#1b3a28;--sur3:#224830;
+  --bord:rgba(100,200,100,0.08);--bord2:rgba(100,200,100,0.15);
+  --txt:#e8f5e9;--txt2:#a5d6a7;--txt3:#4caf50;
+  --acc:#4caf50;--acc2:#00897b;
+  --red:#ef5350;--grn:#4caf50;--ylw:#ffca28;--org:#ffa726;
+}
+
+/* ===== DESKTOP LAYOUT (768px+) ===== */
+@media(min-width:768px){
+  body{overflow:hidden;height:100vh}
+  .mobile-only{display:none!important}
+
+  /* Desktop wrapper */
+  .desk-wrap{display:flex;height:100vh;overflow:hidden}
+
+  /* Sidebar */
+  .desk-sidebar{
+    width:240px;flex-shrink:0;
+    background:var(--bg2);border-left:1px solid var(--bord);
+    display:flex;flex-direction:column;height:100vh;overflow-y:auto;
+  }
+  .desk-sidebar-head{
+    padding:20px 16px 12px;border-bottom:1px solid var(--bord);
+  }
+  .desk-brand{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .desk-logo{
+    width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:900;color:#fff;
+    box-shadow:0 2px 12px rgba(78,110,242,.3);
+    flex-shrink:0;
+  }
+  .desk-wordmark{font-size:20px;font-weight:900;color:var(--txt)}
+  .desk-wordmark span{color:var(--acc)}
+  .desk-greeting{font-size:11px;color:var(--txt3);margin-top:2px}
+
+  .desk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:12px 16px;border-bottom:1px solid var(--bord)}
+  .desk-stat{background:var(--sur3);border-radius:9px;padding:8px 6px;text-align:center}
+  .desk-stat-n{font-size:18px;font-weight:900;color:var(--acc)}
+  .desk-stat-l{font-size:9px;color:var(--txt3);margin-top:1px}
+
+  .desk-nav{padding:10px 10px;border-bottom:1px solid var(--bord)}
+  .desk-nav-item{
+    display:flex;align-items:center;gap:9px;padding:9px 12px;
+    border-radius:10px;cursor:pointer;transition:all .15s;
+    font-size:13px;font-weight:700;color:var(--txt3);margin-bottom:2px;
+  }
+  .desk-nav-item:hover{background:var(--sur2);color:var(--txt)}
+  .desk-nav-item.active{background:var(--acc);color:#fff}
+  .desk-nav-item svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .desk-nav-badge{margin-right:auto;font-size:9px;padding:2px 6px;border-radius:8px;background:rgba(255,255,255,.15);color:inherit}
+
+  .desk-course-list{padding:10px;flex:1;overflow-y:auto}
+  .desk-course-list-title{font-size:9px;color:var(--txt3);font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 6px;margin-bottom:4px}
+  .desk-course-item{
+    display:flex;align-items:center;gap:8px;padding:8px 10px;
+    border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:2px;
+  }
+  .desk-course-item:hover{background:var(--sur2)}
+  .desk-course-item.active{background:var(--sur3)}
+  .desk-course-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .desk-course-name{font-size:12px;font-weight:700;color:var(--txt);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .desk-course-day{font-size:10px;color:var(--txt3)}
+
+  .desk-sidebar-foot{padding:10px;border-top:1px solid var(--bord)}
+  .desk-foot-btn{
+    display:flex;align-items:center;gap:8px;padding:8px 10px;
+    border-radius:9px;cursor:pointer;transition:all .15s;
+    font-size:12px;font-weight:700;color:var(--txt3);width:100%;border:none;background:transparent;font-family:'Cairo',sans-serif;
+  }
+  .desk-foot-btn:hover{background:var(--sur2);color:var(--txt)}
+  .desk-foot-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .desk-add-btn{
+    width:100%;padding:10px;border-radius:10px;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));
+    color:#fff;border:none;font-family:'Cairo',sans-serif;
+    font-size:13px;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    box-shadow:0 2px 10px rgba(78,110,242,.3);margin-bottom:6px;transition:opacity .15s;
+  }
+  .desk-add-btn:hover{opacity:.9}
+  .desk-add-btn svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
+
+  /* Main content */
+  .desk-main{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden}
+  .desk-main-head{
+    padding:16px 20px;border-bottom:1px solid var(--bord);
+    background:var(--bg2);display:flex;align-items:center;gap:10px;flex-shrink:0;
+  }
+  .desk-main-title{font-size:18px;font-weight:900;color:var(--txt);flex:1}
+  .desk-tab-btns{display:flex;background:var(--sur2);border-radius:9px;padding:2px;gap:2px}
+  .desk-tab-btn{
+    padding:6px 14px;border-radius:7px;border:none;background:transparent;
+    font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;
+    color:var(--txt3);cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;gap:5px;
+  }
+  .desk-tab-btn.active{background:var(--bg2);color:var(--acc);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .desk-tab-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .desk-view-btns{display:flex;background:var(--sur2);border-radius:9px;padding:2px;gap:2px}
+  .desk-view-btn{
+    padding:6px 10px;border-radius:7px;border:none;background:transparent;
+    font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;
+    color:var(--txt3);cursor:pointer;transition:all .15s;
+  }
+  .desk-view-btn.active{background:var(--bg2);color:var(--acc);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .desk-filter-bar{display:flex;gap:5px;padding:10px 20px;border-bottom:1px solid var(--bord);flex-wrap:wrap;flex-shrink:0;background:var(--bg)}
+  .desk-main-body{flex:1;overflow-y:auto;padding:16px 20px}
+
+  /* Detail panel */
+  .desk-detail{
+    width:280px;flex-shrink:0;background:var(--bg2);
+    border-right:1px solid var(--bord);height:100vh;
+    overflow-y:auto;display:flex;flex-direction:column;
+  }
+  .desk-detail-empty{
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    color:var(--txt3);text-align:center;padding:20px;
+  }
+  .desk-detail-empty svg{width:40px;height:40px;stroke:var(--txt3);fill:none;stroke-width:1.5;margin-bottom:12px}
+  .desk-detail-empty p{font-size:13px}
+  .desk-det-hero{padding:16px;border-bottom:1px solid var(--bord)}
+  .desk-det-hero-inner{border-radius:12px;padding:16px}
+  .desk-det-name{font-size:16px;font-weight:900;color:#fff}
+  .desk-det-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}
+  .desk-det-body{padding:12px 14px}
+  .desk-det-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+  .desk-dc{background:var(--sur3);border-radius:9px;padding:8px 10px}
+  .desk-dcl{font-size:9px;color:var(--txt3);margin-bottom:2px;letter-spacing:.3px;text-transform:uppercase}
+  .desk-dcv{font-size:12px;font-weight:700;color:var(--txt)}
+  .desk-det-acts{display:flex;gap:6px;margin-bottom:12px;padding:0 14px}
+  .desk-da{flex:1;padding:9px;border-radius:9px;font-size:11px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;border:1px solid var(--bord2);background:var(--sur3);color:var(--txt2);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+  .desk-da svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+  .desk-da:hover{opacity:.8}
+  .desk-da.edit{background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;color:#fff}
+  .desk-da.del{background:rgba(244,67,54,.1);border-color:rgba(244,67,54,.2);color:var(--red)}
+  .desk-files-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 14px}
+  .desk-files-title{font-size:10px;color:var(--txt3);font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+  .desk-add-file-btn{background:var(--acc);color:#fff;border:none;border-radius:7px;padding:4px 9px;font-size:10px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer}
+  .desk-file-list{padding:0 14px}
+  .desk-file-item{display:flex;align-items:center;gap:8px;background:var(--sur3);border-radius:9px;padding:8px 10px;margin-bottom:5px;cursor:pointer;transition:opacity .15s}
+  .desk-file-item:hover{opacity:.8}
+  .desk-file-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .desk-file-name{font-size:11px;font-weight:700;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .desk-file-del{width:20px;height:20px;border-radius:5px;background:rgba(244,67,54,.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+  .desk-file-del svg{width:10px;height:10px;stroke:var(--red);fill:none;stroke-width:2.5;stroke-linecap:round}
+  .desk-file-empty{text-align:center;padding:14px;font-size:11px;color:var(--txt3);background:var(--sur3);border-radius:9px;border:1px dashed var(--bord2)}
+
+  /* Exam card for desktop */
+  .desk-exam-card{background:var(--sur);border:1px solid var(--bord);border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;animation:fi .2s ease both}
+  .desk-exam-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.2)}
+
+  /* Hide mobile topbar and show desktop */
+  .topbar{display:none}
+  .content{padding:0;display:none}
+  .ov .sheet{max-width:460px}
+
+  /* Desktop grid */
+  .desk-grid{display:grid;gap:10px}
+  .desk-grid.g2{grid-template-columns:repeat(2,1fr)}
+  .desk-grid.g3{grid-template-columns:repeat(3,1fr)}
+  .desk-grid.g1{grid-template-columns:1fr}
+
+  /* Upcoming banner desktop */
+  .desk-banner{
+    background:linear-gradient(135deg,rgba(255,109,0,.12),rgba(255,179,0,.08));
+    border:1px solid rgba(255,109,0,.2);border-radius:12px;
+    padding:12px 16px;margin-bottom:14px;
+    display:flex;align-items:center;gap:12px;cursor:pointer;
+  }
+  .desk-banner-ico{font-size:24px}
+  .desk-banner-t1{font-size:13px;font-weight:700;color:var(--org)}
+  .desk-banner-t2{font-size:11px;color:var(--txt3);margin-top:2px}
+}
+
+/* Mobile: hide desktop */
+@media(max-width:767px){
+  .desk-wrap{display:none}
+}
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overscroll-behavior:none}
@@ -447,6 +638,87 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="content" id="content"></div>
 </div>
 
+<!-- ===== DESKTOP LAYOUT ===== -->
+<div class="desk-wrap" id="desk-wrap">
+
+  <!-- SIDEBAR -->
+  <div class="desk-sidebar">
+    <div class="desk-sidebar-head">
+      <div class="desk-brand">
+        <div class="desk-logo">م</div>
+        <div>
+          <div class="desk-wordmark">موا<span>دي</span></div>
+          <div class="desk-greeting" id="desk-greeting">صباح الخير</div>
+        </div>
+      </div>
+    </div>
+    <div class="desk-stats">
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-cn">0</div><div class="desk-stat-l">مادة</div></div>
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-en" style="color:var(--org)">0</div><div class="desk-stat-l">اختبار</div></div>
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-fn" style="color:var(--teal)">0</div><div class="desk-stat-l">ملف</div></div>
+    </div>
+    <div class="desk-nav">
+      <div class="desk-nav-item active" id="dnav-courses" onclick="deskSwitchTab('courses',this)">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        المواد<span class="desk-nav-badge" id="dnb-c">0</span>
+      </div>
+      <div class="desk-nav-item" id="dnav-exams" onclick="deskSwitchTab('exams',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>
+        الاختبارات<span class="desk-nav-badge" id="dnb-e">0</span>
+      </div>
+      <div class="desk-nav-item" id="dnav-week" onclick="deskSwitchTab('week',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="10" y1="10" x2="10" y2="20"/></svg>
+        الجدول الأسبوعي
+      </div>
+      <div class="desk-nav-item" id="dnav-notif" onclick="deskSwitchTab('notif',this)">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        الإشعارات<span class="desk-nav-badge" id="dnb-notif" style="display:none;background:var(--red);color:#fff">0</span>
+      </div>
+    </div>
+    <div class="desk-course-list">
+      <div class="desk-course-list-title">المواد</div>
+      <div id="desk-course-list-items"></div>
+    </div>
+    <div class="desk-sidebar-foot">
+      <button class="desk-add-btn" onclick="playClick();openAdd()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        إضافة مادة
+      </button>
+      <button class="desk-foot-btn" onclick="playClick();openSettings()">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        الإعدادات
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="desk-main">
+    <div class="desk-main-head">
+      <div class="desk-main-title" id="desk-main-title">المواد</div>
+      <div class="desk-tab-btns" id="desk-tab-btns" style="margin-left:auto;margin-right:0">
+        <button class="desk-tab-btn active" id="dtab-grid" onclick="playClick();deskSetView('grid',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>مربعات
+        </button>
+        <button class="desk-tab-btn" id="dtab-list" onclick="playClick();deskSetView('list',this)">
+          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>قائمة
+        </button>
+      </div>
+    </div>
+    <div class="desk-filter-bar" id="desk-filter-bar"></div>
+    <div class="desk-main-body" id="desk-main-body"></div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="desk-detail" id="desk-detail">
+    <div class="desk-detail-empty" id="desk-det-empty">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      <p>اختر مادة لعرض تفاصيلها</p>
+    </div>
+    <div id="desk-det-content" style="display:none;flex-direction:column;flex:1"></div>
+  </div>
+
+</div>
+
 <!-- ADD/EDIT COURSE OVERLAY -->
 <div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
@@ -674,6 +946,16 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <span class="theme-opt-name">ذهبي</span>
       <span class="theme-check" style="display:none" id="thc-gold">✓</span>
     </div>
+    <div class="theme-opt" data-t="th-gray" onclick="playClick();setTheme('th-gray',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#242424,#1a1a1a);border:1px solid #424242"></div>
+      <span class="theme-opt-name">رمادي هادئ</span>
+      <span class="theme-check" style="display:none" id="thc-gray">✓</span>
+    </div>
+    <div class="theme-opt" data-t="th-green" onclick="playClick();setTheme('th-green',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#0f2318,#0a1a0f);border:1px solid rgba(76,175,80,.4)"></div>
+      <span class="theme-opt-name">أخضر زيتوني</span>
+      <span class="theme-check" style="display:none" id="thc-green">✓</span>
+    </div>
   </div>
   <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()">تم</button></div>
 </div>
@@ -777,7 +1059,7 @@ const L={
     today:'Bugün',tomorrow:'Yarın',
   }
 };
-const TH_NAMES={'th-dark':{ar:'أناضولو داكن',en:'Anadolu Dark',tr:'Anadolu Karanlık'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي',en:'Gold',tr:'Altın'}};
+const TH_NAMES={'th-dark':{ar:'أناضولو داكن',en:'Anadolu Dark',tr:'Anadolu Karanlık'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي',en:'Gold',tr:'Altın'},'th-gray':{ar:'رمادي هادئ',en:'Calm Gray',tr:'Sakin Gri'},'th-green':{ar:'أخضر زيتوني',en:'Olive Green',tr:'Zeytin Yeşili'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -808,6 +1090,10 @@ let sz=localStorage.getItem('mw2_sz')||'md';
 let tab='courses',filter='all';
 let eid=null,selC=0,selFileType_='pdf';
 let fileCid=null;
+let deskView=localStorage.getItem('mw2_dview')||'grid';
+let deskTab=localStorage.getItem('mw2_dtab')||'courses';
+let deskSelectedCourse=null;
+const isDesktop=()=>window.innerWidth>=768;
 
 let courses=lsGet('mw2_courses',[
   {id:1,name:'رياضيات 2',doc:'د. محمد علي',dept:'علوم حاسوب',code:'MATH201',day:'الاثنين',s:'08:00',e:'10:00',room:'A101',notes:'',ci:0},
@@ -896,6 +1182,7 @@ function render(){
     else{h+=examSchedH();}
   }
   cont.innerHTML=h;
+  if(isDesktop())deskRender();
 }
 
 // ===== WEEKLY GRID (Anadolu style) =====
@@ -1000,7 +1287,7 @@ function courseCardH(c,i){
 function courseListH(c,i){
   const col=COLS[c.ci||0];
   const fc=(files[c.id]||[]).length;
-  return`<div class="li" onclick="playClick();openCourseDet(${c.id})" style="animation-delay:${i*.04}s">
+  return`<div class="li" onclick="playClick();isDesktop()?deskSelectCourse(${c.id}):openCourseDet(${c.id})" style="animation-delay:${i*.04}s">
     <div class="li-stripe" style="background:${col.b}"></div>
     <div class="li-body">
       <div>
@@ -1475,7 +1762,7 @@ function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  ['dark','light','gold'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
+  ['dark','light','gold','gray','green'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
   lsSave();
 }
@@ -1506,7 +1793,7 @@ function updateLabels(){
   document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
   ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
   document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
-  ['dark','light','gold'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
+  ['dark','light','gold','gray','green'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[currentTheme]?.[lang]||'';
   document.getElementById('s-lang-val').textContent=LANG_NAMES[lang];
 }
@@ -1549,8 +1836,209 @@ function switchTab(t2){
 }
 function ovClick(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open')}
 
+// ===== DESKTOP FUNCTIONS =====
+function deskRender(){
+  if(!isDesktop())return;
+  deskUpdateSidebar();
+  deskRenderMain();
+  deskRenderDetail();
+}
+
+function deskUpdateSidebar(){
+  const h=new Date().getHours();
+  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi günler ☀️':'İyi akşamlar 🌙'};
+  const dg=document.getElementById('desk-greeting');if(dg)dg.textContent=greet[lang];
+  const fileCount=Object.values(files).reduce((s,a)=>s+(a?a.length:0),0);
+  const el=id=>document.getElementById(id);
+  if(el('ds-cn'))el('ds-cn').textContent=courses.length;
+  if(el('ds-en'))el('ds-en').textContent=Object.keys(exams).length;
+  if(el('ds-fn'))el('ds-fn').textContent=fileCount;
+  if(el('dnb-c'))el('dnb-c').textContent=courses.length;
+  if(el('dnb-e'))el('dnb-e').textContent=Object.keys(exams).length;
+  const urgent=courses.filter(c=>{const d=daysUntil(exams[c.id]?.date);return d!==null&&d>=0&&d<=3}).length;
+  if(el('dnb-notif')){el('dnb-notif').style.display=urgent?'':'none';el('dnb-notif').textContent=urgent;}
+  // Course list
+  const cl=el('desk-course-list-items');
+  if(cl)cl.innerHTML=courses.map(c=>{
+    const col=COLS[c.ci||0];
+    const active=deskSelectedCourse===c.id;
+    return`<div class="desk-course-item${active?' active':''}" onclick="deskSelectCourse(${c.id})">
+      <div class="desk-course-dot" style="background:${col.b}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="desk-course-name">${c.name}</div>
+        <div class="desk-course-day">${dLabel(c.day)} ${c.s}–${c.e}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deskRenderMain(){
+  const mb=document.getElementById('desk-main-body');
+  const fb=document.getElementById('desk-filter-bar');
+  const mt=document.getElementById('desk-main-title');
+  const tb=document.getElementById('desk-tab-btns');
+  if(!mb)return;
+
+  if(deskTab==='week'){
+    if(mt)mt.textContent='الجدول الأسبوعي';
+    if(fb)fb.innerHTML='';
+    if(tb)tb.style.display='none';
+    mb.innerHTML=renderWeek();
+    return;
+  }
+  if(deskTab==='notif'){
+    if(mt)mt.textContent='الإشعارات';
+    if(fb)fb.innerHTML='';
+    if(tb)tb.style.display='none';
+    mb.innerHTML=renderNotif();
+    return;
+  }
+  if(tb)tb.style.display='flex';
+
+  if(deskTab==='exams'){
+    if(mt)mt.textContent='الاختبارات';
+    if(fb)fb.innerHTML='';
+    if(deskView==='grid')mb.innerHTML=`<div class="desk-grid g2">${courses.map((c,i)=>examCardH(c,i)).join('')}</div>`;
+    else mb.innerHTML=`<div class="lw">${courses.map((c,i)=>examListH(c,i)).join('')}</div>`;
+    return;
+  }
+
+  // Courses tab
+  if(mt)mt.textContent='المواد';
+  const days=getDays();
+  if(fb)fb.innerHTML=`<button class="dchip${filter==='all'?' active':''}" onclick="playClick();deskFilter('all')">الكل</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();deskFilter('${d}')">${days[i]}</button>`).join('')}`;
+
+  const fil=filter==='all'?courses:courses.filter(c=>c.day===filter);
+  if(!fil.length){mb.innerHTML=emptyHTML();return;}
+
+  // Upcoming banner
+  const upcoming=courses.map(c=>{const d=daysUntil(exams[c.id]?.date);return{c,d};}).filter(x=>x.d!==null&&x.d>=0&&x.d<=7).sort((a,b)=>a.d-b.d);
+  let h='';
+  if(upcoming.length){
+    const first=upcoming[0];
+    h+=`<div class="desk-banner" onclick="deskSwitchTab('exams',document.getElementById('dnav-exams'))">
+      <div class="desk-banner-ico">📅</div>
+      <div><div class="desk-banner-t1">${first.d===0?'اليوم!':first.d===1?'غداً!':first.d+' يوم متبقي'} — ${first.c.name}</div>
+      <div class="desk-banner-t2">${upcoming.length} اختبارات قادمة هذا الأسبوع</div></div>
+    </div>`;
+  }
+
+  if(deskView==='grid')h+=`<div class="desk-grid g3">${fil.map((c,i)=>deskCourseCardH(c,i)).join('')}</div>`;
+  else h+=`<div class="lw">${fil.map((c,i)=>courseListH(c,i)).join('')}</div>`;
+  mb.innerHTML=h;
+}
+
+function deskCourseCardH(c,i){
+  const col=COLS[c.ci||0];
+  const fc=(files[c.id]||[]).length;
+  const active=deskSelectedCourse===c.id;
+  return`<div class="cc${active?' desk-card-active':''}" onclick="playClick();deskSelectCourse(${c.id})" style="animation-delay:${i*.04}s;${active?'border-color:var(--acc);border-width:2px':''}">
+    <div class="cc-bar" style="background:${col.b}"></div>
+    <div class="cc-body">
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-sub">${c.doc||''}</div>
+      <div class="cc-tags">
+        ${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}
+        ${c.code?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.code}</span>`:''}
+      </div>
+      <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
+      ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ملف</div>`:''}
+    </div></div>`;
+}
+
+function deskRenderDetail(){
+  const empty=document.getElementById('desk-det-empty');
+  const content=document.getElementById('desk-det-content');
+  if(!empty||!content)return;
+  if(!deskSelectedCourse){
+    empty.style.display='flex';content.style.display='none';return;
+  }
+  const c=courses.find(x=>x.id===deskSelectedCourse);
+  if(!c){empty.style.display='flex';content.style.display='none';return;}
+  empty.style.display='none';content.style.display='flex';
+  const col=COLS[c.ci||0];
+  const ex=exams[c.id];
+  const cf=files[c.id]||[];
+  const days=ex?daysUntil(ex.date):null;
+  content.innerHTML=`
+    <div class="desk-det-hero">
+      <div class="desk-det-hero-inner" style="background:linear-gradient(135deg,${col.b},${col.b}88)">
+        <div class="desk-det-name">${c.name}</div>
+        <div class="desk-det-sub">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
+        ${ex&&ex.date?`<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.8)">📅 ${ex.date} ${ex.time||''}</div>${days!==null?countdownHTML(days):''}`:'' }
+      </div>
+    </div>
+    <div class="desk-det-body">
+      <div class="desk-det-grid">
+        <div class="desk-dc"><div class="desk-dcl">اليوم</div><div class="desk-dcv">${dLabel(c.day)}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">الوقت</div><div class="desk-dcv">${c.s}–${c.e}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">القاعة</div><div class="desk-dcv">${c.room||'—'}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">الدكتور</div><div class="desk-dcv" style="font-size:11px">${c.doc||'—'}</div></div>
+      </div>
+      ${c.notes?`<div class="desk-dc" style="margin-bottom:12px"><div class="desk-dcl" style="margin-bottom:4px">ملاحظات</div><div style="font-size:11px;color:var(--txt2);line-height:1.7">${c.notes}</div></div>`:''}
+    </div>
+    <div class="desk-det-acts">
+      <button class="desk-da del" onclick="playClick();eid=${c.id};delCourse()">
+        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>حذف
+      </button>
+      <button class="desk-da" onclick="playClick();openExamEdit(${c.id})">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>اختبار
+      </button>
+      <button class="desk-da edit" onclick="playClick();openEditCourse(${c.id})">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>تعديل
+      </button>
+    </div>
+    <div class="desk-files-head">
+      <div class="desk-files-title">📎 الملفات</div>
+      <button class="desk-add-file-btn" onclick="playClick();openAddFile(${c.id})">+ إضافة</button>
+    </div>
+    <div class="desk-file-list">
+      ${cf.length?cf.map(f=>`
+        <div class="desk-file-item" onclick="openFileURL('${f.url}')">
+          <div class="desk-file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
+          <div style="flex:1;min-width:0">
+            <div class="desk-file-name">${f.name}</div>
+            <div style="font-size:9px;color:var(--txt3)">${f.note||f.type||''}</div>
+          </div>
+          <button class="desk-file-del" onclick="event.stopPropagation();playClick();deleteFile(${c.id},${f.id})">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>`).join('')
+      :`<div class="desk-file-empty">لا توجد ملفات — اضغط إضافة</div>`}
+    </div>
+  `;
+}
+
+function deskSelectCourse(id){
+  deskSelectedCourse=id;
+  playClick();
+  deskRender();
+}
+
+function deskSwitchTab(t,el){
+  deskTab=t;
+  document.querySelectorAll('.desk-nav-item').forEach(e=>e.classList.remove('active'));
+  if(el)el.classList.add('active');
+  deskSelectedCourse=null;
+  lsSave();deskRender();
+}
+
+function deskFilter(f){filter=f;deskRender();}
+
+function deskSetView(v,el){
+  deskView=v;
+  document.querySelectorAll('.desk-tab-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  lsSave();deskRender();
+}
+
+// ===== UPDATE THEME PICKER =====
+function openThemePicker(){document.getElementById('ov-theme').classList.add('open')}
+
 // ===== INIT =====
 updateLabels();render();
+if(isDesktop())deskRender();
+window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
 </script>
 </body>
 </html>
