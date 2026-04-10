@@ -7,12 +7,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
-<meta name="theme-color" id="meta-theme" content="#1a1f36">
+<meta name="theme-color" id="meta-theme" content="#0f1322">
+<link rel="manifest" href="manifest.json">
 <title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-/* ===== ANADOLU-INSPIRED THEME ===== */
+/* ===== THEMES ===== */
 :root{
   --bg:#0f1322;--bg2:#161b2e;--bg3:#1e2540;
   --sur:#1e2540;--sur2:#252d4a;--sur3:#2d3660;
@@ -24,37 +25,41 @@
   --r:14px;--rsm:8px;
   --header-h:110px;
 }
+/* Light */
 .th-light{
-  --bg:#f0f4ff;--bg2:#ffffff;--bg3:#e8edf8;
-  --sur:#ffffff;--sur2:#f0f4ff;--sur3:#e3e8f5;
-  --bord:rgba(78,110,242,0.1);--bord2:rgba(78,110,242,0.2);
+  --bg:#f4f6fa;--bg2:#ffffff;--bg3:#eaeef7;
+  --sur:#ffffff;--sur2:#f0f3fb;--sur3:#e4e9f7;
+  --bord:rgba(63,81,181,0.1);--bord2:rgba(63,81,181,0.2);
   --txt:#1a237e;--txt2:#3949ab;--txt3:#7986cb;
-  --acc:#3f51b5;--acc2:#7c4dff;
+  --acc:#3f51b5;--acc2:#5c6bc0;
   --red:#e53935;--grn:#43a047;--ylw:#f9a825;--org:#ef6c00;
 }
+/* Real Gold — dark background + genuine gold accent */
 .th-gold{
-  --bg:#0a0a00;--bg2:#111100;--bg3:#1a1900;
-  --sur:#1a1900;--sur2:#222200;--sur3:#2a2900;
-  --bord:rgba(200,170,50,0.1);--bord2:rgba(200,170,50,0.2);
-  --txt:#fff9c4;--txt2:#f9a825;--txt3:#795548;
-  --acc:#f9a825;--acc2:#ff8f00;
-  --red:#bf360c;--grn:#558b2f;--ylw:#f9a825;--org:#e65100;
+  --bg:#0d0c07;--bg2:#141209;--bg3:#1c1a0e;
+  --sur:#1c1a0e;--sur2:#242113;--sur3:#2e2a18;
+  --bord:rgba(212,175,55,0.12);--bord2:rgba(212,175,55,0.22);
+  --txt:#f5e6c8;--txt2:#d4af37;--txt3:#8a7340;
+  --acc:#d4af37;--acc2:#b8962e;
+  --red:#c0392b;--grn:#6a8f47;--ylw:#d4af37;--org:#c0692b;
 }
+/* Deep Gray — darker, more professional */
 .th-gray{
-  --bg:#1a1a1a;--bg2:#242424;--bg3:#2e2e2e;
-  --sur:#2e2e2e;--sur2:#383838;--sur3:#424242;
-  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.13);
-  --txt:#f5f5f5;--txt2:#bdbdbd;--txt3:#757575;
-  --acc:#90a4ae;--acc2:#78909c;
+  --bg:#111111;--bg2:#1a1a1a;--bg3:#222222;
+  --sur:#222222;--sur2:#2c2c2c;--sur3:#363636;
+  --bord:rgba(255,255,255,0.06);--bord2:rgba(255,255,255,0.11);
+  --txt:#f0f0f0;--txt2:#aaaaaa;--txt3:#666666;
+  --acc:#9e9e9e;--acc2:#757575;
   --red:#ef5350;--grn:#66bb6a;--ylw:#ffca28;--org:#ffa726;
 }
-.th-green{
-  --bg:#0a1a0f;--bg2:#0f2318;--bg3:#152e20;
-  --sur:#152e20;--sur2:#1b3a28;--sur3:#224830;
-  --bord:rgba(100,200,100,0.08);--bord2:rgba(100,200,100,0.15);
-  --txt:#e8f5e9;--txt2:#a5d6a7;--txt3:#4caf50;
-  --acc:#4caf50;--acc2:#00897b;
-  --red:#ef5350;--grn:#4caf50;--ylw:#ffca28;--org:#ffa726;
+/* Dark Orange — deep dark with warm amber/orange */
+.th-darkorange{
+  --bg:#0d0800;--bg2:#140e00;--bg3:#1c1400;
+  --sur:#1c1400;--sur2:#241c00;--sur3:#2e2300;
+  --bord:rgba(255,140,0,0.1);--bord2:rgba(255,140,0,0.2);
+  --txt:#fff3e0;--txt2:#ffb74d;--txt3:#8d5e0a;
+  --acc:#ff9800;--acc2:#f57c00;
+  --red:#e53935;--grn:#558b2f;--ylw:#ffca28;--org:#ff9800;
 }
 
 /* ===== DESKTOP LAYOUT (768px+) ===== */
@@ -596,7 +601,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="topbar">
   <div class="topbar-row">
     <div class="brand">
-      <div class="brand-logo">م</div>
       <div class="brand-text">
         <div class="wordmark">موا<span>دي</span></div>
         <div class="greeting" id="greeting">صباح الخير</div>
@@ -645,7 +649,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="desk-sidebar">
     <div class="desk-sidebar-head">
       <div class="desk-brand">
-        <div class="desk-logo">م</div>
         <div>
           <div class="desk-wordmark">موا<span>دي</span></div>
           <div class="desk-greeting" id="desk-greeting">صباح الخير</div>
@@ -653,40 +656,40 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       </div>
     </div>
     <div class="desk-stats">
-      <div class="desk-stat"><div class="desk-stat-n" id="ds-cn">0</div><div class="desk-stat-l">مادة</div></div>
-      <div class="desk-stat"><div class="desk-stat-n" id="ds-en" style="color:var(--org)">0</div><div class="desk-stat-l">اختبار</div></div>
-      <div class="desk-stat"><div class="desk-stat-n" id="ds-fn" style="color:var(--teal)">0</div><div class="desk-stat-l">ملف</div></div>
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-cn">0</div><div class="desk-stat-l" id="ds-lbl-c">مادة</div></div>
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-en" style="color:var(--org)">0</div><div class="desk-stat-l" id="ds-lbl-e">اختبار</div></div>
+      <div class="desk-stat"><div class="desk-stat-n" id="ds-fn" style="color:var(--teal)">0</div><div class="desk-stat-l" id="ds-lbl-f">ملف</div></div>
     </div>
     <div class="desk-nav">
       <div class="desk-nav-item active" id="dnav-courses" onclick="deskSwitchTab('courses',this)">
         <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-        المواد<span class="desk-nav-badge" id="dnb-c">0</span>
+        <span id="dnav-lbl-courses">المواد</span><span class="desk-nav-badge" id="dnb-c">0</span>
       </div>
       <div class="desk-nav-item" id="dnav-exams" onclick="deskSwitchTab('exams',this)">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9,16 11,18 15,14"/></svg>
-        الاختبارات<span class="desk-nav-badge" id="dnb-e">0</span>
+        <span id="dnav-lbl-exams">الاختبارات</span><span class="desk-nav-badge" id="dnb-e">0</span>
       </div>
       <div class="desk-nav-item" id="dnav-week" onclick="deskSwitchTab('week',this)">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="10" y1="10" x2="10" y2="20"/></svg>
-        الجدول الأسبوعي
+        <span id="dnav-lbl-week">الجدول الأسبوعي</span>
       </div>
       <div class="desk-nav-item" id="dnav-notif" onclick="deskSwitchTab('notif',this)">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        الإشعارات<span class="desk-nav-badge" id="dnb-notif" style="display:none;background:var(--red);color:#fff">0</span>
+        <span id="dnav-lbl-notif">الإشعارات</span><span class="desk-nav-badge" id="dnb-notif" style="display:none;background:var(--red);color:#fff">0</span>
       </div>
     </div>
     <div class="desk-course-list">
-      <div class="desk-course-list-title">المواد</div>
+      <div class="desk-course-list-title" id="desk-course-list-title">المواد</div>
       <div id="desk-course-list-items"></div>
     </div>
     <div class="desk-sidebar-foot">
       <button class="desk-add-btn" onclick="playClick();openAdd()">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        إضافة مادة
+        <span id="desk-add-btn-lbl">إضافة مادة</span>
       </button>
       <button class="desk-foot-btn" onclick="playClick();openSettings()">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        الإعدادات
+        <span id="desk-settings-lbl">الإعدادات</span>
       </button>
     </div>
   </div>
@@ -697,10 +700,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="desk-main-title" id="desk-main-title">المواد</div>
       <div class="desk-tab-btns" id="desk-tab-btns" style="margin-left:auto;margin-right:0">
         <button class="desk-tab-btn active" id="dtab-grid" onclick="playClick();deskSetView('grid',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>مربعات
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span id="desk-lbl-grid">مربعات</span>
         </button>
         <button class="desk-tab-btn" id="dtab-list" onclick="playClick();deskSetView('list',this)">
-          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>قائمة
+          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span id="desk-lbl-list">قائمة</span>
         </button>
       </div>
     </div>
@@ -712,7 +715,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="desk-detail" id="desk-detail">
     <div class="desk-detail-empty" id="desk-det-empty">
       <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-      <p>اختر مادة لعرض تفاصيلها</p>
+      <p id="lbl-select-course">اختر مادة لعرض تفاصيلها</p>
     </div>
     <div id="desk-det-content" style="display:none;flex-direction:column;flex:1"></div>
   </div>
@@ -725,26 +728,26 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="sh"></div>
   <div class="st" id="add-title">إضافة مادة</div>
   <input type="hidden" id="eid">
-  <div class="field"><label>اسم المادة</label><input id="f-name" type="text" placeholder="مثال: رياضيات 2"></div>
-  <div class="field"><label>الدكتور / المدرس</label><input id="f-doc" type="text"></div>
+  <div class="field"><label id="lbl-cname">اسم المادة</label><input id="f-name" type="text" placeholder="مثال: رياضيات 2"></div>
+  <div class="field"><label id="lbl-cdoc">الدكتور / المدرس</label><input id="f-doc" type="text"></div>
   <div class="r2">
-    <div class="field"><label>القسم / التخصص</label><input id="f-dept" type="text"></div>
-    <div class="field"><label>رقم المادة</label><input id="f-code" type="text" placeholder="مثال: CS201"></div>
+    <div class="field"><label id="lbl-cdept">القسم / التخصص</label><input id="f-dept" type="text"></div>
+    <div class="field"><label id="lbl-ccode">رقم المادة</label><input id="f-code" type="text" placeholder="مثال: CS201"></div>
   </div>
   <div class="r2">
-    <div class="field"><label>اليوم</label><select id="f-day"></select></div>
-    <div class="field"><label>القاعة</label><input id="f-room" type="text"></div>
+    <div class="field"><label id="lbl-cday">اليوم</label><select id="f-day"></select></div>
+    <div class="field"><label id="lbl-croom">القاعة</label><input id="f-room" type="text"></div>
   </div>
   <div class="r2">
-    <div class="field"><label>البداية</label><input id="f-s" type="time" value="08:00"></div>
-    <div class="field"><label>النهاية</label><input id="f-e" type="time" value="10:00"></div>
+    <div class="field"><label id="lbl-cs">البداية</label><input id="f-s" type="time" value="08:00"></div>
+    <div class="field"><label id="lbl-ce">النهاية</label><input id="f-e" type="time" value="10:00"></div>
   </div>
-  <div class="field"><label>ملاحظات</label><textarea id="f-notes" placeholder="أي ملاحظات إضافية..."></textarea></div>
-  <div class="field"><label>اللون</label><div class="crow" id="crow-c"></div></div>
+  <div class="field"><label id="lbl-cnotes">ملاحظات</label><textarea id="f-notes" placeholder="أي ملاحظات إضافية..."></textarea></div>
+  <div class="field"><label id="lbl-ccolor">اللون</label><div class="crow" id="crow-c"></div></div>
   <div class="mbtns">
-    <button class="mb mb-d" id="del-btn" style="display:none" onclick="playClick();delCourse()">حذف</button>
-    <button class="mb mb-c" onclick="playClick();closeAdd()">إلغاء</button>
-    <button class="mb mb-s" onclick="playClick();saveCourse()">حفظ</button>
+    <button class="mb mb-d" id="del-btn" style="display:none" onclick="playClick();delCourse()" id="btn-del-course">حذف</button>
+    <button class="mb mb-c" onclick="playClick();closeAdd()" id="btn-cancel-add">إلغاء</button>
+    <button class="mb mb-s" onclick="playClick();saveCourse()" id="btn-save-course">حفظ</button>
   </div>
 </div>
 </div>
@@ -756,21 +759,21 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="st" id="exam-sheet-title">موعد الاختبار</div>
   <input type="hidden" id="exam-cid">
   <div style="background:var(--sur3);border-radius:11px;padding:11px 13px;margin-bottom:12px">
-    <div style="font-size:10px;color:var(--txt3);margin-bottom:2px">المادة</div>
+    <div style="font-size:10px;color:var(--txt3);margin-bottom:2px" id="lbl-exam-course">المادة</div>
     <div style="font-size:16px;font-weight:800;color:var(--txt)" id="exam-course-name">—</div>
   </div>
   <div class="r2">
-    <div class="field"><label>التاريخ</label><input id="f-edate" type="date"></div>
-    <div class="field"><label>اليوم</label><input id="f-eday" type="text" readonly></div>
+    <div class="field"><label id="lbl-edate">التاريخ</label><input id="f-edate" type="date"></div>
+    <div class="field"><label id="lbl-eday">اليوم</label><input id="f-eday" type="text" readonly></div>
   </div>
   <div class="r2">
-    <div class="field"><label>الساعة</label><input id="f-etime" type="time" value="09:00"></div>
-    <div class="field"><label>القاعة</label><input id="f-eroom" type="text"></div>
+    <div class="field"><label id="lbl-etime">الساعة</label><input id="f-etime" type="time" value="09:00"></div>
+    <div class="field"><label id="lbl-eroom">القاعة</label><input id="f-eroom" type="text"></div>
   </div>
-  <div class="field"><label>ملاحظات</label><textarea id="f-enotes"></textarea></div>
+  <div class="field"><label id="lbl-enotes">ملاحظات</label><textarea id="f-enotes"></textarea></div>
   <div class="mbtns">
-    <button class="mb mb-c" onclick="playClick();closeExam()">إلغاء</button>
-    <button class="mb mb-s" onclick="playClick();saveExam()">حفظ</button>
+    <button class="mb mb-c" onclick="playClick();closeExam()" id="btn-cancel-exam">إلغاء</button>
+    <button class="mb mb-s" onclick="playClick();saveExam()" id="btn-save-exam">حفظ</button>
   </div>
 </div>
 </div>
@@ -784,25 +787,25 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="ov" id="ov-file" onclick="ovClick(event,'ov-file')">
 <div class="sheet">
   <div class="sh"></div>
-  <div class="st">إضافة ملف</div>
+  <div class="st" id="lbl-addfile-title">إضافة ملف</div>
   <input type="hidden" id="file-cid">
 
   <!-- Drive status -->
   <div id="drive-status-bar" style="display:none;align-items:center;gap:8px;background:var(--sur3);border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:11px">
     <span id="drive-status-ico">☁️</span>
     <span id="drive-status-txt" style="color:var(--txt2);flex:1"></span>
-    <button onclick="driveSignOut()" style="font-size:10px;color:var(--red);background:none;border:none;cursor:pointer;font-family:Cairo,sans-serif">خروج</button>
+    <button onclick="driveSignOut()" id="btn-drive-signout" style="font-size:10px;color:var(--red);background:none;border:none;cursor:pointer;font-family:Cairo,sans-serif">خروج</button>
   </div>
 
   <!-- Mode tabs -->
   <div class="vsw" style="margin-bottom:12px">
     <button class="vb active" id="tab-upload-mode" onclick="switchFileMode('upload',this)">
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      رفع من الجهاز
+      <span id="lbl-upload-mode">رفع من الجهاز</span>
     </button>
     <button class="vb" id="tab-link-mode" onclick="switchFileMode('link',this)">
       <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-      رابط يدوي
+      <span id="lbl-link-mode">رابط يدوي</span>
     </button>
   </div>
 
@@ -810,10 +813,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div id="file-mode-upload">
     <div id="drive-login-box" style="text-align:center;padding:16px;background:var(--sur3);border-radius:12px;margin-bottom:12px;border:1px dashed var(--bord2)">
       <div style="font-size:28px;margin-bottom:8px">☁️</div>
-      <div style="font-size:13px;font-weight:700;color:var(--txt);margin-bottom:4px">رفع إلى Google Drive</div>
-      <div style="font-size:11px;color:var(--txt3);margin-bottom:12px">سجّل دخول مرة واحدة ثم ارفع الملفات تلقائياً</div>
-      <button onclick="driveSignIn()" style="background:linear-gradient(135deg,#4e6ef2,#7c4dff);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;width:100%">
-        🔐 تسجيل الدخول بـ Google
+      <div style="font-size:13px;font-weight:700;color:var(--txt);margin-bottom:4px" id="lbl-upload-drive-title">رفع إلى Google Drive</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:12px" id="lbl-upload-drive-sub">سجّل دخول مرة واحدة ثم ارفع الملفات تلقائياً</div>
+      <button onclick="driveSignIn()" id="btn-drive-login" style="background:linear-gradient(135deg,#4e6ef2,#7c4dff);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;width:100%">
+        🔐 <span id="lbl-login-google">تسجيل الدخول بـ Google</span>
       </button>
     </div>
     <div id="drive-upload-box" style="display:none">
@@ -824,8 +827,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
         ondragleave="this.style.borderColor='var(--bord2)'"
         ondrop="handleDrop(event)">
         <div style="font-size:32px;margin-bottom:8px">📂</div>
-        <div style="font-size:13px;font-weight:700;color:var(--txt)">اضغط لاختيار ملف</div>
-        <div style="font-size:10px;color:var(--txt3);margin-top:4px">أو اسحب الملف هنا</div>
+        <div style="font-size:13px;font-weight:700;color:var(--txt)" id="lbl-click-select">اضغط لاختيار ملف</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:4px" id="lbl-or-drag">أو اسحب الملف هنا</div>
       </div>
       <input type="file" id="real-file-input" style="display:none" onchange="handleFileSelect(event)">
       <div id="upload-progress" style="display:none;margin-bottom:12px">
@@ -843,30 +846,30 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
         <button onclick="clearSelectedFile()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px">✕</button>
       </div>
     </div>
-    <div class="field"><label>اسم الملف (اختياري)</label><input id="f-fname-upload" type="text" placeholder="سيُأخذ من اسم الملف تلقائياً"></div>
-    <div class="field"><label>ملاحظة</label><input id="f-fnote-upload" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
+    <div class="field"><label id="lbl-fname-upload">اسم الملف (اختياري)</label><input id="f-fname-upload" type="text" placeholder="سيُأخذ من اسم الملف تلقائياً"></div>
+    <div class="field"><label id="lbl-fnote-upload">ملاحظة</label><input id="f-fnote-upload" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
     <div class="mbtns">
-      <button class="mb mb-c" onclick="playClick();closeFile()">إلغاء</button>
+      <button class="mb mb-c" onclick="playClick();closeFile()" id="btn-cancel-file-upload">إلغاء</button>
       <button class="mb mb-s" id="btn-upload-save" onclick="playClick();uploadAndSave()">رفع إلى Drive ☁️</button>
     </div>
   </div>
 
   <!-- LINK MODE -->
   <div id="file-mode-link" style="display:none">
-    <div class="field"><label>نوع الملف</label>
+    <div class="field"><label id="lbl-ftype">نوع الملف</label>
       <div class="file-type-grid">
         <div class="file-type-btn sel" data-t="pdf" onclick="selFileType('pdf',this)"><span>📄</span><span>PDF</span></div>
-        <div class="file-type-btn" data-t="video" onclick="selFileType('video',this)"><span>🎬</span><span>فيديو</span></div>
-        <div class="file-type-btn" data-t="doc" onclick="selFileType('doc',this)"><span>📝</span><span>ملف</span></div>
-        <div class="file-type-btn" data-t="link" onclick="selFileType('link',this)"><span>🔗</span><span>رابط</span></div>
+        <div class="file-type-btn" data-t="video" onclick="selFileType('video',this)"><span>🎬</span><span id="lbl-ftype-video">فيديو</span></div>
+        <div class="file-type-btn" data-t="doc" onclick="selFileType('doc',this)"><span>📝</span><span id="lbl-ftype-doc">ملف</span></div>
+        <div class="file-type-btn" data-t="link" onclick="selFileType('link',this)"><span>🔗</span><span id="lbl-ftype-link">رابط</span></div>
       </div>
     </div>
-    <div class="field"><label>اسم الملف</label><input id="f-fname" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
-    <div class="field"><label>الرابط / URL</label><input id="f-furl" type="url" placeholder="https://drive.google.com/..."></div>
-    <div class="field"><label>ملاحظة (اختياري)</label><input id="f-fnote" type="text" placeholder="مثال: الفصل الأول"></div>
+    <div class="field"><label id="lbl-fname">اسم الملف</label><input id="f-fname" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
+    <div class="field"><label id="lbl-furl">الرابط / URL</label><input id="f-furl" type="url" placeholder="https://drive.google.com/..."></div>
+    <div class="field"><label id="lbl-fnote">ملاحظة (اختياري)</label><input id="f-fnote" type="text" placeholder="مثال: الفصل الأول"></div>
     <div class="mbtns">
-      <button class="mb mb-c" onclick="playClick();closeFile()">إلغاء</button>
-      <button class="mb mb-s" onclick="playClick();saveFile()">إضافة</button>
+      <button class="mb mb-c" onclick="playClick();closeFile()" id="btn-cancel-file-link">إلغاء</button>
+      <button class="mb mb-s" onclick="playClick();saveFile()" id="btn-save-file">إضافة</button>
     </div>
   </div>
 </div>
@@ -876,13 +879,13 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="ov" id="ov-set" onclick="ovClick(event,'ov-set')">
 <div class="sheet">
   <div class="sh"></div>
-  <div class="st">الإعدادات</div>
+  <div class="st" id="lbl-settings-title">الإعدادات</div>
   <div class="set-row" onclick="playClick();openThemePicker()">
     <div class="set-row-left">
       <div class="set-row-icon" style="background:var(--acc)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </div>
-      <span class="set-row-lbl">الثيم</span>
+      <span class="set-row-lbl" id="lbl-theme-row">الثيم</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px">
       <span class="set-row-val" id="s-theme-val">داكن</span>
@@ -894,7 +897,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="set-row-icon" style="background:var(--grn)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
       </div>
-      <span class="set-row-lbl">اللغة</span>
+      <span class="set-row-lbl" id="lbl-lang-row">اللغة</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px">
       <span class="set-row-val" id="s-lang-val">العربية</span>
@@ -906,7 +909,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="set-row-icon" style="background:var(--teal)">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </div>
-      <span class="set-row-lbl">تصدير البيانات</span>
+      <span class="set-row-lbl" id="lbl-export-row">تصدير البيانات</span>
     </div>
     <span class="set-row-arrow">›</span>
   </div>
@@ -915,13 +918,13 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="set-row-icon" style="background:var(--org)">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
-      <span class="set-row-lbl">استيراد البيانات</span>
+      <span class="set-row-lbl" id="lbl-import-row">استيراد البيانات</span>
     </div>
     <span class="set-row-arrow">›</span>
   </div>
   <input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(event)">
   <div class="set-credit">تصميم: أنس فتيان · <a href="#">موادي v2.0</a></div>
-  <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeSettings()">تم</button></div>
+  <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeSettings()" id="btn-settings-done">تم</button></div>
 </div>
 </div>
 
@@ -929,32 +932,32 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="ov" id="ov-theme" onclick="ovClick(event,'ov-theme')">
 <div class="sub-sheet">
   <div class="sh"></div>
-  <div class="st">اختر الثيم</div>
+  <div class="st" id="lbl-theme-picker-title">اختر الثيم</div>
   <div class="theme-opts">
     <div class="theme-opt sel" data-t="th-dark" onclick="playClick();setTheme('th-dark',this)">
       <div class="theme-swatch" style="background:linear-gradient(135deg,#161b2e,#0f1322);border:1px solid #2d3660"></div>
-      <span class="theme-opt-name">أناضولو داكن</span>
+      <span class="theme-opt-name">داكن أزرق</span>
       <span class="theme-check" id="thc-dark">✓</span>
     </div>
     <div class="theme-opt" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#f0f4ff,#ffffff);border:1px solid #e3e8f5"></div>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#f4f6fa,#ffffff);border:1px solid #d0d8ee"></div>
       <span class="theme-opt-name">فاتح</span>
       <span class="theme-check" style="display:none" id="thc-light">✓</span>
     </div>
     <div class="theme-opt" data-t="th-gold" onclick="playClick();setTheme('th-gold',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#111100,#1a1900);border:1px solid rgba(200,170,50,.4)"></div>
-      <span class="theme-opt-name">ذهبي</span>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#141209,#0d0c07);border:1px solid rgba(212,175,55,.5)"></div>
+      <span class="theme-opt-name">ذهبي راقٍ</span>
       <span class="theme-check" style="display:none" id="thc-gold">✓</span>
     </div>
     <div class="theme-opt" data-t="th-gray" onclick="playClick();setTheme('th-gray',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#242424,#1a1a1a);border:1px solid #424242"></div>
-      <span class="theme-opt-name">رمادي هادئ</span>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a1a1a,#111111);border:1px solid #333"></div>
+      <span class="theme-opt-name">رمادي داكن</span>
       <span class="theme-check" style="display:none" id="thc-gray">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-green" onclick="playClick();setTheme('th-green',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#0f2318,#0a1a0f);border:1px solid rgba(76,175,80,.4)"></div>
-      <span class="theme-opt-name">أخضر زيتوني</span>
-      <span class="theme-check" style="display:none" id="thc-green">✓</span>
+    <div class="theme-opt" data-t="th-darkorange" onclick="playClick();setTheme('th-darkorange',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#140e00,#0d0800);border:1px solid rgba(255,140,0,.4)"></div>
+      <span class="theme-opt-name">داكن برتقالي</span>
+      <span class="theme-check" style="display:none" id="thc-darkorange">✓</span>
     </div>
   </div>
   <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()">تم</button></div>
@@ -1027,6 +1030,32 @@ const L={
     addFile:'إضافة ملف',noFiles:'لا توجد ملفات',
     upcomingExams:'اختبارات قادمة',daysLeft:'يوم متبقي',
     today:'اليوم',tomorrow:'غداً',
+    time:'الوقت',addCourse:'إضافة مادة',editCourse:'تعديل المادة',
+    courseName:'اسم المادة',instructor:'الدكتور / المدرس',
+    deptSpec:'القسم / التخصص',courseNum:'رقم المادة',
+    examDate:'التاريخ',examTime:'الساعة',
+    uploadDevice:'رفع من الجهاز',manualLink:'رابط يدوي',
+    uploadDrive:'رفع إلى Google Drive',loginOnce:'سجّل دخول مرة واحدة ثم ارفع الملفات تلقائياً',
+    loginGoogle:'تسجيل الدخول بـ Google',
+    clickToSelect:'اضغط لاختيار ملف',orDrag:'أو اسحب الملف هنا',
+    uploading:'جاري الرفع...',fileNameOpt:'اسم الملف (اختياري)',
+    autoName:'سيُأخذ من اسم الملف تلقائياً',note:'ملاحظة',
+    linkNote:'مثال: محاضرة الأسبوع 3',fileType:'نوع الملف',
+    fileNameReq:'اسم الملف',linkUrl:'الرابط / URL',
+    uploadToDrive:'رفع إلى Drive ☁️',add:'إضافة',
+    noUpcoming:'لا توجد اختبارات قادمة',addExamDates:'أضف مواعيد اختباراتك',
+    noFilesYet:'لا توجد ملفات — اضغط إضافة',
+    selectCourse:'اختر مادة لعرض تفاصيلها',
+    connectedDrive:'متصل بـ Google Drive',logout:'خروج',
+    exam:'الاختبار',
+    thisWeek:'هذا الأسبوع',
+    addCourseBtn:'إضافة مادة',
+    exportData:'تصدير البيانات',importData:'استيراد البيانات',
+    deleteFile:'حذف هذا الملف؟',deleteCourse:'حذف هذه المادة؟',
+    importOk:'تم الاستيراد بنجاح ✅',importErr:'خطأ في الملف',
+    loginErr:'خطأ في تسجيل الدخول: ',mustLogin:'يجب تسجيل الدخول أولاً',
+    selectFile:'اختر ملفاً أولاً',finished:'✓ انتهى',
+    chooseTheme:'اختر الثيم',
   },
   en:{courses:'Courses',exams:'Exams',week:'Week',
     name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',
@@ -1042,6 +1071,32 @@ const L={
     addFile:'Add File',noFiles:'No files yet',
     upcomingExams:'Upcoming Exams',daysLeft:'days left',
     today:'Today',tomorrow:'Tomorrow',
+    time:'Time',addCourse:'Add Course',editCourse:'Edit Course',
+    courseName:'Course Name',instructor:'Instructor',
+    deptSpec:'Department / Major',courseNum:'Course Code',
+    examDate:'Date',examTime:'Time',
+    uploadDevice:'Upload from Device',manualLink:'Manual Link',
+    uploadDrive:'Upload to Google Drive',loginOnce:'Sign in once, then upload files automatically',
+    loginGoogle:'Sign in with Google',
+    clickToSelect:'Click to select a file',orDrag:'Or drag file here',
+    uploading:'Uploading...',fileNameOpt:'File Name (optional)',
+    autoName:'Will be taken from the file name automatically',note:'Note',
+    linkNote:'e.g. Week 3 Lecture',fileType:'File Type',
+    fileNameReq:'File Name',linkUrl:'Link / URL',
+    uploadToDrive:'Upload to Drive ☁️',add:'Add',
+    noUpcoming:'No upcoming exams',addExamDates:'Add your exam dates',
+    noFilesYet:'No files — press Add',
+    selectCourse:'Select a course to view details',
+    connectedDrive:'Connected to Google Drive',logout:'Sign Out',
+    exam:'Exam',
+    thisWeek:'this week',
+    addCourseBtn:'Add Course',
+    exportData:'Export Data',importData:'Import Data',
+    deleteFile:'Delete this file?',deleteCourse:'Delete this course?',
+    importOk:'Import successful ✅',importErr:'File error',
+    loginErr:'Sign in error: ',mustLogin:'Please sign in first',
+    selectFile:'Please select a file first',finished:'✓ Finished',
+    chooseTheme:'Choose Theme',
   },
   tr:{courses:'Dersler',exams:'Sınavlar',week:'Hafta',
     name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',
@@ -1057,9 +1112,35 @@ const L={
     addFile:'Dosya Ekle',noFiles:'Dosya yok',
     upcomingExams:'Yaklaşan Sınavlar',daysLeft:'gün kaldı',
     today:'Bugün',tomorrow:'Yarın',
+    time:'Saat',addCourse:'Ders Ekle',editCourse:'Dersi Düzenle',
+    courseName:'Ders Adı',instructor:'Öğretim Görevlisi',
+    deptSpec:'Bölüm / Uzmanlık',courseNum:'Ders Kodu',
+    examDate:'Tarih',examTime:'Saat',
+    uploadDevice:'Cihazdan Yükle',manualLink:'Manuel Bağlantı',
+    uploadDrive:"Google Drive'a Yükle",loginOnce:'Bir kere giriş yap, dosyaları otomatik yükle',
+    loginGoogle:"Google ile Giriş Yap",
+    clickToSelect:'Dosya seçmek için tıkla',orDrag:'Ya da dosyayı buraya sürükle',
+    uploading:'Yükleniyor...',fileNameOpt:'Dosya Adı (isteğe bağlı)',
+    autoName:'Dosya adından otomatik alınır',note:'Not',
+    linkNote:'örn: 3. Hafta Dersi',fileType:'Dosya Türü',
+    fileNameReq:'Dosya Adı',linkUrl:'Bağlantı / URL',
+    uploadToDrive:"Drive'a Yükle ☁️",add:'Ekle',
+    noUpcoming:'Yaklaşan sınav yok',addExamDates:'Sınav tarihlerini ekle',
+    noFilesYet:'Dosya yok — Ekle düğmesine bas',
+    selectCourse:'Detayları görmek için bir ders seç',
+    connectedDrive:"Google Drive'a bağlı",logout:'Çıkış',
+    exam:'Sınav',
+    thisWeek:'bu hafta',
+    addCourseBtn:'Ders Ekle',
+    exportData:'Verileri Dışa Aktar',importData:'Verileri İçe Aktar',
+    deleteFile:'Bu dosya silinsin mi?',deleteCourse:'Bu ders silinsin mi?',
+    importOk:'İçe aktarma başarılı ✅',importErr:'Dosya hatası',
+    loginErr:'Giriş hatası: ',mustLogin:'Lütfen önce giriş yapın',
+    selectFile:'Lütfen önce bir dosya seçin',finished:'✓ Bitti',
+    chooseTheme:'Tema Seç',
   }
 };
-const TH_NAMES={'th-dark':{ar:'أناضولو داكن',en:'Anadolu Dark',tr:'Anadolu Karanlık'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي',en:'Gold',tr:'Altın'},'th-gray':{ar:'رمادي هادئ',en:'Calm Gray',tr:'Sakin Gri'},'th-green':{ar:'أخضر زيتوني',en:'Olive Green',tr:'Zeytin Yeşili'}};
+const TH_NAMES={'th-dark':{ar:'داكن أزرق',en:'Dark Blue',tr:'Koyu Mavi'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي راقٍ',en:'Royal Gold',tr:'Kraliyet Altını'},'th-gray':{ar:'رمادي داكن',en:'Dark Gray',tr:'Koyu Gri'},'th-darkorange':{ar:'داكن برتقالي',en:'Dark Orange',tr:'Koyu Turuncu'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -1118,7 +1199,7 @@ function daysUntil(dateStr){
 }
 function countdownHTML(days){
   if(days===null)return'';
-  if(days<0)return`<div class="exam-countdown ok">✓ انتهى</div>`;
+  if(days<0)return`<div class="exam-countdown ok">${t('finished')}</div>`;
   if(days===0)return`<div class="exam-countdown soon">🔴 ${t('today')}!</div>`;
   if(days===1)return`<div class="exam-countdown soon">🔴 ${t('tomorrow')}!</div>`;
   if(days<=7)return`<div class="exam-countdown near">⚠️ ${days} ${t('daysLeft')}</div>`;
@@ -1154,7 +1235,7 @@ function render(){
       <div class="exam-banner-ico">📅</div>
       <div class="exam-banner-text">
         <div class="et1">${first.d===0?t('today')+'!':first.d===1?t('tomorrow')+'!':first.d+' '+t('daysLeft')} — ${first.c.name}</div>
-        <div class="et2">${upcoming.length} ${t('upcomingExams')} هذا الأسبوع</div>
+        <div class="et2">${upcoming.length} ${t('upcomingExams')} ${t('thisWeek')}</div>
       </div>
       <div class="exam-banner-arrow">‹</div>
     </div>`;
@@ -1197,7 +1278,7 @@ function renderWeek(){
   let html=`<div class="sec-label">${t('week')}</div>`;
   html+=`<div class="week-wrap"><div class="week-grid">`;
   // Header
-  html+=`<div class="week-head"><div class="wh-cell">الوقت</div>`;
+  html+=`<div class="week-head"><div class="wh-cell">${t('time')}</div>`;
   arDays.forEach((d,i)=>{
     const active=i===todayIdx?'today':'';
     html+=`<div class="wh-cell ${active}">${wdays[i]}</div>`;
@@ -1248,7 +1329,7 @@ function renderNotif(){
 
   let h=`<div class="sec-label">${t('upcomingExams')}</div>`;
   if(!upcoming.length){
-    return h+`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><p>لا توجد اختبارات قادمة</p><small>أضف مواعيد اختباراتك</small></div>`;
+    return h+`<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><p>${t('noUpcoming')}</p><small>${t('addExamDates')}</small></div>`;
   }
   upcoming.forEach(({c,ex,d},i)=>{
     const col=COLS[c.ci||0];
@@ -1281,7 +1362,7 @@ function courseCardH(c,i){
         ${c.code?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.code}</span>`:''}
       </div>
       <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
-      ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ملف</div>`:''}
+      ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ${t('files')}</div>`:''}
     </div></div>`;
 }
 function courseListH(c,i){
@@ -1293,7 +1374,7 @@ function courseListH(c,i){
       <div>
         <div class="li-ln">${c.name}</div>
         <div class="li-ls">${[c.doc,c.dept].filter(Boolean).join(' · ')}</div>
-        ${fc?`<div class="li-fcount">📎 ${fc} ملف</div>`:''}
+        ${fc?`<div class="li-fcount">📎 ${fc} ${t('files')}</div>`:''}
       </div>
       <div style="text-align:left">
         <div class="li-day">${dLabel(c.day)}</div>
@@ -1313,7 +1394,7 @@ function courseSchedH(fil){
     const conf=new Set();
     for(let a=0;a<dc.length;a++)for(let b=a+1;b<dc.length;b++){if(dc[a].s<dc[b].e&&dc[a].e>dc[b].s){conf.add(dc[a].id);conf.add(dc[b].id)}}
     h+=`<div><div class="s-dh"><span class="s-dn">${dLabel(day)}</span><div class="s-dl"></div><span class="s-dc">${dc.length}</span></div>`;
-    if(conf.size)h+=`<div class="conflict-w"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>تعارض في الوقت</div>`;
+    if(conf.size)h+=`<div class="conflict-w"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${t('conflict')}</div>`;
     dc.forEach(c=>{
       const col=COLS[c.ci||0];
       const fc=(files[c.id]||[]).length;
@@ -1411,7 +1492,7 @@ function openCourseDet(id){
     </div>
     <div class="det-grid">
       <div class="dc"><div class="dcl">${t('day')}</div><div class="dcv">${dLabel(c.day)}</div></div>
-      <div class="dc"><div class="dcl">الوقت</div><div class="dcv">${c.s}–${c.e}</div></div>
+      <div class="dc"><div class="dcl">${t('time')}</div><div class="dcv">${c.s}–${c.e}</div></div>
       <div class="dc"><div class="dcl">${t('room')}</div><div class="dcv">${c.room||'—'}</div></div>
       <div class="dc"><div class="dcl">${t('doctor')}</div><div class="dcv">${c.doc||'—'}</div></div>
     </div>
@@ -1421,7 +1502,7 @@ function openCourseDet(id){
         <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>${t('del')}
       </button>
       <button class="da" onclick="playClick();closeDet();openExamEdit(${c.id})">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>الاختبار
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('exam')}
       </button>
       <button class="da edit" onclick="playClick();closeDet();openEditCourse(${c.id})">
         <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>${t('edit')}
@@ -1447,7 +1528,7 @@ function openCourseDet(id){
               <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>`).join('')
-        :`<div class="file-empty">لا توجد ملفات بعد — اضغط "إضافة ملف"</div>`
+        :`<div class="file-empty">${t('noFilesYet')}</div>`
       }
     </div>
   `;
@@ -1468,7 +1549,7 @@ function driveSignIn(){
     client_id:GDRIVE_CLIENT_ID,
     scope:GDRIVE_SCOPE,
     callback:(resp)=>{
-      if(resp.error)return alert('خطأ في تسجيل الدخول: '+resp.error);
+      if(resp.error)return alert(t('loginErr')+resp.error);
       driveToken=resp.access_token;
       localStorage.setItem('mw2_drive_token',driveToken);
       onDriveReady();
@@ -1483,7 +1564,7 @@ function onDriveReady(){
   const bar=document.getElementById('drive-status-bar');
   bar.style.display='flex';
   document.getElementById('drive-status-ico').textContent='✅';
-  document.getElementById('drive-status-txt').textContent='متصل بـ Google Drive';
+  document.getElementById('drive-status-txt').textContent=t('connectedDrive');
 }
 
 function driveSignOut(){
@@ -1539,8 +1620,8 @@ function clearSelectedFile(){
 function formatBytes(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
 
 async function uploadAndSave(){
-  if(!driveToken){alert('يجب تسجيل الدخول أولاً');return;}
-  if(!selectedFile){alert('اختر ملفاً أولاً');return;}
+  if(!driveToken){alert(t('mustLogin'));return;}
+  if(!selectedFile){alert(t('selectFile'));return;}
   const cid=parseInt(document.getElementById('file-cid').value);
   const customName=document.getElementById('f-fname-upload').value.trim()||selectedFile.name;
   const note=document.getElementById('f-fnote-upload').value.trim();
@@ -1553,7 +1634,7 @@ async function uploadAndSave(){
   const lbl=document.getElementById('upload-progress-label');
   prog.style.display='block';
   bar.style.width='10%';
-  lbl.textContent='جاري الرفع إلى Drive...';
+  lbl.textContent=t('uploading');
   document.getElementById('btn-upload-save').disabled=true;
 
   try{
@@ -1658,7 +1739,7 @@ function saveFile(){
   playOk();lsSave();closeFile();render();
 }
 function deleteFile(courseId,fileId){
-  if(!confirm('حذف هذا الملف؟'))return;
+  if(!confirm(t('deleteFile')))return;
   if(files[courseId])files[courseId]=files[courseId].filter(f=>f.id!==fileId);
   lsSave();render();
 }
@@ -1679,7 +1760,7 @@ function buildDaySelect(){
 function openAdd(){
   eid=null;
   document.getElementById('eid').value='';
-  document.getElementById('add-title').textContent='إضافة مادة';
+  document.getElementById('add-title').textContent=t('addCourse');
   document.getElementById('del-btn').style.display='none';
   clearCourseForm();buildColorRow(0,'crow-c');buildDaySelect();
   document.getElementById('ov-add').classList.add('open');
@@ -1688,7 +1769,7 @@ function openEditCourse(id){
   const c=courses.find(x=>x.id===id);if(!c)return;
   eid=id;
   document.getElementById('eid').value=id;
-  document.getElementById('add-title').textContent='تعديل المادة';
+  document.getElementById('add-title').textContent=t('editCourse');
   document.getElementById('del-btn').style.display='inline-flex';
   document.getElementById('f-name').value=c.name||'';
   document.getElementById('f-doc').value=c.doc||'';
@@ -1718,7 +1799,7 @@ function saveCourse(){
   playOk();lsSave();closeAdd();render();
 }
 function delCourse(){
-  if(!confirm('حذف هذه المادة؟'))return;
+  if(!confirm(t('deleteCourse')))return;
   const id=eid||parseInt(document.getElementById('eid').value);
   courses=courses.filter(c=>c.id!==id);
   delete exams[id];delete files[id];
@@ -1762,7 +1843,7 @@ function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  ['dark','light','gold','gray','green'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
+  ['dark','light','gold','gray','darkorange'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
   lsSave();
 }
@@ -1779,23 +1860,56 @@ function setLang(l,el){
 function updateLabels(){
   const h=new Date().getHours();
   const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi günler ☀️':'İyi akşamlar 🌙'};
-  document.getElementById('greeting').textContent=greet[lang];
-  document.getElementById('tc-lbl').textContent=t('courses');
-  document.getElementById('te-lbl').textContent=t('exams');
-  document.getElementById('tw-lbl').textContent=t('week');
-  document.getElementById('tc-n').textContent=courses.length;
-  document.getElementById('te-n').textContent=Object.keys(exams).length;
-  // notif badge
+  const set=(id,txt)=>{const e=document.getElementById(id);if(e)e.textContent=txt};
+  set('greeting',greet[lang]);
+  set('tc-lbl',t('courses')); set('te-lbl',t('exams')); set('tw-lbl',t('week'));
+  set('tc-n',courses.length); set('te-n',Object.keys(exams).length);
+  // Course form
+  set('lbl-cname',t('courseName')); set('lbl-cdoc',t('instructor'));
+  set('lbl-cdept',t('deptSpec')); set('lbl-ccode',t('courseNum'));
+  set('lbl-cday',t('day')); set('lbl-croom',t('room'));
+  set('lbl-cs',t('start')); set('lbl-ce',t('end'));
+  set('lbl-cnotes',t('notes')); set('lbl-ccolor',t('color'));
+  set('btn-cancel-add',t('cancel')); set('btn-save-course',t('save'));
+  // Exam form
+  set('lbl-exam-course',t('course')); set('lbl-edate',t('examDate'));
+  set('lbl-eday',t('day')); set('lbl-etime',t('examTime'));
+  set('lbl-eroom',t('room')); set('lbl-enotes',t('notes'));
+  set('btn-cancel-exam',t('cancel')); set('btn-save-exam',t('save'));
+  // File overlay
+  set('lbl-addfile-title',t('addFile')); set('lbl-upload-mode',t('uploadDevice'));
+  set('lbl-link-mode',t('manualLink')); set('lbl-upload-drive-title',t('uploadDrive'));
+  set('lbl-upload-drive-sub',t('loginOnce')); set('lbl-login-google',t('loginGoogle'));
+  set('lbl-click-select',t('clickToSelect')); set('lbl-or-drag',t('orDrag'));
+  set('upload-progress-label',t('uploading')); set('lbl-fname-upload',t('fileNameOpt'));
+  set('lbl-fnote-upload',t('note')); set('btn-cancel-file-upload',t('cancel'));
+  set('btn-upload-save',t('uploadToDrive')); set('lbl-ftype',t('fileType'));
+  set('lbl-fname',t('fileNameReq')); set('lbl-furl',t('linkUrl'));
+  set('lbl-fnote',t('note')); set('btn-cancel-file-link',t('cancel'));
+  set('btn-save-file',t('add')); set('btn-drive-signout',t('logout'));
+  // Settings
+  set('lbl-settings-title',t('settings')); set('lbl-theme-row',t('theme'));
+  set('lbl-lang-row',t('lang')); set('lbl-export-row',t('exportData'));
+  set('lbl-import-row',t('importData')); set('btn-settings-done',t('done'));
+  set('lbl-theme-picker-title',t('chooseTheme'));
+  // Desktop sidebar
+  set('dnav-lbl-courses',t('courses')); set('dnav-lbl-exams',t('exams'));
+  set('dnav-lbl-week',t('week')); set('dnav-lbl-notif',t('upcomingExams'));
+  set('ds-lbl-c',t('total')); set('ds-lbl-e',t('exams')); set('ds-lbl-f',t('files'));
+  set('desk-course-list-title',t('courses')); set('desk-add-btn-lbl',t('addCourseBtn'));
+  set('desk-settings-lbl',t('settings')); set('desk-lbl-grid',t('grid'));
+  set('desk-lbl-list',t('list')); set('lbl-select-course',t('selectCourse'));
+  // Notif badge
   const urgentCount=courses.filter(c=>{const d=daysUntil(exams[c.id]?.date);return d!==null&&d>=0&&d<=3}).length;
   const badge=document.getElementById('notif-badge');
   if(badge){badge.style.display=urgentCount?'':'none';}
-  // theme/lang sync
+  // Theme/lang sync
   document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
   ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
   document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
-  ['dark','light','gold','gray','green'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
-  document.getElementById('s-theme-val').textContent=TH_NAMES[currentTheme]?.[lang]||'';
-  document.getElementById('s-lang-val').textContent=LANG_NAMES[lang];
+  ['dark','light','gold','gray','darkorange'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
+  set('s-theme-val',TH_NAMES[currentTheme]?.[lang]||'');
+  set('s-lang-val',LANG_NAMES[lang]);
 }
 
 // ===== EXPORT / IMPORT =====
@@ -1818,8 +1932,8 @@ function handleImport(e){
       if(data.files)files=data.files;
       if(data.nid)nid=data.nid;
       lsSave();closeSettings();render();
-      alert('تم الاستيراد بنجاح ✅');
-    }catch(err){alert('خطأ في الملف');}
+      alert(t('importOk'));
+    }catch(err){alert(t('importErr'));}
   };reader.readAsText(file);
 }
 
@@ -1880,14 +1994,14 @@ function deskRenderMain(){
   if(!mb)return;
 
   if(deskTab==='week'){
-    if(mt)mt.textContent='الجدول الأسبوعي';
+    if(mt)mt.textContent=t('week');
     if(fb)fb.innerHTML='';
     if(tb)tb.style.display='none';
     mb.innerHTML=renderWeek();
     return;
   }
   if(deskTab==='notif'){
-    if(mt)mt.textContent='الإشعارات';
+    if(mt)mt.textContent=t('upcomingExams');
     if(fb)fb.innerHTML='';
     if(tb)tb.style.display='none';
     mb.innerHTML=renderNotif();
@@ -1896,7 +2010,7 @@ function deskRenderMain(){
   if(tb)tb.style.display='flex';
 
   if(deskTab==='exams'){
-    if(mt)mt.textContent='الاختبارات';
+    if(mt)mt.textContent=t('exams');
     if(fb)fb.innerHTML='';
     if(deskView==='grid')mb.innerHTML=`<div class="desk-grid g2">${courses.map((c,i)=>examCardH(c,i)).join('')}</div>`;
     else mb.innerHTML=`<div class="lw">${courses.map((c,i)=>examListH(c,i)).join('')}</div>`;
@@ -1904,9 +2018,9 @@ function deskRenderMain(){
   }
 
   // Courses tab
-  if(mt)mt.textContent='المواد';
+  if(mt)mt.textContent=t('courses');
   const days=getDays();
-  if(fb)fb.innerHTML=`<button class="dchip${filter==='all'?' active':''}" onclick="playClick();deskFilter('all')">الكل</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();deskFilter('${d}')">${days[i]}</button>`).join('')}`;
+  if(fb)fb.innerHTML=`<button class="dchip${filter==='all'?' active':''}" onclick="playClick();deskFilter('all')">${t('all')}</button>${DAR.map((d,i)=>`<button class="dchip${filter===d?' active':''}" onclick="playClick();deskFilter('${d}')">${days[i]}</button>`).join('')}`;
 
   const fil=filter==='all'?courses:courses.filter(c=>c.day===filter);
   if(!fil.length){mb.innerHTML=emptyHTML();return;}
@@ -1918,8 +2032,8 @@ function deskRenderMain(){
     const first=upcoming[0];
     h+=`<div class="desk-banner" onclick="deskSwitchTab('exams',document.getElementById('dnav-exams'))">
       <div class="desk-banner-ico">📅</div>
-      <div><div class="desk-banner-t1">${first.d===0?'اليوم!':first.d===1?'غداً!':first.d+' يوم متبقي'} — ${first.c.name}</div>
-      <div class="desk-banner-t2">${upcoming.length} اختبارات قادمة هذا الأسبوع</div></div>
+      <div><div class="desk-banner-t1">${first.d===0?t('today')+'!':first.d===1?t('tomorrow')+'!':first.d+' '+t('daysLeft')} — ${first.c.name}</div>
+      <div class="desk-banner-t2">${upcoming.length} ${t('upcomingExams')} ${t('thisWeek')}</div></div>
     </div>`;
   }
 
@@ -1942,7 +2056,7 @@ function deskCourseCardH(c,i){
         ${c.code?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.code}</span>`:''}
       </div>
       <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
-      ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ملف</div>`:''}
+      ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ${t('files')}</div>`:''}
     </div></div>`;
 }
 
@@ -1970,27 +2084,27 @@ function deskRenderDetail(){
     </div>
     <div class="desk-det-body">
       <div class="desk-det-grid">
-        <div class="desk-dc"><div class="desk-dcl">اليوم</div><div class="desk-dcv">${dLabel(c.day)}</div></div>
-        <div class="desk-dc"><div class="desk-dcl">الوقت</div><div class="desk-dcv">${c.s}–${c.e}</div></div>
-        <div class="desk-dc"><div class="desk-dcl">القاعة</div><div class="desk-dcv">${c.room||'—'}</div></div>
-        <div class="desk-dc"><div class="desk-dcl">الدكتور</div><div class="desk-dcv" style="font-size:11px">${c.doc||'—'}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">${t('day')}</div><div class="desk-dcv">${dLabel(c.day)}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">${t('time')}</div><div class="desk-dcv">${c.s}–${c.e}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">${t('room')}</div><div class="desk-dcv">${c.room||'—'}</div></div>
+        <div class="desk-dc"><div class="desk-dcl">${t('doctor')}</div><div class="desk-dcv" style="font-size:11px">${c.doc||'—'}</div></div>
       </div>
-      ${c.notes?`<div class="desk-dc" style="margin-bottom:12px"><div class="desk-dcl" style="margin-bottom:4px">ملاحظات</div><div style="font-size:11px;color:var(--txt2);line-height:1.7">${c.notes}</div></div>`:''}
+      ${c.notes?`<div class="desk-dc" style="margin-bottom:12px"><div class="desk-dcl" style="margin-bottom:4px">${t('notes')}</div><div style="font-size:11px;color:var(--txt2);line-height:1.7">${c.notes}</div></div>`:''}
     </div>
     <div class="desk-det-acts">
       <button class="desk-da del" onclick="playClick();eid=${c.id};delCourse()">
-        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>حذف
+        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/></svg>${t('del')}
       </button>
       <button class="desk-da" onclick="playClick();openExamEdit(${c.id})">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>اختبار
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${t('exam')}
       </button>
       <button class="desk-da edit" onclick="playClick();openEditCourse(${c.id})">
-        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>تعديل
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>${t('edit')}
       </button>
     </div>
     <div class="desk-files-head">
-      <div class="desk-files-title">📎 الملفات</div>
-      <button class="desk-add-file-btn" onclick="playClick();openAddFile(${c.id})">+ إضافة</button>
+      <div class="desk-files-title">📎 ${t('files')}</div>
+      <button class="desk-add-file-btn" onclick="playClick();openAddFile(${c.id})">+ ${t('addFile')}</button>
     </div>
     <div class="desk-file-list">
       ${cf.length?cf.map(f=>`
@@ -2004,7 +2118,7 @@ function deskRenderDetail(){
             <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>`).join('')
-      :`<div class="desk-file-empty">لا توجد ملفات — اضغط إضافة</div>`}
+      :`<div class="desk-file-empty">${t('noFilesYet')}</div>`}
     </div>
   `;
 }
@@ -2039,6 +2153,13 @@ function openThemePicker(){document.getElementById('ov-theme').classList.add('op
 updateLabels();render();
 if(isDesktop())deskRender();
 window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
+
+// ===== PWA SERVICE WORKER =====
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
