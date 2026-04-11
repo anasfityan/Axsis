@@ -880,6 +880,29 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 <div class="sheet">
   <div class="sh"></div>
   <div class="st" id="lbl-settings-title">الإعدادات</div>
+
+  <!-- SYNC STATUS BAR -->
+  <div id="sync-status-bar" style="display:none;align-items:center;gap:9px;background:var(--sur3);border-radius:11px;padding:10px 14px;margin-bottom:10px;border:1px solid var(--bord2);transition:border-color .3s">
+    <span id="sync-ico" style="font-size:16px">⏳</span>
+    <span id="sync-msg" style="font-size:12px;font-weight:700;color:var(--txt2);flex:1"></span>
+  </div>
+
+  <!-- DRIVE SYNC ROW -->
+  <div style="background:var(--sur3);border-radius:12px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:9px;background:#4285f4;display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white"><path d="M6.5 20l-5-8.66L7 3h10l5.5 8.34L17.5 20z" fill="none" stroke="white" stroke-width="1.5"/><path d="M2 12h20M7 3l5 9.5L17 3" fill="none" stroke="white" stroke-width="1.5"/></svg>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--txt)" id="lbl-sync-title">مزامنة Drive</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:1px" id="sync-drive-status">غير متصل</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button id="sync-drive-btn" onclick="playClick();handleSyncBtn()" style="background:var(--acc);color:#fff;border:none;border-radius:9px;padding:7px 12px;font-size:11px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;white-space:nowrap">☁️ ربط</button>
+      <button onclick="playClick();driveSignOut()" id="sync-signout-btn" style="display:none;background:rgba(244,67,54,.1);color:var(--red);border:1px solid rgba(244,67,54,.2);border-radius:9px;padding:7px 10px;font-size:11px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer" id="lbl-signout-sync">خروج</button>
+    </div>
+  </div>
   <div class="set-row" onclick="playClick();openThemePicker()">
     <div class="set-row-left">
       <div class="set-row-icon" style="background:var(--acc)">
@@ -1056,6 +1079,11 @@ const L={
     loginErr:'خطأ في تسجيل الدخول: ',mustLogin:'يجب تسجيل الدخول أولاً',
     selectFile:'اختر ملفاً أولاً',finished:'✓ انتهى',
     chooseTheme:'اختر الثيم',
+    syncNow:'مزامنة الآن',connectDrive:'ربط بـ Drive',
+    notConnected:'غير متصل بـ Drive',syncing:'جاري المزامنة...',
+    syncedAt:'آخر مزامنة',syncError:'فشلت المزامنة',
+    loadingFromDrive:'جاري تحميل البيانات...',dataLoaded:'تم تحميل البيانات ✅',
+    syncTitle:'مزامنة Drive',signoutSync:'فصل الحساب',
   },
   en:{courses:'Courses',exams:'Exams',week:'Week',
     name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',
@@ -1097,6 +1125,11 @@ const L={
     loginErr:'Sign in error: ',mustLogin:'Please sign in first',
     selectFile:'Please select a file first',finished:'✓ Finished',
     chooseTheme:'Choose Theme',
+    syncNow:'Sync Now',connectDrive:'Connect Drive',
+    notConnected:'Not connected to Drive',syncing:'Syncing...',
+    syncedAt:'Last sync',syncError:'Sync failed',
+    loadingFromDrive:'Loading data...',dataLoaded:'Data loaded ✅',
+    syncTitle:'Drive Sync',signoutSync:'Disconnect',
   },
   tr:{courses:'Dersler',exams:'Sınavlar',week:'Hafta',
     name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',
@@ -1138,6 +1171,11 @@ const L={
     loginErr:'Giriş hatası: ',mustLogin:'Lütfen önce giriş yapın',
     selectFile:'Lütfen önce bir dosya seçin',finished:'✓ Bitti',
     chooseTheme:'Tema Seç',
+    syncNow:'Şimdi Eşitle',connectDrive:"Drive'a Bağlan",
+    notConnected:"Drive'a bağlı değil",syncing:'Eşitleniyor...',
+    syncedAt:'Son eşitleme',syncError:'Eşitleme başarısız',
+    loadingFromDrive:'Veriler yükleniyor...',dataLoaded:'Veriler yüklendi ✅',
+    syncTitle:'Drive Eşitleme',signoutSync:'Bağlantıyı Kes',
   }
 };
 const TH_NAMES={'th-dark':{ar:'داكن أزرق',en:'Dark Blue',tr:'Koyu Mavi'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي راقٍ',en:'Royal Gold',tr:'Kraliyet Altını'},'th-gray':{ar:'رمادي داكن',en:'Dark Gray',tr:'Koyu Gri'},'th-darkorange':{ar:'داكن برتقالي',en:'Dark Orange',tr:'Koyu Turuncu'}};
@@ -1161,6 +1199,8 @@ function lsSave(){
     localStorage.setItem('mw2_view',view);
     localStorage.setItem('mw2_sz',sz);
   }catch(e){}
+  // Also sync to Drive if connected
+  if(driveToken){syncToDrive();}
 }
 
 // ===== STATE =====
@@ -1540,45 +1580,212 @@ function openFileURL(url){if(url)window.open(url,'_blank')}
 // ===== GOOGLE DRIVE =====
 const GDRIVE_CLIENT_ID='949622293826-im748pjqsh7beuvhaaqbsd1ceah4gf8q.apps.googleusercontent.com';
 const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
+const SYNC_FILE_NAME='mawadi-data.json';
 let driveToken=null;
 let selectedFile=null;
 let currentFileMode='upload';
+let syncFileId=null; // ID of mawadi-data.json in Drive
+let isSyncing=false;
 
+// ===== SYNC STATUS UI =====
+function showSyncBar(icon,msg,color){
+  const bar=document.getElementById('sync-status-bar');
+  if(!bar)return;
+  bar.style.display='flex';
+  document.getElementById('sync-ico').textContent=icon;
+  document.getElementById('sync-msg').textContent=msg;
+  bar.style.borderColor=color||'var(--bord2)';
+}
+function hideSyncBar(){const b=document.getElementById('sync-status-bar');if(b)b.style.display='none';}
+
+// ===== DRIVE AUTH =====
 function driveSignIn(){
   const client=google.accounts.oauth2.initTokenClient({
     client_id:GDRIVE_CLIENT_ID,
     scope:GDRIVE_SCOPE,
-    callback:(resp)=>{
+    callback:async(resp)=>{
       if(resp.error)return alert(t('loginErr')+resp.error);
       driveToken=resp.access_token;
       localStorage.setItem('mw2_drive_token',driveToken);
       onDriveReady();
+      // Load data from Drive on first sign-in
+      await syncFromDrive();
     }
   });
   client.requestAccessToken();
 }
 
 function onDriveReady(){
-  document.getElementById('drive-login-box').style.display='none';
-  document.getElementById('drive-upload-box').style.display='block';
+  const lb=document.getElementById('drive-login-box');
+  const ub=document.getElementById('drive-upload-box');
+  if(lb)lb.style.display='none';
+  if(ub)ub.style.display='block';
   const bar=document.getElementById('drive-status-bar');
-  bar.style.display='flex';
-  document.getElementById('drive-status-ico').textContent='✅';
-  document.getElementById('drive-status-txt').textContent=t('connectedDrive');
+  if(bar){bar.style.display='flex';}
+  const ico=document.getElementById('drive-status-ico');
+  const txt=document.getElementById('drive-status-txt');
+  if(ico)ico.textContent='✅';
+  if(txt)txt.textContent=t('connectedDrive');
+  updateSyncUI();
 }
 
 function driveSignOut(){
   driveToken=null;
+  syncFileId=null;
   localStorage.removeItem('mw2_drive_token');
-  document.getElementById('drive-login-box').style.display='block';
-  document.getElementById('drive-upload-box').style.display='none';
-  document.getElementById('drive-status-bar').style.display='none';
+  localStorage.removeItem('mw2_sync_file_id');
+  const lb=document.getElementById('drive-login-box');
+  const ub=document.getElementById('drive-upload-box');
+  const bar=document.getElementById('drive-status-bar');
+  if(lb)lb.style.display='block';
+  if(ub)ub.style.display='none';
+  if(bar)bar.style.display='none';
+  updateSyncUI();
+  updateSyncSignoutBtn();
 }
 
 function checkDriveToken(){
   const saved=localStorage.getItem('mw2_drive_token');
-  if(saved){driveToken=saved;return true;}
+  if(saved){
+    driveToken=saved;
+    syncFileId=localStorage.getItem('mw2_sync_file_id')||null;
+    return true;
+  }
   return false;
+}
+
+function updateSyncUI(){
+  const btn=document.getElementById('sync-drive-btn');
+  const status=document.getElementById('sync-drive-status');
+  if(!btn||!status)return;
+  if(driveToken){
+    btn.textContent='🔄 '+t('syncNow');
+    status.textContent=t('connectedDrive');
+    status.style.color='var(--grn)';
+  } else {
+    btn.textContent='☁️ '+t('connectDrive');
+    status.textContent=t('notConnected');
+    status.style.color='var(--txt3)';
+  }
+}
+
+// ===== SYNC DATA TO/FROM DRIVE =====
+async function getOrCreateSyncFile(){
+  if(syncFileId)return syncFileId;
+  // Search for existing file
+  const q=encodeURIComponent(`name="${SYNC_FILE_NAME}" and trashed=false`);
+  const r=await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=drive&fields=files(id,name)`,
+    {headers:{Authorization:'Bearer '+driveToken}});
+  const d=await r.json();
+  if(d.files&&d.files.length>0){
+    syncFileId=d.files[0].id;
+    localStorage.setItem('mw2_sync_file_id',syncFileId);
+    return syncFileId;
+  }
+  // Create new file
+  const meta={name:SYNC_FILE_NAME,mimeType:'application/json'};
+  const cr=await fetch('https://www.googleapis.com/drive/v3/files',{
+    method:'POST',
+    headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
+    body:JSON.stringify(meta)
+  });
+  const cf=await cr.json();
+  syncFileId=cf.id;
+  localStorage.setItem('mw2_sync_file_id',syncFileId);
+  return syncFileId;
+}
+
+async function syncToDrive(){
+  if(!driveToken||isSyncing)return;
+  isSyncing=true;
+  showSyncBar('⏳',t('syncing'),'var(--acc)');
+  try{
+    const fid2=await getOrCreateSyncFile();
+    const payload=JSON.stringify({courses,exams,files,nid,fid,version:'2.1',updated:new Date().toISOString()});
+    const blob=new Blob([payload],{type:'application/json'});
+    const fd=new FormData();
+    fd.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
+    fd.append('file',blob);
+    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fid2}?uploadType=multipart`,{
+      method:'PATCH',
+      headers:{Authorization:'Bearer '+driveToken},
+      body:fd
+    });
+    const now=new Date().toLocaleTimeString(lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',{hour:'2-digit',minute:'2-digit'});
+    showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
+    setTimeout(hideSyncBar,3000);
+  }catch(e){
+    showSyncBar('⚠️',t('syncError'),'var(--red)');
+    setTimeout(hideSyncBar,4000);
+  }
+  isSyncing=false;
+}
+
+async function syncFromDrive(){
+  if(!driveToken)return;
+  showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
+  try{
+    const fid2=await getOrCreateSyncFile();
+    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fid2}?alt=media`,
+      {headers:{Authorization:'Bearer '+driveToken}});
+    if(!r.ok){hideSyncBar();return;}
+    const data=await r.json();
+    if(data.courses){courses=data.courses;}
+    if(data.exams){exams=data.exams;}
+    if(data.files){files=data.files;}
+    if(data.nid){nid=parseInt(data.nid);}
+    if(data.fid){fid=parseInt(data.fid);}
+    // Save to local too
+    localStorage.setItem('mw2_courses',JSON.stringify(courses));
+    localStorage.setItem('mw2_exams',JSON.stringify(exams));
+    localStorage.setItem('mw2_files',JSON.stringify(files));
+    showSyncBar('✅',t('dataLoaded'),'var(--grn)');
+    setTimeout(hideSyncBar,2500);
+    updateLabels();render();
+    if(isDesktop())deskRender();
+  }catch(e){
+    hideSyncBar();
+  }
+}
+
+// Override lsSave to also sync to Drive
+function handleSyncBtn(){
+  if(driveToken){
+    syncToDrive();
+  } else {
+    // Open sign-in flow
+    const client=google.accounts.oauth2.initTokenClient({
+      client_id:GDRIVE_CLIENT_ID,
+      scope:GDRIVE_SCOPE,
+      callback:async(resp)=>{
+        if(resp.error)return alert(t('loginErr')+resp.error);
+        driveToken=resp.access_token;
+        localStorage.setItem('mw2_drive_token',driveToken);
+        onDriveReady();
+        await syncFromDrive();
+        updateSyncUI();
+        updateSyncSignoutBtn();
+      }
+    });
+    client.requestAccessToken();
+  }
+}
+
+function updateSyncSignoutBtn(){
+  const btn=document.getElementById('sync-signout-btn');
+  const mainBtn=document.getElementById('sync-drive-btn');
+  if(!btn||!mainBtn)return;
+  if(driveToken){
+    btn.style.display='';
+    mainBtn.textContent='🔄 '+t('syncNow');
+    document.getElementById('sync-drive-status').textContent=t('connectedDrive');
+    document.getElementById('sync-drive-status').style.color='var(--grn)';
+  } else {
+    btn.style.display='none';
+    mainBtn.textContent='☁️ '+t('connectDrive');
+    document.getElementById('sync-drive-status').textContent=t('notConnected');
+    document.getElementById('sync-drive-status').style.color='var(--txt3)';
+  }
 }
 
 function switchFileMode(mode,el){
@@ -2153,6 +2360,16 @@ function openThemePicker(){document.getElementById('ov-theme').classList.add('op
 updateLabels();render();
 if(isDesktop())deskRender();
 window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
+
+// Auto-load from Drive if already connected
+if(checkDriveToken()){
+  updateSyncSignoutBtn();
+  // Small delay so UI renders first
+  setTimeout(async()=>{
+    await syncFromDrive();
+    updateSyncSignoutBtn();
+  }, 800);
+}
 
 // ===== PWA SERVICE WORKER =====
 if('serviceWorker' in navigator){
