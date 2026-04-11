@@ -791,12 +791,12 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="field"><label id="lbl-cname">اسم المادة</label><input id="f-name" type="text" placeholder="مثال: رياضيات 2"></div>
   <div class="field"><label id="lbl-cdoc">الدكتور / المدرس</label><input id="f-doc" type="text"></div>
   <div class="r2">
-    <div class="field"><label id="lbl-cdept">القسم / التخصص</label><input id="f-dept" type="text"></div>
+    <div class="field"><label id="lbl-croom">القاعة</label><input id="f-room" type="text" placeholder="مثال: A101"></div>
     <div class="field"><label id="lbl-ccode">رقم المادة</label><input id="f-code" type="text" placeholder="مثال: CS201"></div>
   </div>
   <div class="r2">
+    <div class="field"><label id="lbl-cdept">القسم / التخصص</label><input id="f-dept" type="text"></div>
     <div class="field"><label id="lbl-cday">اليوم</label><select id="f-day"></select></div>
-    <div class="field"><label id="lbl-croom">القاعة</label><input id="f-room" type="text"></div>
   </div>
   <div class="r2">
     <div class="field"><label id="lbl-cs">البداية</label><input id="f-s" type="time" value="08:00"></div>
@@ -1445,7 +1445,7 @@ function courseCardH(c,i){
       <div class="cc-sub">${c.doc||''}</div>
       <div class="cc-tags">
         ${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}
-        ${c.code?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.code}</span>`:''}
+        ${c.room?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.room}</span>`:''}
       </div>
       <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
       ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ${t('files')}</div>`:''}
@@ -1653,7 +1653,7 @@ let selectedFile=null;
 let currentFileMode='upload';
 
 // ===== AKSIS =====
-function openAksis(){document.getElementById('ov-aksis').style.display='flex';}
+function openAksis(){window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');}
 function closeAksis(){document.getElementById('ov-aksis').style.display='none';}
 function reloadAksis(){window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');}
 function openAksisExternal(){window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');}
@@ -2031,8 +2031,16 @@ function clearSelectedFile(){
 function formatBytes(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
 
 async function uploadAndSave(){
-  if(!driveToken){alert(t('mustLogin'));return;}
   if(!selectedFile){alert(t('selectFile'));return;}
+  // If no Drive token yet but user is signed in, request it first
+  if(!driveToken){
+    if(fbUser){
+      driveSignIn();
+      alert('جاري الاتصال بـ Google Drive، حاول مرة أخرى خلال ثانية');
+      return;
+    }
+    alert(t('mustLogin'));return;
+  }
   const cid=parseInt(document.getElementById('file-cid').value);
   const customName=document.getElementById('f-fname-upload').value.trim()||selectedFile.name;
   const note=document.getElementById('f-fnote-upload').value.trim();
@@ -2109,7 +2117,6 @@ function openAddFile(courseId){
   document.getElementById('file-cid').value=courseId;
   selectedFile=null;
   currentFileMode='upload';
-  // Reset upload UI
   document.getElementById('file-mode-upload').style.display='block';
   document.getElementById('file-mode-link').style.display='none';
   document.getElementById('tab-upload-mode').classList.add('active');
@@ -2121,20 +2128,27 @@ function openAddFile(courseId){
   document.getElementById('selected-file-info').style.display='none';
   document.getElementById('btn-upload-save').disabled=false;
   document.getElementById('real-file-input').value='';
-  // Reset link UI
   document.getElementById('f-fname').value='';
   document.getElementById('f-furl').value='';
   document.getElementById('f-fnote').value='';
   selFileType_='pdf';
   document.querySelectorAll('.file-type-btn').forEach((b,i)=>b.classList.toggle('sel',i===0));
-  // Check drive status
-  if(checkDriveToken()){
-    onDriveReady();
+  // If already have driveToken show upload box directly
+  // If Firebase user is signed in, try to get Drive token silently
+  if(driveToken){
+    onDriveFileReady();
+  } else if(fbUser){
+    // Auto-request Drive token without showing login box
+    driveSignIn();
+    // Show upload box optimistically, driveSignIn callback will confirm
+    document.getElementById('drive-login-box').style.display='none';
+    document.getElementById('drive-upload-box').style.display='block';
   } else {
     document.getElementById('drive-login-box').style.display='block';
     document.getElementById('drive-upload-box').style.display='none';
-    document.getElementById('drive-status-bar').style.display='none';
   }
+  const dbar=document.getElementById('drive-status-bar');
+  if(dbar)dbar.style.display='none';
   document.getElementById('ov-file').classList.add('open');
 }
 function closeFile(){
@@ -2458,7 +2472,7 @@ function deskCourseCardH(c,i){
       <div class="cc-sub">${c.doc||''}</div>
       <div class="cc-tags">
         ${c.dept?`<span class="cc-tag" style="background:${col.bg};color:${col.tx}">${c.dept}</span>`:''}
-        ${c.code?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.code}</span>`:''}
+        ${c.room?`<span class="cc-tag" style="background:var(--sur3);color:var(--txt3)">${c.room}</span>`:''}
       </div>
       <div class="cc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>${c.s}–${c.e}</div>
       ${fc?`<div class="cc-files"><svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>${fc} ${t('files')}</div>`:''}
