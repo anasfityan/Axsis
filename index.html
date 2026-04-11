@@ -1259,6 +1259,7 @@ function lsSave(){
     localStorage.setItem('mw2_theme',currentTheme);
     localStorage.setItem('mw2_view',view);
     localStorage.setItem('mw2_sz',sz);
+    localStorage.setItem('mw2_last_save',''+Date.now());
   }catch(e){}
   // Auto-sync to Firestore 2 seconds after any change
   scheduleSyncToFirestore();
@@ -1830,26 +1831,55 @@ async function syncFromFirestore(){
   showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
   try{
     const doc=await fbDb.collection('users').doc(fbUid).get();
+
     if(!doc.exists){
+      // Nothing in cloud yet — push local data up
       hideSyncBar();
       await syncToFirestore();
       return;
     }
+
     const data=doc.data();
-    if(Array.isArray(data.courses)&&data.courses.length>0) courses=data.courses;
-    if(data.exams&&Object.keys(data.exams).length>0) exams=data.exams;
-    if(data.files) files=data.files;
-    if(data.nid) nid=parseInt(data.nid)||nid;
-    if(data.fid) fid=parseInt(data.fid)||fid;
-    localStorage.setItem('mw2_courses',JSON.stringify(courses));
-    localStorage.setItem('mw2_exams',JSON.stringify(exams));
-    localStorage.setItem('mw2_files',JSON.stringify(files));
-    localStorage.setItem('mw2_nid',''+nid);
-    localStorage.setItem('mw2_fid',''+fid);
-    showSyncBar('✅',t('dataLoaded'),'var(--grn)');
-    setTimeout(hideSyncBar,2500);
-    updateLabels();render();
-    if(isDesktop())deskRender();
+    const cloudCourses = Array.isArray(data.courses) ? data.courses : [];
+    const localCourses = courses;
+
+    // Compare by updated timestamp — cloud wins if it has a newer timestamp
+    // If no timestamp available, the one with MORE courses wins
+    const cloudUpdated = data.updated ? data.updated.toMillis() : 0;
+    const localUpdated = parseInt(localStorage.getItem('mw2_last_save')||'0');
+
+    let useCloud = false;
+    if(cloudUpdated > localUpdated){
+      // Cloud is newer
+      useCloud = true;
+    } else if(cloudUpdated === localUpdated){
+      // Same time — more courses wins
+      useCloud = cloudCourses.length >= localCourses.length;
+    } else {
+      // Local is newer — push local to cloud
+      useCloud = false;
+    }
+
+    if(useCloud && cloudCourses.length > 0){
+      courses = cloudCourses;
+      if(data.exams) exams=data.exams;
+      if(data.files) files=data.files;
+      if(data.nid)   nid=parseInt(data.nid)||nid;
+      if(data.fid)   fid=parseInt(data.fid)||fid;
+      localStorage.setItem('mw2_courses',JSON.stringify(courses));
+      localStorage.setItem('mw2_exams',JSON.stringify(exams));
+      localStorage.setItem('mw2_files',JSON.stringify(files));
+      localStorage.setItem('mw2_nid',''+nid);
+      localStorage.setItem('mw2_fid',''+fid);
+      showSyncBar('✅',t('dataLoaded'),'var(--grn)');
+      setTimeout(hideSyncBar,2500);
+      updateLabels();render();
+      if(isDesktop())deskRender();
+    } else {
+      // Local is newer or equal — push local up to cloud
+      hideSyncBar();
+      await syncToFirestore();
+    }
   }catch(err){
     showSyncBar('❌',t('syncError'),'var(--red)');
     setTimeout(hideSyncBar,4000);
@@ -1858,7 +1888,12 @@ async function syncFromFirestore(){
 
 function scheduleSyncToFirestore(){
   clearTimeout(syncDebounceTimer);
-  syncDebounceTimer=setTimeout(()=>{if(fbUser)syncToFirestore();},2000);
+  syncDebounceTimer=setTimeout(()=>{
+    if(fbUser){
+      localStorage.setItem('mw2_last_save',''+Date.now());
+      syncToFirestore();
+    }
+  },2000);
 }
 
 function switchFileMode(mode,el){
