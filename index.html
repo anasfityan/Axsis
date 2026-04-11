@@ -622,8 +622,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
     <div class="brand">
       <div class="brand-text">
         <div style="display:flex;align-items:center;gap:6px">
-          <div class="wordmark">موا<span>دي</span></div>
           <span class="conn-dot" id="conn-dot-mobile" title=""></span>
+          <div class="wordmark">موا<span>دي</span></div>
         </div>
         <div class="greeting" id="greeting">صباح الخير</div>
       </div>
@@ -676,8 +676,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="desk-brand">
         <div>
           <div style="display:flex;align-items:center;gap:6px">
-            <div class="desk-wordmark">موا<span>دي</span></div>
             <span class="conn-dot" id="conn-dot-desk" title=""></span>
+            <div class="desk-wordmark">موا<span>دي</span></div>
           </div>
           <div class="desk-greeting" id="desk-greeting">صباح الخير</div>
         </div>
@@ -1625,61 +1625,92 @@ function openFileURL(url){if(url)window.open(url,'_blank')}
 
 // ===== GOOGLE DRIVE =====
 const GDRIVE_CLIENT_ID='949622293826-im748pjqsh7beuvhaaqbsd1ceah4gf8q.apps.googleusercontent.com';
-const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata';
+const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
 const AKSIS_URL='https://aksis.istanbul.edu.tr/';
-
-// ===== AKSIS FUNCTIONS =====
-function openAksis(){
-  const ov=document.getElementById('ov-aksis');
-  const frame=document.getElementById('aksis-frame');
-  ov.style.display='flex';
-  if(frame.src==='about:blank'){
-    frame.src=AKSIS_URL;
-  }
-}
-function closeAksis(){
-  document.getElementById('ov-aksis').style.display='none';
-}
-function reloadAksis(){
-  const frame=document.getElementById('aksis-frame');
-  frame.src=frame.src;
-}
-function openAksisExternal(){
-  window.open(AKSIS_URL,'_blank');
-}
 const SYNC_FILE_NAME='mawadi-data.json';
+
 let driveToken=null;
 let selectedFile=null;
 let currentFileMode='upload';
-let syncFileId=null; // ID of mawadi-data.json in Drive
+let syncFileId=localStorage.getItem('mw2_sync_file_id')||null;
 let isSyncing=false;
+let tokenClient=null; // reusable token client
+
+// ===== AKSIS FUNCTIONS =====
+function openAksis(){ window.open(AKSIS_URL,'_blank'); }
+function closeAksis(){ document.getElementById('ov-aksis').style.display='none'; }
+function reloadAksis(){ const f=document.getElementById('aksis-frame'); f.src=f.src; }
+function openAksisExternal(){ window.open(AKSIS_URL,'_blank'); }
 
 // ===== SYNC STATUS UI =====
 function showSyncBar(icon,msg,color){
   const bar=document.getElementById('sync-status-bar');
   if(!bar)return;
   bar.style.display='flex';
-  document.getElementById('sync-ico').textContent=icon;
-  document.getElementById('sync-msg').textContent=msg;
+  const ico=document.getElementById('sync-ico');
+  const m=document.getElementById('sync-msg');
+  if(ico)ico.textContent=icon;
+  if(m)m.textContent=msg;
   bar.style.borderColor=color||'var(--bord2)';
 }
 function hideSyncBar(){const b=document.getElementById('sync-status-bar');if(b)b.style.display='none';}
 
 // ===== DRIVE AUTH =====
+function initTokenClient(){
+  if(tokenClient)return;
+  try{
+    tokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:GDRIVE_CLIENT_ID,
+      scope:GDRIVE_SCOPE,
+      callback:async(resp)=>{
+        if(resp.error){
+          showSyncBar('❌',t('loginErr')+resp.error,'var(--red)');
+          setTimeout(hideSyncBar,4000);
+          return;
+        }
+        driveToken=resp.access_token;
+        // Token expires in ~1 hour — schedule refresh
+        clearTimeout(window._tokenRefreshTimer);
+        window._tokenRefreshTimer=setTimeout(()=>{driveToken=null;updateConnDot();},3500*1000);
+        onDriveReady();
+        await syncFromDrive();
+      }
+    });
+  }catch(e){}
+}
+
 function driveSignIn(){
-  const client=google.accounts.oauth2.initTokenClient({
-    client_id:GDRIVE_CLIENT_ID,
-    scope:GDRIVE_SCOPE,
-    callback:async(resp)=>{
-      if(resp.error)return alert(t('loginErr')+resp.error);
-      driveToken=resp.access_token;
-      localStorage.setItem('mw2_drive_token',driveToken);
-      onDriveReady();
-      // Load data from Drive on first sign-in
-      await syncFromDrive();
-    }
+  initTokenClient();
+  if(tokenClient)tokenClient.requestAccessToken();
+}
+
+// Silent re-auth (no popup) — refreshes expired token
+function silentAuth(){
+  return new Promise(resolve=>{
+    try{
+      const client=google.accounts.oauth2.initTokenClient({
+        client_id:GDRIVE_CLIENT_ID,
+        scope:GDRIVE_SCOPE,
+        prompt:'',
+        callback:(resp)=>{
+          if(resp.error||!resp.access_token){resolve(false);return;}
+          driveToken=resp.access_token;
+          clearTimeout(window._tokenRefreshTimer);
+          window._tokenRefreshTimer=setTimeout(()=>{driveToken=null;updateConnDot();},3500*1000);
+          resolve(true);
+        }
+      });
+      client.requestAccessToken({prompt:''});
+    }catch(e){resolve(false);}
   });
-  client.requestAccessToken();
+}
+
+async function ensureToken(){
+  if(driveToken)return true;
+  // Try silent refresh first
+  const ok=await silentAuth();
+  if(ok){updateConnDot();return true;}
+  return false;
 }
 
 function onDriveReady(){
@@ -1688,19 +1719,23 @@ function onDriveReady(){
   if(lb)lb.style.display='none';
   if(ub)ub.style.display='block';
   const bar=document.getElementById('drive-status-bar');
-  if(bar){bar.style.display='flex';}
+  if(bar)bar.style.display='flex';
   const ico=document.getElementById('drive-status-ico');
   const txt=document.getElementById('drive-status-txt');
   if(ico)ico.textContent='✅';
   if(txt)txt.textContent=t('connectedDrive');
+  // Mark user as having connected before
+  localStorage.setItem('mw2_drive_connected','1');
   updateSyncUI();
+  updateSyncSignoutBtn();
   updateConnDot();
 }
 
 function driveSignOut(){
   driveToken=null;
   syncFileId=null;
-  localStorage.removeItem('mw2_drive_token');
+  clearTimeout(window._tokenRefreshTimer);
+  localStorage.removeItem('mw2_drive_connected');
   localStorage.removeItem('mw2_sync_file_id');
   const lb=document.getElementById('drive-login-box');
   const ub=document.getElementById('drive-upload-box');
@@ -1711,16 +1746,14 @@ function driveSignOut(){
   updateSyncUI();
   updateSyncSignoutBtn();
   updateConnDot();
+  // Revoke token fully
+  try{google.accounts.oauth2.revoke(driveToken,()=>{});}catch(e){}
 }
 
 function checkDriveToken(){
-  const saved=localStorage.getItem('mw2_drive_token');
-  if(saved){
-    driveToken=saved;
-    syncFileId=localStorage.getItem('mw2_sync_file_id')||null;
-    return true;
-  }
-  return false;
+  // We no longer store the actual token (it expires)
+  // Instead store a flag that user has connected before
+  return localStorage.getItem('mw2_drive_connected')==='1';
 }
 
 function updateSyncUI(){
@@ -1731,7 +1764,7 @@ function updateSyncUI(){
     btn.textContent='🔄 '+t('syncNow');
     status.textContent=t('connectedDrive');
     status.style.color='var(--grn)';
-  } else {
+  }else{
     btn.textContent='☁️ '+t('connectDrive');
     status.textContent=t('notConnected');
     status.style.color='var(--txt3)';
@@ -1741,23 +1774,27 @@ function updateSyncUI(){
 // ===== SYNC DATA TO/FROM DRIVE =====
 async function getOrCreateSyncFile(){
   if(syncFileId)return syncFileId;
-  // Search for existing file
   const q=encodeURIComponent(`name="${SYNC_FILE_NAME}" and trashed=false`);
-  const r=await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=drive&fields=files(id,name)`,
-    {headers:{Authorization:'Bearer '+driveToken}});
+  const r=await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${q}&spaces=drive&fields=files(id,name)`,
+    {headers:{Authorization:'Bearer '+driveToken}}
+  );
+  if(!r.ok)throw new Error('list failed '+r.status);
   const d=await r.json();
   if(d.files&&d.files.length>0){
     syncFileId=d.files[0].id;
     localStorage.setItem('mw2_sync_file_id',syncFileId);
     return syncFileId;
   }
-  // Create new file
-  const meta={name:SYNC_FILE_NAME,mimeType:'application/json'};
-  const cr=await fetch('https://www.googleapis.com/drive/v3/files',{
-    method:'POST',
-    headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
-    body:JSON.stringify(meta)
+  // Create empty file
+  const body=JSON.stringify({courses:[],exams:{},files:{},nid:10,fid:1,version:'2.1'});
+  const form=new FormData();
+  form.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
+  form.append('file',new Blob([body],{type:'application/json'}));
+  const cr=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{
+    method:'POST',headers:{Authorization:'Bearer '+driveToken},body:form
   });
+  if(!cr.ok)throw new Error('create failed '+cr.status);
   const cf=await cr.json();
   syncFileId=cf.id;
   localStorage.setItem('mw2_sync_file_id',syncFileId);
@@ -1765,79 +1802,92 @@ async function getOrCreateSyncFile(){
 }
 
 async function syncToDrive(){
-  if(!driveToken||isSyncing)return;
+  if(isSyncing)return;
   isSyncing=true;
   showSyncBar('⏳',t('syncing'),'var(--acc)');
   try{
-    const fid2=await getOrCreateSyncFile();
+    // Ensure we have a valid token
+    if(!driveToken){
+      const ok=await ensureToken();
+      if(!ok){
+        showSyncBar('⚠️',t('notConnected'),'var(--red)');
+        setTimeout(hideSyncBar,3000);
+        isSyncing=false;
+        return;
+      }
+    }
+    const fileId=await getOrCreateSyncFile();
     const payload=JSON.stringify({courses,exams,files,nid,fid,version:'2.1',updated:new Date().toISOString()});
-    const blob=new Blob([payload],{type:'application/json'});
-    const fd=new FormData();
-    fd.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
-    fd.append('file',blob);
-    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fid2}?uploadType=multipart`,{
-      method:'PATCH',
-      headers:{Authorization:'Bearer '+driveToken},
-      body:fd
-    });
+    const form=new FormData();
+    form.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
+    form.append('file',new Blob([payload],{type:'application/json'}));
+    const res=await fetch(
+      `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`,
+      {method:'PATCH',headers:{Authorization:'Bearer '+driveToken},body:form}
+    );
+    if(!res.ok)throw new Error('upload failed '+res.status);
     const now=new Date().toLocaleTimeString(lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',{hour:'2-digit',minute:'2-digit'});
     showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
     setTimeout(hideSyncBar,3000);
-  }catch(e){
-    showSyncBar('⚠️',t('syncError'),'var(--red)');
-    setTimeout(hideSyncBar,4000);
+    updateConnDot();
+  }catch(err){
+    showSyncBar('❌',t('syncError')+' — '+err.message,'var(--red)');
+    setTimeout(hideSyncBar,5000);
   }
   isSyncing=false;
 }
 
 async function syncFromDrive(){
-  if(!driveToken)return;
   showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
   try{
-    const fid2=await getOrCreateSyncFile();
-    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fid2}?alt=media`,
-      {headers:{Authorization:'Bearer '+driveToken}});
+    if(!driveToken){
+      const ok=await ensureToken();
+      if(!ok){hideSyncBar();return;}
+    }
+    const fileId=await getOrCreateSyncFile();
+    const r=await fetch(
+      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+      {headers:{Authorization:'Bearer '+driveToken}}
+    );
     if(!r.ok){hideSyncBar();return;}
-    const data=await r.json();
-    if(data.courses){courses=data.courses;}
-    if(data.exams){exams=data.exams;}
-    if(data.files){files=data.files;}
-    if(data.nid){nid=parseInt(data.nid);}
-    if(data.fid){fid=parseInt(data.fid);}
-    // Save to local too
+    const text=await r.text();
+    if(!text||text.trim()===''){hideSyncBar();return;}
+    const data=JSON.parse(text);
+    if(Array.isArray(data.courses)&&data.courses.length>0) courses=data.courses;
+    if(data.exams&&Object.keys(data.exams).length>0) exams=data.exams;
+    if(data.files) files=data.files;
+    if(data.nid) nid=parseInt(data.nid)||nid;
+    if(data.fid) fid=parseInt(data.fid)||fid;
+    // Save locally
     localStorage.setItem('mw2_courses',JSON.stringify(courses));
     localStorage.setItem('mw2_exams',JSON.stringify(exams));
     localStorage.setItem('mw2_files',JSON.stringify(files));
+    localStorage.setItem('mw2_nid',''+nid);
+    localStorage.setItem('mw2_fid',''+fid);
     showSyncBar('✅',t('dataLoaded'),'var(--grn)');
     setTimeout(hideSyncBar,2500);
     updateLabels();render();
     if(isDesktop())deskRender();
-  }catch(e){
-    hideSyncBar();
+    updateConnDot();
+  }catch(err){
+    showSyncBar('❌',t('syncError'),'var(--red)');
+    setTimeout(hideSyncBar,4000);
   }
 }
 
-// Override lsSave to also sync to Drive
+// Handle sync button press
 function handleSyncBtn(){
   if(driveToken){
     syncToDrive();
-  } else {
-    // Open sign-in flow
-    const client=google.accounts.oauth2.initTokenClient({
-      client_id:GDRIVE_CLIENT_ID,
-      scope:GDRIVE_SCOPE,
-      callback:async(resp)=>{
-        if(resp.error)return alert(t('loginErr')+resp.error);
-        driveToken=resp.access_token;
-        localStorage.setItem('mw2_drive_token',driveToken);
-        onDriveReady();
-        await syncFromDrive();
-        updateSyncUI();
-        updateSyncSignoutBtn();
-        updateConnDot();
-      }
+  } else if(checkDriveToken()){
+    // Connected before — try silent re-auth then sync
+    showSyncBar('⏳',t('syncing'),'var(--acc)');
+    ensureToken().then(ok=>{
+      if(ok){onDriveReady();syncToDrive();}
+      else{hideSyncBar();driveSignIn();}
     });
-    client.requestAccessToken();
+  } else {
+    driveSignIn();
   }
 }
 
@@ -2151,7 +2201,7 @@ function setLang(l,el){
 }
 function updateLabels(){
   const h=new Date().getHours();
-  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi günler ☀️':'İyi akşamlar 🌙'};
+  const greet={ar:h<12?'صباح الخير':h<18?'مساء الخير':'مساء النور',en:h<12?'Good morning':h<18?'Good afternoon':'Good evening',tr:h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar'};
   const set=(id,txt)=>{const e=document.getElementById(id);if(e)e.textContent=txt};
   set('greeting',greet[lang]);
   set('tc-lbl',t('courses')); set('te-lbl',t('exams')); set('tw-lbl',t('week'));
@@ -2257,7 +2307,7 @@ function deskRender(){
 
 function deskUpdateSidebar(){
   const h=new Date().getHours();
-  const greet={ar:h<12?'صباح الخير 🌅':h<18?'مساء الخير ☀️':'مساء النور 🌙',en:h<12?'Good morning 🌅':h<18?'Good afternoon ☀️':'Good evening 🌙',tr:h<12?'Günaydın 🌅':h<18?'İyi günler ☀️':'İyi akşamlar 🌙'};
+  const greet={ar:h<12?'صباح الخير':h<18?'مساء الخير':'مساء النور',en:h<12?'Good morning':h<18?'Good afternoon':'Good evening',tr:h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar'};
   const dg=document.getElementById('desk-greeting');if(dg)dg.textContent=greet[lang];
   const fileCount=Object.values(files).reduce((s,a)=>s+(a?a.length:0),0);
   const el=id=>document.getElementById(id);
@@ -2440,15 +2490,23 @@ updateLabels();render();
 if(isDesktop())deskRender();
 window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
 
-// Auto-load from Drive if already connected
+// Auto-load from Drive if user has connected before
 if(checkDriveToken()){
   updateSyncSignoutBtn();
-  updateConnDot();
+  // Wait for Google script to load, then try silent auth
   setTimeout(async()=>{
-    await syncFromDrive();
-    updateSyncSignoutBtn();
-    updateConnDot();
-  }, 800);
+    try{
+      const ok=await ensureToken();
+      if(ok){
+        onDriveReady();
+        await syncFromDrive();
+      } else {
+        // Token needs interactive login — show indication
+        updateConnDot();
+        updateSyncSignoutBtn();
+      }
+    }catch(e){updateConnDot();}
+  }, 1200);
 }
 
 // ===== PWA SERVICE WORKER =====
