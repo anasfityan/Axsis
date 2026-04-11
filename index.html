@@ -615,6 +615,11 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 /* ===== SECTION LABEL ===== */
 .sec-label{font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;margin:12px 0 6px;padding:0 2px}
 </style>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!-- Google GSI (still needed for Drive file uploads) -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="th-dark">
@@ -1257,8 +1262,8 @@ function lsSave(){
     localStorage.setItem('mw2_view',view);
     localStorage.setItem('mw2_sz',sz);
   }catch(e){}
-  // Also sync to Drive if connected
-  if(driveToken){syncToDrive();}
+  // Auto-sync to Firestore 2 seconds after any change
+  scheduleSyncToFirestore();
 }
 
 // ===== STATE =====
@@ -1619,28 +1624,244 @@ function closeDet(){document.getElementById('ov-det').classList.remove('open')}
 function openFileURL(url){if(url)window.open(url,'_blank')}
 
 // ===== GOOGLE DRIVE =====
+// ===== FIREBASE CONFIG =====
+const FB_CONFIG = {
+  apiKey: "AIzaSyCGVAiQ02CzhBdoR-_mUbvP-aCzCXyyBjY",
+  authDomain: "mawadi-app.firebaseapp.com",
+  projectId: "mawadi-app",
+  storageBucket: "mawadi-app.firebasestorage.app",
+  messagingSenderId: "253120920549",
+  appId: "1:253120920549:web:a70af7a5c44e2f3b6f8d0c"
+};
+
+firebase.initializeApp(FB_CONFIG);
+const fbAuth = firebase.auth();
+const fbDb   = firebase.firestore();
+const fbGoogleProvider = new firebase.auth.GoogleAuthProvider();
+
+let fbUser = null;      // current signed-in user
+let fbUid  = null;
+let isSyncing = false;
+let syncDebounceTimer = null;
+
+// Keep Drive token vars for file-upload feature (unchanged)
 const GDRIVE_CLIENT_ID='949622293826-im748pjqsh7beuvhaaqbsd1ceah4gf8q.apps.googleusercontent.com';
 const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
 const AKSIS_URL='https://aksis.istanbul.edu.tr/';
-const SYNC_FILE_NAME='mawadi-data.json';
-
 let driveToken=null;
 let selectedFile=null;
 let currentFileMode='upload';
-let syncFileId=localStorage.getItem('mw2_sync_file_id')||null;
-let isSyncing=false;
-let tokenClient=null; // reusable token client
 
-// ===== AKSIS FUNCTIONS =====
-function openAksis(){
-  const ov=document.getElementById('ov-aksis');
-  ov.style.display='flex';
+// ===== AKSIS =====
+function openAksis(){document.getElementById('ov-aksis').style.display='flex';}
+function closeAksis(){document.getElementById('ov-aksis').style.display='none';}
+function reloadAksis(){window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');}
+function openAksisExternal(){window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');}
+
+// ===== SYNC STATUS UI =====
+function showSyncBar(icon,msg,color){
+  const bar=document.getElementById('sync-status-bar');
+  if(!bar)return;
+  bar.style.display='flex';
+  const ico=document.getElementById('sync-ico');
+  const m=document.getElementById('sync-msg');
+  if(ico)ico.textContent=icon;
+  if(m)m.textContent=msg;
+  bar.style.borderColor=color||'var(--bord2)';
 }
-function closeAksis(){
-  document.getElementById('ov-aksis').style.display='none';
+function hideSyncBar(){const b=document.getElementById('sync-status-bar');if(b)b.style.display='none';}
+
+// ===== FIREBASE AUTH =====
+fbAuth.onAuthStateChanged(async user=>{
+  fbUser=user;
+  fbUid=user?user.uid:null;
+  if(user){
+    // Signed in — load data from Firestore
+    onFirebaseReady(user);
+    await syncFromFirestore();
+  } else {
+    onFirebaseSignedOut();
+  }
+});
+
+function onFirebaseReady(user){
+  // Update drive status bar (reuse same UI)
+  const lb=document.getElementById('drive-login-box');
+  const ub=document.getElementById('drive-upload-box');
+  if(lb)lb.style.display='none';
+  if(ub)ub.style.display='block';
+  const bar=document.getElementById('drive-status-bar');
+  if(bar)bar.style.display='flex';
+  const ico=document.getElementById('drive-status-ico');
+  const txt=document.getElementById('drive-status-txt');
+  if(ico)ico.textContent='✅';
+  if(txt)txt.textContent=(user.displayName||user.email)+' — '+t('connectedDrive');
+  updateSyncUI(true);
+  updateSyncSignoutBtn(true);
+  updateConnDot(true);
 }
-function reloadAksis(){ window.open('https://aksis.istanbul.edu.tr/','_blank','noopener'); }
-function openAksisExternal(){ window.open('https://aksis.istanbul.edu.tr/','_blank','noopener'); }
+
+function onFirebaseSignedOut(){
+  const lb=document.getElementById('drive-login-box');
+  const ub=document.getElementById('drive-upload-box');
+  const bar=document.getElementById('drive-status-bar');
+  if(lb)lb.style.display='block';
+  if(ub)ub.style.display='none';
+  if(bar)bar.style.display='none';
+  updateSyncUI(false);
+  updateSyncSignoutBtn(false);
+  updateConnDot(false);
+}
+
+function firebaseSignIn(){
+  fbAuth.signInWithPopup(fbGoogleProvider).catch(err=>{
+    showSyncBar('❌','Sign-in error: '+err.message,'var(--red)');
+    setTimeout(hideSyncBar,4000);
+  });
+}
+
+function driveSignOut(){
+  fbAuth.signOut().then(()=>{
+    showSyncBar('',t('notConnected'),'var(--bord2)');
+    setTimeout(hideSyncBar,2000);
+  });
+}
+
+// Keep old driveSignIn name working (called from file upload UI)
+function driveSignIn(){
+  // For file uploads, use Google OAuth as before
+  try{
+    const client=google.accounts.oauth2.initTokenClient({
+      client_id:GDRIVE_CLIENT_ID,scope:GDRIVE_SCOPE,
+      callback:(resp)=>{
+        if(resp.error)return;
+        driveToken=resp.access_token;
+        onDriveFileReady();
+      }
+    });
+    client.requestAccessToken();
+  }catch(e){}
+}
+
+function onDriveFileReady(){
+  const lb=document.getElementById('drive-login-box');
+  const ub=document.getElementById('drive-upload-box');
+  const bar=document.getElementById('drive-status-bar');
+  if(lb)lb.style.display='none';
+  if(ub)ub.style.display='block';
+  if(bar)bar.style.display='flex';
+  const ico=document.getElementById('drive-status-ico');
+  const txt=document.getElementById('drive-status-txt');
+  if(ico)ico.textContent='✅';
+  if(txt)txt.textContent=t('connectedDrive');
+}
+
+function checkDriveToken(){return !!fbUser;}
+
+function updateSyncUI(connected){
+  const btn=document.getElementById('sync-drive-btn');
+  const status=document.getElementById('sync-drive-status');
+  if(!btn||!status)return;
+  if(connected){
+    btn.textContent='🔄 '+t('syncNow');
+    status.textContent=fbUser?(fbUser.displayName||fbUser.email):t('connectedDrive');
+    status.style.color='var(--grn)';
+  }else{
+    btn.textContent='☁️ '+t('connectDrive');
+    status.textContent=t('notConnected');
+    status.style.color='var(--txt3)';
+  }
+}
+
+function updateSyncSignoutBtn(connected){
+  const btn=document.getElementById('sync-signout-btn');
+  const mainBtn=document.getElementById('sync-drive-btn');
+  if(!btn||!mainBtn)return;
+  btn.style.display=connected?'':'none';
+  if(connected){
+    mainBtn.textContent='🔄 '+t('syncNow');
+    const s=document.getElementById('sync-drive-status');
+    if(s){s.textContent=fbUser?(fbUser.displayName||fbUser.email):t('connectedDrive');s.style.color='var(--grn)';}
+  }else{
+    mainBtn.textContent='☁️ '+t('connectDrive');
+    const s=document.getElementById('sync-drive-status');
+    if(s){s.textContent=t('notConnected');s.style.color='var(--txt3)';}
+  }
+}
+
+function updateConnDot(connected){
+  ['conn-dot-mobile','conn-dot-desk'].forEach(id=>{
+    const d=document.getElementById(id);
+    if(!d)return;
+    if(connected){d.classList.add('online');d.title=fbUser?(fbUser.displayName||''):'';
+    }else{d.classList.remove('online');d.title='';}
+  });
+}
+
+function handleSyncBtn(){
+  if(fbUser){syncToFirestore();}
+  else{firebaseSignIn();}
+}
+
+// ===== FIRESTORE SYNC =====
+async function syncToFirestore(){
+  if(!fbUid||isSyncing)return;
+  isSyncing=true;
+  showSyncBar('⏳',t('syncing'),'var(--acc)');
+  try{
+    await fbDb.collection('users').doc(fbUid).set({
+      courses,exams,files,nid,fid,
+      updated:firebase.firestore.FieldValue.serverTimestamp(),
+      version:'3.0'
+    },{merge:false});
+    const now=new Date().toLocaleTimeString(lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',{hour:'2-digit',minute:'2-digit'});
+    showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
+    setTimeout(hideSyncBar,3000);
+  }catch(err){
+    showSyncBar('❌',t('syncError')+': '+err.message,'var(--red)');
+    setTimeout(hideSyncBar,5000);
+  }
+  isSyncing=false;
+}
+
+async function syncFromFirestore(){
+  if(!fbUid)return;
+  showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
+  try{
+    const doc=await fbDb.collection('users').doc(fbUid).get();
+    if(!doc.exists){
+      // No data yet — push current local data
+      hideSyncBar();
+      await syncToFirestore();
+      return;
+    }
+    const data=doc.data();
+    if(Array.isArray(data.courses)) courses=data.courses;
+    if(data.exams) exams=data.exams;
+    if(data.files) files=data.files;
+    if(data.nid)   nid=parseInt(data.nid)||nid;
+    if(data.fid)   fid=parseInt(data.fid)||fid;
+    localStorage.setItem('mw2_courses',JSON.stringify(courses));
+    localStorage.setItem('mw2_exams',JSON.stringify(exams));
+    localStorage.setItem('mw2_files',JSON.stringify(files));
+    localStorage.setItem('mw2_nid',''+nid);
+    localStorage.setItem('mw2_fid',''+fid);
+    const now=new Date().toLocaleTimeString(lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',{hour:'2-digit',minute:'2-digit'});
+    showSyncBar('✅',t('dataLoaded'),'var(--grn)');
+    setTimeout(hideSyncBar,2500);
+    updateLabels();render();
+    if(isDesktop())deskRender();
+  }catch(err){
+    showSyncBar('❌',t('syncError'),'var(--red)');
+    setTimeout(hideSyncBar,4000);
+  }
+}
+
+// Debounced auto-sync — fires 2 seconds after last change
+function scheduleSyncToFirestore(){
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer=setTimeout(()=>{if(fbUser)syncToFirestore();},2000);
+}
 
 // ===== SYNC STATUS UI =====
 function showSyncBar(icon,msg,color){
@@ -1769,158 +1990,6 @@ function updateSyncUI(){
     status.textContent=t('notConnected');
     status.style.color='var(--txt3)';
   }
-}
-
-// ===== SYNC DATA TO/FROM DRIVE =====
-async function getOrCreateSyncFile(){
-  if(syncFileId)return syncFileId;
-  const q=encodeURIComponent(`name="${SYNC_FILE_NAME}" and trashed=false`);
-  const r=await fetch(
-    `https://www.googleapis.com/drive/v3/files?q=${q}&spaces=drive&fields=files(id,name)`,
-    {headers:{Authorization:'Bearer '+driveToken}}
-  );
-  if(!r.ok)throw new Error('list failed '+r.status);
-  const d=await r.json();
-  if(d.files&&d.files.length>0){
-    syncFileId=d.files[0].id;
-    localStorage.setItem('mw2_sync_file_id',syncFileId);
-    return syncFileId;
-  }
-  // Create empty file
-  const body=JSON.stringify({courses:[],exams:{},files:{},nid:10,fid:1,version:'2.1'});
-  const form=new FormData();
-  form.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
-  form.append('file',new Blob([body],{type:'application/json'}));
-  const cr=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{
-    method:'POST',headers:{Authorization:'Bearer '+driveToken},body:form
-  });
-  if(!cr.ok)throw new Error('create failed '+cr.status);
-  const cf=await cr.json();
-  syncFileId=cf.id;
-  localStorage.setItem('mw2_sync_file_id',syncFileId);
-  return syncFileId;
-}
-
-async function syncToDrive(){
-  if(isSyncing)return;
-  isSyncing=true;
-  showSyncBar('⏳',t('syncing'),'var(--acc)');
-  try{
-    // Ensure we have a valid token
-    if(!driveToken){
-      const ok=await ensureToken();
-      if(!ok){
-        showSyncBar('⚠️',t('notConnected'),'var(--red)');
-        setTimeout(hideSyncBar,3000);
-        isSyncing=false;
-        return;
-      }
-    }
-    const fileId=await getOrCreateSyncFile();
-    const payload=JSON.stringify({courses,exams,files,nid,fid,version:'2.1',updated:new Date().toISOString()});
-    const form=new FormData();
-    form.append('metadata',new Blob([JSON.stringify({name:SYNC_FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
-    form.append('file',new Blob([payload],{type:'application/json'}));
-    const res=await fetch(
-      `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`,
-      {method:'PATCH',headers:{Authorization:'Bearer '+driveToken},body:form}
-    );
-    if(!res.ok)throw new Error('upload failed '+res.status);
-    const now=new Date().toLocaleTimeString(lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',{hour:'2-digit',minute:'2-digit'});
-    showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
-    setTimeout(hideSyncBar,3000);
-    updateConnDot();
-  }catch(err){
-    showSyncBar('❌',t('syncError')+' — '+err.message,'var(--red)');
-    setTimeout(hideSyncBar,5000);
-  }
-  isSyncing=false;
-}
-
-async function syncFromDrive(){
-  showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
-  try{
-    if(!driveToken){
-      const ok=await ensureToken();
-      if(!ok){hideSyncBar();return;}
-    }
-    const fileId=await getOrCreateSyncFile();
-    const r=await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-      {headers:{Authorization:'Bearer '+driveToken}}
-    );
-    if(!r.ok){hideSyncBar();return;}
-    const text=await r.text();
-    if(!text||text.trim()===''){hideSyncBar();return;}
-    const data=JSON.parse(text);
-    if(Array.isArray(data.courses)&&data.courses.length>0) courses=data.courses;
-    if(data.exams&&Object.keys(data.exams).length>0) exams=data.exams;
-    if(data.files) files=data.files;
-    if(data.nid) nid=parseInt(data.nid)||nid;
-    if(data.fid) fid=parseInt(data.fid)||fid;
-    // Save locally
-    localStorage.setItem('mw2_courses',JSON.stringify(courses));
-    localStorage.setItem('mw2_exams',JSON.stringify(exams));
-    localStorage.setItem('mw2_files',JSON.stringify(files));
-    localStorage.setItem('mw2_nid',''+nid);
-    localStorage.setItem('mw2_fid',''+fid);
-    showSyncBar('✅',t('dataLoaded'),'var(--grn)');
-    setTimeout(hideSyncBar,2500);
-    updateLabels();render();
-    if(isDesktop())deskRender();
-    updateConnDot();
-  }catch(err){
-    showSyncBar('❌',t('syncError'),'var(--red)');
-    setTimeout(hideSyncBar,4000);
-  }
-}
-
-// Handle sync button press
-function handleSyncBtn(){
-  if(driveToken){
-    syncToDrive();
-  } else if(checkDriveToken()){
-    // Connected before — try silent re-auth then sync
-    showSyncBar('⏳',t('syncing'),'var(--acc)');
-    ensureToken().then(ok=>{
-      if(ok){onDriveReady();syncToDrive();}
-      else{hideSyncBar();driveSignIn();}
-    });
-  } else {
-    driveSignIn();
-  }
-}
-
-function updateSyncSignoutBtn(){
-  const btn=document.getElementById('sync-signout-btn');
-  const mainBtn=document.getElementById('sync-drive-btn');
-  if(!btn||!mainBtn)return;
-  if(driveToken){
-    btn.style.display='';
-    mainBtn.textContent='🔄 '+t('syncNow');
-    document.getElementById('sync-drive-status').textContent=t('connectedDrive');
-    document.getElementById('sync-drive-status').style.color='var(--grn)';
-  } else {
-    btn.style.display='none';
-    mainBtn.textContent='☁️ '+t('connectDrive');
-    document.getElementById('sync-drive-status').textContent=t('notConnected');
-    document.getElementById('sync-drive-status').style.color='var(--txt3)';
-  }
-}
-
-function updateConnDot(){
-  const connected=!!driveToken;
-  ['conn-dot-mobile','conn-dot-desk'].forEach(id=>{
-    const d=document.getElementById(id);
-    if(!d)return;
-    if(connected){
-      d.classList.add('online');
-      d.title='متصل بـ Google Drive ✅';
-    } else {
-      d.classList.remove('online');
-      d.title='غير متصل';
-    }
-  });
 }
 
 function switchFileMode(mode,el){
@@ -2490,12 +2559,8 @@ updateLabels();render();
 if(isDesktop())deskRender();
 window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
 
-// If user was connected before, show the dot indicator and update UI
-// (actual sync requires user to press "Sync Now" to avoid popup on load)
-if(checkDriveToken()){
-  updateSyncSignoutBtn();
-  updateConnDot();
-}
+// Firebase Auth state listener handles sign-in/sign-out automatically
+// (defined above in fbAuth.onAuthStateChanged)
 
 // ===== PWA SERVICE WORKER =====
 if('serviceWorker' in navigator){
