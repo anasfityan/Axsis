@@ -2032,14 +2032,22 @@ function formatBytes(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFi
 
 async function uploadAndSave(){
   if(!selectedFile){alert(t('selectFile'));return;}
-  // If no Drive token yet but user is signed in, request it first
+  // If no Drive token, request it now (user gesture allows popup)
   if(!driveToken){
-    if(fbUser){
-      driveSignIn();
-      alert('جاري الاتصال بـ Google Drive، حاول مرة أخرى خلال ثانية');
-      return;
-    }
-    alert(t('mustLogin'));return;
+    return new Promise(resolve=>{
+      try{
+        const client=google.accounts.oauth2.initTokenClient({
+          client_id:GDRIVE_CLIENT_ID,scope:GDRIVE_SCOPE,
+          callback:(resp)=>{
+            if(resp.error){alert(t('loginErr')+resp.error);resolve();return;}
+            driveToken=resp.access_token;
+            resolve();
+            uploadAndSave(); // retry after getting token
+          }
+        });
+        client.requestAccessToken();
+      }catch(e){alert(t('mustLogin'));resolve();}
+    });
   }
   const cid=parseInt(document.getElementById('file-cid').value);
   const customName=document.getElementById('f-fname-upload').value.trim()||selectedFile.name;
@@ -2133,22 +2141,14 @@ function openAddFile(courseId){
   document.getElementById('f-fnote').value='';
   selFileType_='pdf';
   document.querySelectorAll('.file-type-btn').forEach((b,i)=>b.classList.toggle('sel',i===0));
-  // If already have driveToken show upload box directly
-  // If Firebase user is signed in, try to get Drive token silently
-  if(driveToken){
-    onDriveFileReady();
-  } else if(fbUser){
-    // Auto-request Drive token without showing login box
-    driveSignIn();
-    // Show upload box optimistically, driveSignIn callback will confirm
-    document.getElementById('drive-login-box').style.display='none';
-    document.getElementById('drive-upload-box').style.display='block';
-  } else {
-    document.getElementById('drive-login-box').style.display='block';
-    document.getElementById('drive-upload-box').style.display='none';
-  }
+
+  // Show upload box — always allow selecting file regardless of Drive token
+  document.getElementById('drive-login-box').style.display='none';
+  document.getElementById('drive-upload-box').style.display='block';
   const dbar=document.getElementById('drive-status-bar');
   if(dbar)dbar.style.display='none';
+
+  // Open overlay immediately
   document.getElementById('ov-file').classList.add('open');
 }
 function closeFile(){
