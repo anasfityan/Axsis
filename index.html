@@ -16,53 +16,57 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-/* ===== THEMES ===== */
+/* ===== MATERIAL DESIGN 3 + APPLE THEMES ===== */
+/* MD3 Dark — Google baseline (default) */
 :root{
-  --bg:#0f1322;--bg2:#161b2e;--bg3:#1e2540;
-  --sur:#1e2540;--sur2:#252d4a;--sur3:#2d3660;
-  --bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.13);
-  --txt:#e8eaf6;--txt2:#9fa8da;--txt3:#5c6bc0;
-  --acc:#4e6ef2;--acc2:#7c4dff;
-  --red:#f44336;--grn:#4caf50;--ylw:#ffb300;--org:#ff6d00;
-  --teal:#00bcd4;--pink:#e91e63;
-  --r:14px;--rsm:8px;
-  --header-h:110px;
+  --bg:#0f0f13;--bg2:#1c1b1f;--bg3:#2b2930;
+  --sur:#1c1b1f;--sur2:#2b2930;--sur3:#38363d;
+  --bord:rgba(202,196,208,0.08);--bord2:rgba(202,196,208,0.16);
+  --txt:#e6e1e5;--txt2:#cac4d0;--txt3:#938f99;
+  --acc:#d0bcff;--acc2:#9a82db;
+  --red:#f2b8b5;--grn:#a8d5a2;--ylw:#f4e16c;--org:#ffb4ab;
+  --teal:#80cbc4;--pink:#f48fb1;
+  --r:16px;--rsm:10px;--header-h:110px;
 }
-/* Light */
+/* MD3 Light — Google Material You */
 .th-light{
-  --bg:#f4f6fa;--bg2:#ffffff;--bg3:#eaeef7;
-  --sur:#ffffff;--sur2:#f0f3fb;--sur3:#e4e9f7;
-  --bord:rgba(63,81,181,0.1);--bord2:rgba(63,81,181,0.2);
-  --txt:#1a237e;--txt2:#3949ab;--txt3:#7986cb;
-  --acc:#3f51b5;--acc2:#5c6bc0;
-  --red:#e53935;--grn:#43a047;--ylw:#f9a825;--org:#ef6c00;
+  --bg:#fffbfe;--bg2:#f7f2fa;--bg3:#ece6f0;
+  --sur:#fffbfe;--sur2:#f7f2fa;--sur3:#ece6f0;
+  --bord:rgba(121,116,126,0.12);--bord2:rgba(121,116,126,0.22);
+  --txt:#1c1b1f;--txt2:#49454f;--txt3:#79747e;
+  --acc:#6750a4;--acc2:#7965af;
+  --red:#b3261e;--grn:#386a20;--ylw:#7a5900;--org:#8c4e00;
+  --teal:#006874;--pink:#8c4190;
 }
-/* Real Gold — dark background + genuine gold accent */
-.th-gold{
-  --bg:#0d0c07;--bg2:#141209;--bg3:#1c1a0e;
-  --sur:#1c1a0e;--sur2:#242113;--sur3:#2e2a18;
-  --bord:rgba(212,175,55,0.12);--bord2:rgba(212,175,55,0.22);
-  --txt:#f5e6c8;--txt2:#d4af37;--txt3:#8a7340;
-  --acc:#d4af37;--acc2:#b8962e;
-  --red:#c0392b;--grn:#6a8f47;--ylw:#d4af37;--org:#c0692b;
+/* MD3 Blue Dark — Google deep blue */
+.th-md3blue{
+  --bg:#001831;--bg2:#00213f;--bg3:#002d57;
+  --sur:#00213f;--sur2:#002d57;--sur3:#003870;
+  --bord:rgba(169,199,255,0.1);--bord2:rgba(169,199,255,0.18);
+  --txt:#d6e3ff;--txt2:#adc6ff;--txt3:#6b9fff;
+  --acc:#adc6ff;--acc2:#90b4fd;
+  --red:#ffb4ab;--grn:#a8d5a2;--ylw:#f4e16c;--org:#ffb950;
+  --teal:#82d7e0;--pink:#ffb0c8;
 }
-/* Deep Gray — darker, more professional */
-.th-gray{
-  --bg:#111111;--bg2:#1a1a1a;--bg3:#222222;
-  --sur:#222222;--sur2:#2c2c2c;--sur3:#363636;
-  --bord:rgba(255,255,255,0.06);--bord2:rgba(255,255,255,0.11);
-  --txt:#f0f0f0;--txt2:#aaaaaa;--txt3:#666666;
-  --acc:#9e9e9e;--acc2:#757575;
-  --red:#ef5350;--grn:#66bb6a;--ylw:#ffca28;--org:#ffa726;
+/* Apple Light — iOS / macOS */
+.th-apple{
+  --bg:#f2f2f7;--bg2:#ffffff;--bg3:#e5e5ea;
+  --sur:#ffffff;--sur2:#f2f2f7;--sur3:#e5e5ea;
+  --bord:rgba(60,60,67,0.08);--bord2:rgba(60,60,67,0.15);
+  --txt:#000000;--txt2:#3c3c43;--txt3:#8e8e93;
+  --acc:#007aff;--acc2:#0a84ff;
+  --red:#ff3b30;--grn:#34c759;--ylw:#ff9500;--org:#ff6b00;
+  --teal:#32ade6;--pink:#ff2d55;
 }
-/* Dark Orange — deep dark with warm amber/orange */
-.th-darkorange{
-  --bg:#0d0800;--bg2:#140e00;--bg3:#1c1400;
-  --sur:#1c1400;--sur2:#241c00;--sur3:#2e2300;
-  --bord:rgba(255,140,0,0.1);--bord2:rgba(255,140,0,0.2);
-  --txt:#fff3e0;--txt2:#ffb74d;--txt3:#8d5e0a;
-  --acc:#ff9800;--acc2:#f57c00;
-  --red:#e53935;--grn:#558b2f;--ylw:#ffca28;--org:#ff9800;
+/* Apple Dark — macOS dark */
+.th-appledark{
+  --bg:#000000;--bg2:#1c1c1e;--bg3:#2c2c2e;
+  --sur:#1c1c1e;--sur2:#2c2c2e;--sur3:#3a3a3c;
+  --bord:rgba(255,255,255,0.08);--bord2:rgba(255,255,255,0.15);
+  --txt:#ffffff;--txt2:#ebebf5;--txt3:#8e8e93;
+  --acc:#0a84ff;--acc2:#409cff;
+  --red:#ff453a;--grn:#32d74b;--ylw:#ffd60a;--org:#ff9f0a;
+  --teal:#5ac8fa;--pink:#ff375f;
 }
 
 /* ===== DESKTOP LAYOUT (768px+) ===== */
@@ -754,30 +758,21 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 
 </div>
 
-<!-- AKSIS IN-APP BROWSER -->
-<div id="ov-aksis" style="display:none;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column">
-  <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border-bottom:1px solid var(--bord);flex-shrink:0">
-    <!-- Istanbul University logo mark -->
-    <div style="width:32px;height:32px;border-radius:8px;background:#c8102e;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <svg viewBox="0 0 24 24" fill="white" style="width:18px;height:18px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+<!-- AKSIS QUICK LAUNCH -->
+<div id="ov-aksis" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+  <div style="background:var(--bg2);border-radius:24px;padding:28px 24px;max-width:320px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)">
+    <div style="width:56px;height:56px;border-radius:16px;background:#c8102e;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+      <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="none" stroke="white" stroke-width="1.8"/><polyline points="9,22 9,12 15,12 15,22" fill="none" stroke="white" stroke-width="1.8"/></svg>
     </div>
-    <div style="flex:1;min-width:0">
-      <div style="font-size:13px;font-weight:800;color:var(--txt)" id="aksis-title">Aksis - İstanbul Üniversitesi</div>
-      <div style="font-size:10px;color:var(--txt3)">aksis.istanbul.edu.tr</div>
-    </div>
-    <button onclick="playClick();closeAksis()" style="background:var(--sur3);border:none;border-radius:9px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--txt2);cursor:pointer;font-family:Cairo,sans-serif;flex-shrink:0" id="btn-aksis-close">✕ إغلاق</button>
-  </div>
-  <iframe id="aksis-frame" src="about:blank"
-    style="flex:1;border:none;width:100%;background:#fff"
-    allow="fullscreen"
-    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation">
-  </iframe>
-  <div style="padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bord);display:flex;gap:8px;flex-shrink:0">
-    <button onclick="playClick();reloadAksis()" style="flex:1;background:var(--sur3);border:1px solid var(--bord2);border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:var(--txt2);cursor:pointer;font-family:Cairo,sans-serif">
-      🔄 <span id="btn-aksis-reload">إعادة تحميل</span>
-    </button>
-    <button onclick="playClick();openAksisExternal()" style="flex:1;background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif">
+    <div style="font-size:17px;font-weight:800;color:var(--txt);margin-bottom:6px">Aksis</div>
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:20px">İstanbul Üniversitesi</div>
+    <button onclick="window.open('https://aksis.istanbul.edu.tr/','_blank','noopener');closeAksis()"
+      style="width:100%;padding:14px;background:var(--acc);color:var(--bg);border:none;border-radius:14px;font-size:14px;font-weight:800;font-family:Cairo,sans-serif;cursor:pointer;margin-bottom:10px">
       🌐 <span id="btn-aksis-external">فتح في المتصفح</span>
+    </button>
+    <button onclick="closeAksis()"
+      style="width:100%;padding:12px;background:var(--sur3);color:var(--txt2);border:none;border-radius:14px;font-size:13px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer">
+      <span id="btn-aksis-close">إغلاق</span>
     </button>
   </div>
 </div>
@@ -1018,29 +1013,29 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   <div class="st" id="lbl-theme-picker-title">اختر الثيم</div>
   <div class="theme-opts">
     <div class="theme-opt sel" data-t="th-dark" onclick="playClick();setTheme('th-dark',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#161b2e,#0f1322);border:1px solid #2d3660"></div>
-      <span class="theme-opt-name">داكن أزرق</span>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#2b2930,#1c1b1f);border:1px solid rgba(202,196,208,.2)"></div>
+      <span class="theme-opt-name">MD3 Dark</span>
       <span class="theme-check" id="thc-dark">✓</span>
     </div>
     <div class="theme-opt" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#f4f6fa,#ffffff);border:1px solid #d0d8ee"></div>
-      <span class="theme-opt-name">فاتح</span>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#fffbfe,#f7f2fa);border:1px solid rgba(121,116,126,.2)"></div>
+      <span class="theme-opt-name">MD3 Light</span>
       <span class="theme-check" style="display:none" id="thc-light">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-gold" onclick="playClick();setTheme('th-gold',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#141209,#0d0c07);border:1px solid rgba(212,175,55,.5)"></div>
-      <span class="theme-opt-name">ذهبي راقٍ</span>
-      <span class="theme-check" style="display:none" id="thc-gold">✓</span>
+    <div class="theme-opt" data-t="th-md3blue" onclick="playClick();setTheme('th-md3blue',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#002d57,#001831);border:1px solid rgba(169,199,255,.3)"></div>
+      <span class="theme-opt-name">MD3 Blue</span>
+      <span class="theme-check" style="display:none" id="thc-md3blue">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-gray" onclick="playClick();setTheme('th-gray',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a1a1a,#111111);border:1px solid #333"></div>
-      <span class="theme-opt-name">رمادي داكن</span>
-      <span class="theme-check" style="display:none" id="thc-gray">✓</span>
+    <div class="theme-opt" data-t="th-apple" onclick="playClick();setTheme('th-apple',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#ffffff,#f2f2f7);border:1px solid rgba(60,60,67,.15)"></div>
+      <span class="theme-opt-name">Apple Light</span>
+      <span class="theme-check" style="display:none" id="thc-apple">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-darkorange" onclick="playClick();setTheme('th-darkorange',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#140e00,#0d0800);border:1px solid rgba(255,140,0,.4)"></div>
-      <span class="theme-opt-name">داكن برتقالي</span>
-      <span class="theme-check" style="display:none" id="thc-darkorange">✓</span>
+    <div class="theme-opt" data-t="th-appledark" onclick="playClick();setTheme('th-appledark',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#1c1c1e,#000000);border:1px solid rgba(255,255,255,.12)"></div>
+      <span class="theme-opt-name">Apple Dark</span>
+      <span class="theme-check" style="display:none" id="thc-appledark">✓</span>
     </div>
   </div>
   <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()">تم</button></div>
@@ -1241,7 +1236,7 @@ const L={
     aksisTitle:'İstanbul Üniversitesi Sistemi',aksisClose:'Kapat',aksisReload:'Yenile',aksisExternal:'Tarayıcıda Aç',
   }
 };
-const TH_NAMES={'th-dark':{ar:'داكن أزرق',en:'Dark Blue',tr:'Koyu Mavi'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي راقٍ',en:'Royal Gold',tr:'Kraliyet Altını'},'th-gray':{ar:'رمادي داكن',en:'Dark Gray',tr:'Koyu Gri'},'th-darkorange':{ar:'داكن برتقالي',en:'Dark Orange',tr:'Koyu Turuncu'}};
+const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -1637,10 +1632,15 @@ let isSyncing=false;
 let tokenClient=null; // reusable token client
 
 // ===== AKSIS FUNCTIONS =====
-function openAksis(){ window.open(AKSIS_URL,'_blank'); }
-function closeAksis(){ document.getElementById('ov-aksis').style.display='none'; }
-function reloadAksis(){ const f=document.getElementById('aksis-frame'); f.src=f.src; }
-function openAksisExternal(){ window.open(AKSIS_URL,'_blank'); }
+function openAksis(){
+  const ov=document.getElementById('ov-aksis');
+  ov.style.display='flex';
+}
+function closeAksis(){
+  document.getElementById('ov-aksis').style.display='none';
+}
+function reloadAksis(){ window.open('https://aksis.istanbul.edu.tr/','_blank','noopener'); }
+function openAksisExternal(){ window.open('https://aksis.istanbul.edu.tr/','_blank','noopener'); }
 
 // ===== SYNC STATUS UI =====
 function showSyncBar(icon,msg,color){
@@ -2185,7 +2185,7 @@ function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  ['dark','light','gold','gray','darkorange'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
+  ['dark','light','md3blue','apple','appledark'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
   lsSave();
 }
@@ -2254,7 +2254,7 @@ function updateLabels(){
   document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
   ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
   document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
-  ['dark','light','gold','gray','darkorange'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
+  ['dark','light','md3blue','apple','appledark'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
   set('s-theme-val',TH_NAMES[currentTheme]?.[lang]||'');
   set('s-lang-val',LANG_NAMES[lang]);
 }
@@ -2490,23 +2490,11 @@ updateLabels();render();
 if(isDesktop())deskRender();
 window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();});
 
-// Auto-load from Drive if user has connected before
+// If user was connected before, show the dot indicator and update UI
+// (actual sync requires user to press "Sync Now" to avoid popup on load)
 if(checkDriveToken()){
   updateSyncSignoutBtn();
-  // Wait for Google script to load, then try silent auth
-  setTimeout(async()=>{
-    try{
-      const ok=await ensureToken();
-      if(ok){
-        onDriveReady();
-        await syncFromDrive();
-      } else {
-        // Token needs interactive login — show indication
-        updateConnDot();
-        updateSyncSignoutBtn();
-      }
-    }catch(e){updateConnDot();}
-  }, 1200);
+  updateConnDot();
 }
 
 // ===== PWA SERVICE WORKER =====
