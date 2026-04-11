@@ -607,6 +607,9 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       </div>
     </div>
     <div class="topbar-btns">
+      <div class="ib" onclick="playClick();openAksis()" title="Aksis - İstanbul Üniversitesi" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
       <div class="ib ib-notify" onclick="playClick();switchTab('notif')" id="notif-btn" title="إشعارات الامتحانات">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
         <span class="badge" id="notif-badge" style="display:none"></span>
@@ -687,6 +690,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         <span id="desk-add-btn-lbl">إضافة مادة</span>
       </button>
+      <button class="desk-foot-btn" onclick="playClick();openAksis()" style="color:var(--acc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        <span id="desk-aksis-lbl">نظام جامعة إسطنبول</span>
+      </button>
       <button class="desk-foot-btn" onclick="playClick();openSettings()">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         <span id="desk-settings-lbl">الإعدادات</span>
@@ -722,7 +729,35 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 
 </div>
 
-<!-- ADD/EDIT COURSE OVERLAY -->
+<!-- AKSIS IN-APP BROWSER -->
+<div id="ov-aksis" style="display:none;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column">
+  <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border-bottom:1px solid var(--bord);flex-shrink:0">
+    <!-- Istanbul University logo mark -->
+    <div style="width:32px;height:32px;border-radius:8px;background:#c8102e;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg viewBox="0 0 24 24" fill="white" style="width:18px;height:18px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:800;color:var(--txt)" id="aksis-title">Aksis - İstanbul Üniversitesi</div>
+      <div style="font-size:10px;color:var(--txt3)">aksis.istanbul.edu.tr</div>
+    </div>
+    <button onclick="playClick();closeAksis()" style="background:var(--sur3);border:none;border-radius:9px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--txt2);cursor:pointer;font-family:Cairo,sans-serif;flex-shrink:0" id="btn-aksis-close">✕ إغلاق</button>
+  </div>
+  <iframe id="aksis-frame" src="about:blank"
+    style="flex:1;border:none;width:100%;background:#fff"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation">
+  </iframe>
+  <div style="padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bord);display:flex;gap:8px;flex-shrink:0">
+    <button onclick="playClick();reloadAksis()" style="flex:1;background:var(--sur3);border:1px solid var(--bord2);border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:var(--txt2);cursor:pointer;font-family:Cairo,sans-serif">
+      🔄 <span id="btn-aksis-reload">إعادة تحميل</span>
+    </button>
+    <button onclick="playClick();openAksisExternal()" style="flex:1;background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif">
+      🌐 <span id="btn-aksis-external">فتح في المتصفح</span>
+    </button>
+  </div>
+</div>
+
+<!-- OVERLAYS -->
 <div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
   <div class="sh"></div>
@@ -1084,6 +1119,7 @@ const L={
     syncedAt:'آخر مزامنة',syncError:'فشلت المزامنة',
     loadingFromDrive:'جاري تحميل البيانات...',dataLoaded:'تم تحميل البيانات ✅',
     syncTitle:'مزامنة Drive',signoutSync:'فصل الحساب',
+    aksisTitle:'نظام جامعة إسطنبول',aksisClose:'إغلاق',aksisReload:'إعادة تحميل',aksisExternal:'فتح في المتصفح',
   },
   en:{courses:'Courses',exams:'Exams',week:'Week',
     name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',
@@ -1130,6 +1166,7 @@ const L={
     syncedAt:'Last sync',syncError:'Sync failed',
     loadingFromDrive:'Loading data...',dataLoaded:'Data loaded ✅',
     syncTitle:'Drive Sync',signoutSync:'Disconnect',
+    aksisTitle:'Istanbul University System',aksisClose:'Close',aksisReload:'Reload',aksisExternal:'Open in Browser',
   },
   tr:{courses:'Dersler',exams:'Sınavlar',week:'Hafta',
     name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',
@@ -1176,6 +1213,7 @@ const L={
     syncedAt:'Son eşitleme',syncError:'Eşitleme başarısız',
     loadingFromDrive:'Veriler yükleniyor...',dataLoaded:'Veriler yüklendi ✅',
     syncTitle:'Drive Eşitleme',signoutSync:'Bağlantıyı Kes',
+    aksisTitle:'İstanbul Üniversitesi Sistemi',aksisClose:'Kapat',aksisReload:'Yenile',aksisExternal:'Tarayıcıda Aç',
   }
 };
 const TH_NAMES={'th-dark':{ar:'داكن أزرق',en:'Dark Blue',tr:'Koyu Mavi'},'th-light':{ar:'فاتح',en:'Light',tr:'Açık'},'th-gold':{ar:'ذهبي راقٍ',en:'Royal Gold',tr:'Kraliyet Altını'},'th-gray':{ar:'رمادي داكن',en:'Dark Gray',tr:'Koyu Gri'},'th-darkorange':{ar:'داكن برتقالي',en:'Dark Orange',tr:'Koyu Turuncu'}};
@@ -1263,23 +1301,6 @@ function render(){
     <div class="stat"><div class="stat-n">${examCount}</div><div class="stat-l">${t('exams')}</div></div>
     <div class="stat"><div class="stat-n">${fileCount}</div><div class="stat-l">${t('files')}</div></div>
   </div>`;
-
-  // Upcoming exam banner
-  const upcoming=courses
-    .map(c=>{const d=daysUntil(exams[c.id]?.date);return{c,d}})
-    .filter(x=>x.d!==null&&x.d>=0&&x.d<=7)
-    .sort((a,b)=>a.d-b.d);
-  if(upcoming.length&&tab==='courses'){
-    const first=upcoming[0];
-    h+=`<div class="exam-banner" onclick="playClick();switchTab('exams')">
-      <div class="exam-banner-ico">📅</div>
-      <div class="exam-banner-text">
-        <div class="et1">${first.d===0?t('today')+'!':first.d===1?t('tomorrow')+'!':first.d+' '+t('daysLeft')} — ${first.c.name}</div>
-        <div class="et2">${upcoming.length} ${t('upcomingExams')} ${t('thisWeek')}</div>
-      </div>
-      <div class="exam-banner-arrow">‹</div>
-    </div>`;
-  }
 
   // View switcher
   h+=`<div class="vsw">
@@ -1579,7 +1600,28 @@ function openFileURL(url){if(url)window.open(url,'_blank')}
 
 // ===== GOOGLE DRIVE =====
 const GDRIVE_CLIENT_ID='949622293826-im748pjqsh7beuvhaaqbsd1ceah4gf8q.apps.googleusercontent.com';
-const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
+const GDRIVE_SCOPE='https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata';
+const AKSIS_URL='https://aksis.istanbul.edu.tr/';
+
+// ===== AKSIS FUNCTIONS =====
+function openAksis(){
+  const ov=document.getElementById('ov-aksis');
+  const frame=document.getElementById('aksis-frame');
+  ov.style.display='flex';
+  if(frame.src==='about:blank'){
+    frame.src=AKSIS_URL;
+  }
+}
+function closeAksis(){
+  document.getElementById('ov-aksis').style.display='none';
+}
+function reloadAksis(){
+  const frame=document.getElementById('aksis-frame');
+  frame.src=frame.src;
+}
+function openAksisExternal(){
+  window.open(AKSIS_URL,'_blank');
+}
 const SYNC_FILE_NAME='mawadi-data.json';
 let driveToken=null;
 let selectedFile=null;
@@ -2106,6 +2148,11 @@ function updateLabels(){
   set('desk-course-list-title',t('courses')); set('desk-add-btn-lbl',t('addCourseBtn'));
   set('desk-settings-lbl',t('settings')); set('desk-lbl-grid',t('grid'));
   set('desk-lbl-list',t('list')); set('lbl-select-course',t('selectCourse'));
+  set('desk-aksis-lbl',t('aksisTitle'));
+  set('btn-aksis-close','✕ '+t('aksisClose'));
+  set('btn-aksis-reload',t('aksisReload'));
+  set('btn-aksis-external',t('aksisExternal'));
+  set('lbl-sync-title',t('syncTitle'));
   // Notif badge
   const urgentCount=courses.filter(c=>{const d=daysUntil(exams[c.id]?.date);return d!==null&&d>=0&&d<=3}).length;
   const badge=document.getElementById('notif-badge');
@@ -2232,18 +2279,7 @@ function deskRenderMain(){
   const fil=filter==='all'?courses:courses.filter(c=>c.day===filter);
   if(!fil.length){mb.innerHTML=emptyHTML();return;}
 
-  // Upcoming banner
-  const upcoming=courses.map(c=>{const d=daysUntil(exams[c.id]?.date);return{c,d};}).filter(x=>x.d!==null&&x.d>=0&&x.d<=7).sort((a,b)=>a.d-b.d);
   let h='';
-  if(upcoming.length){
-    const first=upcoming[0];
-    h+=`<div class="desk-banner" onclick="deskSwitchTab('exams',document.getElementById('dnav-exams'))">
-      <div class="desk-banner-ico">📅</div>
-      <div><div class="desk-banner-t1">${first.d===0?t('today')+'!':first.d===1?t('tomorrow')+'!':first.d+' '+t('daysLeft')} — ${first.c.name}</div>
-      <div class="desk-banner-t2">${upcoming.length} ${t('upcomingExams')} ${t('thisWeek')}</div></div>
-    </div>`;
-  }
-
   if(deskView==='grid')h+=`<div class="desk-grid g3">${fil.map((c,i)=>deskCourseCardH(c,i)).join('')}</div>`;
   else h+=`<div class="lw">${fil.map((c,i)=>courseListH(c,i)).join('')}</div>`;
   mb.innerHTML=h;
