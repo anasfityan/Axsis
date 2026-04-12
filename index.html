@@ -69,15 +69,18 @@
   --teal:#5ac8fa;--pink:#ff375f;
 }
 
-/* Deep Space — Fundly/Finance app style */
+/* Glassmorphism — frosted glass style */
 .th-glass-blue{
-  --bg:#080b18;--bg2:#0d1120;--bg3:#121828;
-  --sur:#0f1520;--sur2:#151d2e;--sur3:#1a2438;
-  --bord:rgba(99,120,200,0.12);--bord2:rgba(99,120,200,0.22);
-  --txt:#e8edf8;--txt2:#a0aec8;--txt3:#5a6888;
-  --acc:#e07830;--acc2:#c85f18;
-  --red:#ff5f7a;--grn:#4ade80;--ylw:#fbbf24;--org:#e07830;
-  --teal:#38bdf8;--pink:#f472b6;
+  --bg:#1a1f35;--bg2:#1e2540;--bg3:#232c4a;
+  --sur:rgba(255,255,255,0.07);--sur2:rgba(255,255,255,0.10);--sur3:rgba(255,255,255,0.13);
+  --bord:rgba(255,255,255,0.12);--bord2:rgba(255,255,255,0.20);
+  --txt:#f0f4ff;--txt2:#b8c4e0;--txt3:#7888b0;
+  --acc:#7eb8f7;--acc2:#5a9ef5;
+  --red:#ff8fa3;--grn:#86efac;--ylw:#fde68a;--org:#fdba74;
+  --teal:#67e8f9;--pink:#f9a8d4;
+  --glass-bg:rgba(255,255,255,0.07);
+  --glass-blur:16px;
+  --glass-border:rgba(255,255,255,0.15);
 }
 /* Deep Violet — professional purple-blue */
 .th-glass-purple{
@@ -98,6 +101,85 @@
   --acc:#3b82f6;--acc2:#2563eb;
   --red:#ff5f7a;--grn:#4ade80;--ylw:#fbbf24;--org:#fb923c;
   --teal:#22d3ee;--pink:#e879f9;
+}
+
+/* ===== GLASSMORPHISM EFFECTS (th-glass-blue only) ===== */
+.th-glass-blue body{
+  background:linear-gradient(135deg,#1a1f35 0%,#232c4a 40%,#1a2840 70%,#1e1f38 100%);
+  background-attachment:fixed;
+}
+.th-glass-blue .cc,
+.th-glass-blue .desk-stat,
+.th-glass-blue .desk-sidebar,
+.th-glass-blue .desk-detail,
+.th-glass-blue .desk-main-head,
+.th-glass-blue .topbar,
+.th-glass-blue .sheet,
+.th-glass-blue .sub-sheet{
+  background:rgba(255,255,255,0.07)!important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.14)!important;
+}
+.th-glass-blue .cc:hover{
+  background:rgba(255,255,255,0.12)!important;
+  border-color:rgba(126,184,247,0.4)!important;
+}
+.th-glass-blue .desk-sidebar{
+  background:rgba(255,255,255,0.05)!important;
+}
+.th-glass-blue .desk-nav-item.active{
+  background:rgba(126,184,247,0.25)!important;
+  border:1px solid rgba(126,184,247,0.3);
+}
+.th-glass-blue .desk-add-btn{
+  background:linear-gradient(135deg,rgba(126,184,247,0.8),rgba(90,158,245,0.8))!important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.th-glass-blue .mb-s{
+  background:linear-gradient(135deg,rgba(126,184,247,0.85),rgba(90,158,245,0.85))!important;
+  backdrop-filter:blur(8px);
+}
+.th-glass-blue .stat,
+.th-glass-blue .li,
+.th-glass-blue .notif-item{
+  background:rgba(255,255,255,0.06)!important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.12)!important;
+}
+.th-glass-blue .ib{
+  background:rgba(255,255,255,0.10)!important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.th-glass-blue .field input,
+.th-glass-blue .field select,
+.th-glass-blue .field textarea{
+  background:rgba(255,255,255,0.08)!important;
+  border:1px solid rgba(255,255,255,0.15)!important;
+}
+.th-glass-blue .desk-filter-bar{
+  background:rgba(255,255,255,0.04)!important;
+  backdrop-filter:blur(8px);
+}
+.th-glass-blue .set-row,
+.th-glass-blue .theme-opt,
+.th-glass-blue .lang-opt,
+.th-glass-blue .file-item,
+.th-glass-blue .desk-file-item,
+.th-glass-blue .file-folder{
+  background:rgba(255,255,255,0.07)!important;
+  border:1px solid rgba(255,255,255,0.12)!important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.th-glass-blue .desk-course-item:hover{
+  background:rgba(255,255,255,0.10)!important;
+}
+.th-glass-blue .desk-wrap{
+  background:linear-gradient(135deg,#1a1f35 0%,#232c4a 50%,#1a2840 100%);
 }
 
 /* ===== DESKTOP LAYOUT (768px+) ===== */
@@ -1122,8 +1204,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <span class="theme-check" style="display:none" id="thc-appledark">✓</span>
     </div>
     <div class="theme-opt" data-t="th-glass-blue" onclick="playClick();setTheme('th-glass-blue',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a2438,#080b18);border:1px solid rgba(224,120,48,.4)"></div>
-      <span class="theme-opt-name">🔥 Deep Space</span>
+      <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05));backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25)"></div>
+      <span class="theme-opt-name">🫧 Glassmorphism</span>
       <span class="theme-check" style="display:none" id="thc-glass-blue">✓</span>
     </div>
     <div class="theme-opt" data-t="th-glass-purple" onclick="playClick();setTheme('th-glass-purple',this)">
@@ -1335,7 +1417,7 @@ const L={
     aksisTitle:'İstanbul Üniversitesi Sistemi',aksisClose:'Kapat',aksisReload:'Yenile',aksisExternal:'Tarayıcıda Aç',
   }
 };
-const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'},'th-glass-blue':{ar:'Deep Space',en:'Deep Space',tr:'Deep Space'},'th-glass-purple':{ar:'Deep Violet',en:'Deep Violet',tr:'Deep Violet'},'th-glass-ocean':{ar:'Midnight Navy',en:'Midnight Navy',tr:'Midnight Navy'}};
+const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'},'th-glass-blue':{ar:'Glassmorphism',en:'Glassmorphism',tr:'Glassmorphism'},'th-glass-purple':{ar:'Deep Violet',en:'Deep Violet',tr:'Deep Violet'},'th-glass-ocean':{ar:'Midnight Navy',en:'Midnight Navy',tr:'Midnight Navy'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
