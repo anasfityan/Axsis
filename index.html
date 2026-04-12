@@ -28,16 +28,7 @@
   --teal:#80cbc4;--pink:#f48fb1;
   --r:16px;--rsm:10px;--header-h:110px;
 }
-/* MD3 Light — Google Material You */
-.th-light{
-  --bg:#fffbfe;--bg2:#f7f2fa;--bg3:#ece6f0;
-  --sur:#fffbfe;--sur2:#f7f2fa;--sur3:#ece6f0;
-  --bord:rgba(121,116,126,0.12);--bord2:rgba(121,116,126,0.22);
-  --txt:#1c1b1f;--txt2:#49454f;--txt3:#79747e;
-  --acc:#6750a4;--acc2:#7965af;
-  --red:#b3261e;--grn:#386a20;--ylw:#7a5900;--org:#8c4e00;
-  --teal:#006874;--pink:#8c4190;
-}
+
 /* MD3 Blue Dark — Google deep blue */
 .th-md3blue{
   --bg:#001831;--bg2:#00213f;--bg3:#002d57;
@@ -82,27 +73,19 @@
   --glass-blur:16px;
   --glass-border:rgba(255,255,255,0.15);
 }
-/* Deep Violet — professional purple-blue */
-.th-glass-purple{
-  --bg:#070814;--bg2:#0c0d1e;--bg3:#111228;
-  --sur:#0e0f22;--sur2:#13152e;--sur3:#181a38;
-  --bord:rgba(110,80,200,0.12);--bord2:rgba(110,80,200,0.22);
-  --txt:#ede8ff;--txt2:#9d8ccc;--txt3:#5a4d88;
-  --acc:#7c5cfc;--acc2:#6040e0;
-  --red:#ff5f7a;--grn:#4ade80;--ylw:#fbbf24;--org:#fb923c;
+
+
+
+/* Deep Space — Fundly/Finance app style */
+.th-deepspace{
+  --bg:#080b18;--bg2:#0d1120;--bg3:#121828;
+  --sur:#0f1520;--sur2:#151d2e;--sur3:#1a2438;
+  --bord:rgba(99,120,200,0.12);--bord2:rgba(99,120,200,0.22);
+  --txt:#e8edf8;--txt2:#a0aec8;--txt3:#5a6888;
+  --acc:#e07830;--acc2:#c85f18;
+  --red:#ff5f7a;--grn:#4ade80;--ylw:#fbbf24;--org:#e07830;
   --teal:#38bdf8;--pink:#f472b6;
 }
-/* Midnight Navy — clean dark blue */
-.th-glass-ocean{
-  --bg:#060b18;--bg2:#0a1120;--bg3:#0f182c;
-  --sur:#0a1020;--sur2:#0f182c;--sur3:#142038;
-  --bord:rgba(56,130,246,0.12);--bord2:rgba(56,130,246,0.22);
-  --txt:#e2eaff;--txt2:#90a8e0;--txt3:#4a6098;
-  --acc:#3b82f6;--acc2:#2563eb;
-  --red:#ff5f7a;--grn:#4ade80;--ylw:#fbbf24;--org:#fb923c;
-  --teal:#22d3ee;--pink:#e879f9;
-}
-
 /* ===== GLASSMORPHISM EFFECTS (th-glass-blue only) ===== */
 .th-glass-blue body{
   background:linear-gradient(135deg,#1a1f35 0%,#232c4a 40%,#1a2840 70%,#1e1f38 100%);
@@ -224,7 +207,7 @@
     font-size:13px;font-weight:700;color:var(--txt3);margin-bottom:2px;
   }
   .desk-nav-item:hover{background:var(--sur2);color:var(--txt)}
-  .desk-nav-item.active{background:var(--acc);color:var(--bg);font-weight:800}
+  .desk-nav-item.active{background:var(--acc);color:var(--bg);font-weight:800;box-shadow:0 4px 14px rgba(78,110,242,.35),0 0 18px rgba(78,110,242,.15)}
   .desk-nav-item svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
   .desk-nav-badge{margin-right:auto;font-size:9px;padding:2px 6px;border-radius:8px;background:rgba(255,255,255,.15);color:inherit}
 
@@ -254,7 +237,7 @@
     color:#fff;border:none;font-family:'Cairo',sans-serif;
     font-size:13px;font-weight:800;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:7px;
-    box-shadow:0 4px 15px rgba(0,0,0,.3);margin-bottom:6px;transition:all .2s;
+    box-shadow:0 4px 18px rgba(78,110,242,.35),0 0 24px rgba(78,110,242,.15);margin-bottom:6px;transition:all .2s;
   }
   .desk-add-btn:hover{opacity:.9}
   .desk-add-btn svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
@@ -360,6 +343,8 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overscroll-behavior:none}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;transition:background .25s,color .25s}
+/* Subtle depth overlay */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(100,130,255,0.04) 0%,transparent 70%)}
 ::-webkit-scrollbar{width:0;height:0}
 
 /* ===== TOPBAR ===== */
@@ -401,8 +386,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   width:34px;height:34px;border-radius:10px;
   background:var(--sur3);border:none;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--txt2);transition:all .15s;
+  cursor:pointer;color:var(--txt2);transition:all .2s;
+  box-shadow:0 4px 12px rgba(0,0,0,.3),0 1px 3px rgba(0,0,0,.2);
 }
+.ib:hover{box-shadow:0 6px 16px rgba(0,0,0,.4),0 0 12px rgba(var(--acc-rgb,100,120,255),.15);transform:translateY(-1px)}
 .ib:active{opacity:.6;transform:scale(.94)}
 .ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ib-acc{background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 2px 8px rgba(78,110,242,.4)}
@@ -421,7 +408,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   display:flex;align-items:center;justify-content:center;gap:5px;
   border-bottom:2px solid transparent;
 }
-.tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+.tab-btn.active{color:var(--acc);border-bottom-color:var(--acc);text-shadow:0 0 12px rgba(100,130,255,.3)}
 .tab-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tab-badge{font-size:9px;padding:1px 5px;border-radius:8px;background:var(--sur3);color:var(--txt3)}
 .tab-btn.active .tab-badge{background:var(--acc);color:#fff}
@@ -434,7 +421,10 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 .stat{
   background:var(--sur);border:1px solid var(--bord);border-radius:var(--r);
   padding:10px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,.25),0 1px 4px rgba(0,0,0,.15);
+  transition:box-shadow .2s;
 }
+.stat:hover{box-shadow:0 6px 20px rgba(0,0,0,.3),0 0 16px rgba(100,120,255,.1)}
 .stat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acc)0%,transparent 100%);opacity:.05}
 .stat-n{font-size:22px;font-weight:900;color:var(--acc)}
 .stat-l{font-size:9px;color:var(--txt3);margin-top:1px;text-transform:uppercase;letter-spacing:.4px}
@@ -614,7 +604,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 .mb{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:800;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .15s;border:none}
 .mb:active{opacity:.75;transform:scale(.98)}
 .mb-c{background:var(--sur3);color:var(--txt2)}
-.mb-s{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 3px 10px rgba(78,110,242,.35)}
+.mb-s{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 4px 16px rgba(78,110,242,.4),0 0 20px rgba(78,110,242,.15)}
 .mb-d{background:rgba(244,67,54,.15);color:var(--red);flex:.55}
 
 /* ===== COURSE DETAIL SHEET ===== */
@@ -1183,11 +1173,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <span class="theme-opt-name">MD3 Dark</span>
       <span class="theme-check" id="thc-dark">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-light" onclick="playClick();setTheme('th-light',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#fffbfe,#f7f2fa);border:1px solid rgba(121,116,126,.2)"></div>
-      <span class="theme-opt-name">MD3 Light</span>
-      <span class="theme-check" style="display:none" id="thc-light">✓</span>
-    </div>
+
     <div class="theme-opt" data-t="th-md3blue" onclick="playClick();setTheme('th-md3blue',this)">
       <div class="theme-swatch" style="background:linear-gradient(135deg,#002d57,#001831);border:1px solid rgba(169,199,255,.3)"></div>
       <span class="theme-opt-name">MD3 Blue</span>
@@ -1208,15 +1194,12 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <span class="theme-opt-name">🫧 Glassmorphism</span>
       <span class="theme-check" style="display:none" id="thc-glass-blue">✓</span>
     </div>
-    <div class="theme-opt" data-t="th-glass-purple" onclick="playClick();setTheme('th-glass-purple',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#181a38,#070814);border:1px solid rgba(124,92,252,.4)"></div>
-      <span class="theme-opt-name">🔮 Deep Violet</span>
-      <span class="theme-check" style="display:none" id="thc-glass-purple">✓</span>
-    </div>
-    <div class="theme-opt" data-t="th-glass-ocean" onclick="playClick();setTheme('th-glass-ocean',this)">
-      <div class="theme-swatch" style="background:linear-gradient(135deg,#142038,#060b18);border:1px solid rgba(59,130,246,.4)"></div>
-      <span class="theme-opt-name">🌌 Midnight Navy</span>
-      <span class="theme-check" style="display:none" id="thc-glass-ocean">✓</span>
+
+
+    <div class="theme-opt" data-t="th-deepspace" onclick="playClick();setTheme('th-deepspace',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a2438,#080b18);border:1px solid rgba(224,120,48,.4)"></div>
+      <span class="theme-opt-name">🔥 Deep Space</span>
+      <span class="theme-check" style="display:none" id="thc-deepspace">✓</span>
     </div>
   </div>
   <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()">تم</button></div>
@@ -1417,7 +1400,7 @@ const L={
     aksisTitle:'İstanbul Üniversitesi Sistemi',aksisClose:'Kapat',aksisReload:'Yenile',aksisExternal:'Tarayıcıda Aç',
   }
 };
-const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'},'th-glass-blue':{ar:'Glassmorphism',en:'Glassmorphism',tr:'Glassmorphism'},'th-glass-purple':{ar:'Deep Violet',en:'Deep Violet',tr:'Deep Violet'},'th-glass-ocean':{ar:'Midnight Navy',en:'Midnight Navy',tr:'Midnight Navy'}};
+const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'},'th-glass-blue':{ar:'Glassmorphism',en:'Glassmorphism',tr:'Glassmorphism'},'th-deepspace':{ar:'Deep Space',en:'Deep Space',tr:'Deep Space'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -1445,7 +1428,7 @@ function lsSave(){
 
 // ===== STATE =====
 let lang=localStorage.getItem('mw2_lang')||'ar';
-let currentTheme=localStorage.getItem('mw2_theme')||'th-dark';
+let currentTheme=(()=>{const t=localStorage.getItem('mw2_theme');return(t&&['th-dark','th-md3blue','th-apple','th-appledark','th-glass-blue','th-deepspace'].includes(t))?t:'th-dark';})();
 let view=localStorage.getItem('mw2_view')||'grid';
 let sz=localStorage.getItem('mw2_sz')||'md';
 let tab='courses',filter='all';
@@ -2500,7 +2483,7 @@ function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  ['dark','light','md3blue','apple','appledark','glass-blue','glass-purple','glass-ocean'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
+  ['dark','md3blue','apple','appledark','glass-blue','deepspace'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
   lsSave();
 }
@@ -2569,7 +2552,7 @@ function updateLabels(){
   document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
   ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
   document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
-  ['dark','light','md3blue','apple','appledark','glass-blue','glass-purple','glass-ocean'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
+  ['dark','md3blue','apple','appledark','glass-blue','deepspace'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
   set('s-theme-val',TH_NAMES[currentTheme]?.[lang]||'');
   set('s-lang-val',LANG_NAMES[lang]);
 }
