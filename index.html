@@ -19,7 +19,7 @@
 /* ===== MATERIAL DESIGN 3 + APPLE THEMES ===== */
 /* MD3 Dark — Google baseline (default) */
 :root{
-  --bg:#0f0f13;--bg2:#1c1b1f;--bg3:#2b2930;
+  --bg:#111114;--bg2:#1e1d22;--bg3:#2d2b33;
   --sur:#1c1b1f;--sur2:#2b2930;--sur3:#38363d;
   --bord:rgba(202,196,208,0.08);--bord2:rgba(202,196,208,0.16);
   --txt:#e6e1e5;--txt2:#cac4d0;--txt3:#938f99;
@@ -60,7 +60,7 @@
 }
 /* Apple Dark — macOS dark */
 .th-appledark{
-  --bg:#000000;--bg2:#1c1c1e;--bg3:#2c2c2e;
+  --bg:#0a0a0a;--bg2:#1c1c1e;--bg3:#2c2c2e;
   --sur:#1c1c1e;--sur2:#2c2c2e;--sur3:#3a3a3c;
   --bord:rgba(255,255,255,0.08);--bord2:rgba(255,255,255,0.15);
   --txt:#ffffff;--txt2:#ebebf5;--txt3:#8e8e93;
@@ -99,10 +99,10 @@
   .desk-wordmark span{color:var(--acc)}
   .desk-greeting{font-size:11px;color:var(--txt3);margin-top:2px}
 
-  .desk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:12px 16px;border-bottom:1px solid var(--bord)}
-  .desk-stat{background:var(--sur3);border-radius:9px;padding:8px 6px;text-align:center}
-  .desk-stat-n{font-size:18px;font-weight:900;color:var(--acc)}
-  .desk-stat-l{font-size:9px;color:var(--txt3);margin-top:1px}
+  .desk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 16px;border-bottom:1px solid var(--bord)}
+  .desk-stat{background:var(--sur3);border-radius:10px;padding:10px 6px;text-align:center}
+  .desk-stat-n{font-size:20px;font-weight:900;color:var(--acc)}
+  .desk-stat-l{font-size:10px;color:var(--txt2);margin-top:2px;font-weight:600}
 
   .desk-nav{padding:10px 10px;border-bottom:1px solid var(--bord)}
   .desk-nav-item{
@@ -111,7 +111,7 @@
     font-size:13px;font-weight:700;color:var(--txt3);margin-bottom:2px;
   }
   .desk-nav-item:hover{background:var(--sur2);color:var(--txt)}
-  .desk-nav-item.active{background:var(--acc);color:#fff}
+  .desk-nav-item.active{background:var(--acc);color:var(--bg);font-weight:800}
   .desk-nav-item svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
   .desk-nav-badge{margin-right:auto;font-size:9px;padding:2px 6px;border-radius:8px;background:rgba(255,255,255,.15);color:inherit}
 
@@ -122,7 +122,7 @@
     border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:2px;
   }
   .desk-course-item:hover{background:var(--sur2)}
-  .desk-course-item.active{background:var(--sur3)}
+  .desk-course-item.active{background:var(--sur3);border-right:3px solid var(--acc)}
   .desk-course-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
   .desk-course-name{font-size:12px;font-weight:700;color:var(--txt);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .desk-course-day{font-size:10px;color:var(--txt3)}
@@ -170,7 +170,7 @@
   }
   .desk-view-btn.active{background:var(--bg2);color:var(--acc);box-shadow:0 1px 4px rgba(0,0,0,.25)}
   .desk-filter-bar{display:flex;gap:5px;padding:10px 20px;border-bottom:1px solid var(--bord);flex-wrap:wrap;flex-shrink:0;background:var(--bg)}
-  .desk-main-body{flex:1;overflow-y:auto;padding:16px 20px}
+  .desk-main-body{flex:1;overflow-y:auto;padding:20px 24px}
 
   /* Detail panel */
   .desk-detail{
@@ -187,7 +187,7 @@
   .desk-detail-empty p{font-size:13px}
   .desk-det-hero{padding:16px;border-bottom:1px solid var(--bord)}
   .desk-det-hero-inner{border-radius:12px;padding:16px}
-  .desk-det-name{font-size:16px;font-weight:900;color:#fff}
+  .desk-det-name{font-size:16px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3)}
   .desk-det-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}
   .desk-det-body{padding:12px 14px}
   .desk-det-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
@@ -222,7 +222,7 @@
   .ov .sheet{max-width:460px}
 
   /* Desktop grid */
-  .desk-grid{display:grid;gap:10px}
+  .desk-grid{display:grid;gap:12px}
   .desk-grid.g2{grid-template-columns:repeat(2,1fr)}
   .desk-grid.g3{grid-template-columns:repeat(3,1fr)}
   .desk-grid.g1{grid-template-columns:1fr}
@@ -403,7 +403,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 .cc:active{transform:scale(.97)}
 .cc:hover{box-shadow:0 4px 16px rgba(0,0,0,.2)}
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.cc-bar{height:3px}
+.cc-bar{height:5px;border-radius:var(--r) var(--r) 0 0}
 .cc-body{padding:11px 12px}
 .sm .cc-body{padding:7px 8px}
 .lg .cc-body{padding:14px 15px}
@@ -727,7 +727,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       </div>
       <div class="desk-nav-item" id="dnav-notif" onclick="deskSwitchTab('notif',this)">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <span id="dnav-lbl-notif">الإشعارات</span><span class="desk-nav-badge" id="dnb-notif" style="display:none;background:var(--red);color:#fff">0</span>
+        <span id="dnav-lbl-notif">الإشعارات</span><span class="desk-nav-badge" id="dnb-notif" style="display:none;background:var(--red);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:800">0</span>
       </div>
     </div>
     <div class="desk-course-list">
