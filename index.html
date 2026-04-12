@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
-<meta name="theme-color" id="meta-theme" content="#0f1322">
+<meta name="theme-color" id="meta-theme" content="#111114">
 <link rel="manifest" href="manifest.json">
 <title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1451,6 +1451,8 @@ let nid=parseInt(localStorage.getItem('mw2_nid')||'10');
 let fid=parseInt(localStorage.getItem('mw2_fid')||'1');
 
 document.body.className=currentTheme;
+// Set title bar to match current theme on load
+(function(){const mc=document.getElementById('meta-theme');const TH_BG_INIT={'th-dark':'#111114','th-md3blue':'#001831','th-apple':'#f2f2f7','th-appledark':'#0a0a0a','th-glass-blue':'#1a1f35','th-deepspace':'#080b18'};if(mc)mc.setAttribute('content',TH_BG_INIT[currentTheme]||'#111114');})();
 document.documentElement.dir=lang==='ar'?'rtl':'ltr';
 document.documentElement.lang=lang;
 
@@ -2509,12 +2511,25 @@ function closeThemePicker(){document.getElementById('ov-theme').classList.remove
 function openLangPicker(){document.getElementById('ov-lang').classList.add('open')}
 function closeLangPicker(){document.getElementById('ov-lang').classList.remove('open')}
 
+// Background color per theme (matches --bg CSS variable)
+const TH_BG={
+  'th-dark':'#111114',
+  'th-md3blue':'#001831',
+  'th-apple':'#f2f2f7',
+  'th-appledark':'#0a0a0a',
+  'th-glass-blue':'#1a1f35',
+  'th-deepspace':'#080b18'
+};
+
 function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
   ['dark','md3blue','apple','appledark','glass-blue','deepspace'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
+  // Update title bar color to match theme background
+  const mc=document.getElementById('meta-theme');
+  if(mc)mc.setAttribute('content',TH_BG[cls]||'#111114');
   lsSave();
 }
 function setLang(l,el){
