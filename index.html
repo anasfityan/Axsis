@@ -69,6 +69,37 @@
   --teal:#5ac8fa;--pink:#ff375f;
 }
 
+/* Glass Blue-Purple — Google Pixel style */
+.th-glass-blue{
+  --bg:#0a0a1a;--bg2:#0f0f2a;--bg3:#151535;
+  --sur:#12122e;--sur2:#18184a;--sur3:#1e1e5e;
+  --bord:rgba(120,140,255,0.12);--bord2:rgba(120,140,255,0.22);
+  --txt:#e8eaff;--txt2:#a8b0ff;--txt3:#6070cc;
+  --acc:#7986ff;--acc2:#5c6ef5;
+  --red:#ff6b8a;--grn:#69f0ae;--ylw:#ffd54f;--org:#ff9e40;
+  --teal:#64ffda;--pink:#f48fb1;
+}
+/* Glass Purple-Pink — iOS 16 style */
+.th-glass-purple{
+  --bg:#0d0015;--bg2:#130020;--bg3:#1a0030;
+  --sur:#160028;--sur2:#1e0038;--sur3:#260048;
+  --bord:rgba(180,100,255,0.12);--bord2:rgba(180,100,255,0.22);
+  --txt:#f0e8ff;--txt2:#cc99ff;--txt3:#8855cc;
+  --acc:#c084fc;--acc2:#a855f7;
+  --red:#ff6b8a;--grn:#86efac;--ylw:#fde68a;--org:#fdba74;
+  --teal:#67e8f9;--pink:#f9a8d4;
+}
+/* Glass Ocean — Teal-Blue */
+.th-glass-ocean{
+  --bg:#010f18;--bg2:#021a28;--bg3:#032538;
+  --sur:#021a28;--sur2:#032538;--sur3:#043048;
+  --bord:rgba(0,200,220,0.1);--bord2:rgba(0,200,220,0.2);
+  --txt:#e0f7ff;--txt2:#80deea;--txt3:#4090a0;
+  --acc:#00bcd4;--acc2:#0097a7;
+  --red:#ff6b8a;--grn:#69f0ae;--ylw:#ffd54f;--org:#ff9e40;
+  --teal:#00e5ff;--pink:#f48fb1;
+}
+
 /* ===== DESKTOP LAYOUT (768px+) ===== */
 @media(min-width:768px){
   body{overflow:hidden;height:100vh}
@@ -1090,6 +1121,21 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
       <span class="theme-opt-name">Apple Dark</span>
       <span class="theme-check" style="display:none" id="thc-appledark">✓</span>
     </div>
+    <div class="theme-opt" data-t="th-glass-blue" onclick="playClick();setTheme('th-glass-blue',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#7986ff,#0a0a1a);border:1px solid rgba(120,140,255,.4)"></div>
+      <span class="theme-opt-name">🌊 زجاجي أزرق</span>
+      <span class="theme-check" style="display:none" id="thc-glass-blue">✓</span>
+    </div>
+    <div class="theme-opt" data-t="th-glass-purple" onclick="playClick();setTheme('th-glass-purple',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#c084fc,#0d0015);border:1px solid rgba(180,100,255,.4)"></div>
+      <span class="theme-opt-name">🌸 زجاجي بنفسجي</span>
+      <span class="theme-check" style="display:none" id="thc-glass-purple">✓</span>
+    </div>
+    <div class="theme-opt" data-t="th-glass-ocean" onclick="playClick();setTheme('th-glass-ocean',this)">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#00bcd4,#010f18);border:1px solid rgba(0,200,220,.4)"></div>
+      <span class="theme-opt-name">🫧 زجاجي فيروزي</span>
+      <span class="theme-check" style="display:none" id="thc-glass-ocean">✓</span>
+    </div>
   </div>
   <div class="mbtns" style="margin-top:16px"><button class="mb mb-s" onclick="playClick();closeThemePicker()">تم</button></div>
 </div>
@@ -1289,7 +1335,7 @@ const L={
     aksisTitle:'İstanbul Üniversitesi Sistemi',aksisClose:'Kapat',aksisReload:'Yenile',aksisExternal:'Tarayıcıda Aç',
   }
 };
-const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'}};
+const TH_NAMES={'th-dark':{ar:'MD3 Dark',en:'MD3 Dark',tr:'MD3 Dark'},'th-light':{ar:'MD3 Light',en:'MD3 Light',tr:'MD3 Light'},'th-md3blue':{ar:'MD3 Blue',en:'MD3 Blue',tr:'MD3 Blue'},'th-apple':{ar:'Apple Light',en:'Apple Light',tr:'Apple Light'},'th-appledark':{ar:'Apple Dark',en:'Apple Dark',tr:'Apple Dark'},'th-glass-blue':{ar:'زجاجي أزرق',en:'Glass Blue',tr:'Cam Mavi'},'th-glass-purple':{ar:'زجاجي بنفسجي',en:'Glass Purple',tr:'Cam Mor'},'th-glass-ocean':{ar:'زجاجي فيروزي',en:'Glass Ocean',tr:'Cam Okyanus'}};
 const LANG_NAMES={ar:'العربية',en:'English',tr:'Türkçe'};
 const t=k=>L[lang][k]||k;
 function getDays(){return lang==='en'?DEN:lang==='tr'?DTR:DAR}
@@ -1446,7 +1492,7 @@ function renderWeek(){
         const inside=courses.filter(c=>c.day===dayAr&&c.s<slot&&c.e>slot);
         if(inside.length){
           const col=COLS[inside[0].ci||0];
-          html+=`<div style="height:100%;background:${col.b};opacity:.3;border-radius:0"></div>`;
+          html+=`<div style="height:100%;border-right:3px solid ${col.b};opacity:.25;box-sizing:border-box"></div>`;
         }
       }
       html+=`</div>`;
@@ -1563,7 +1609,7 @@ function examCardH(c,i){
       <div class="cc-name">${c.name}</div>
       <div class="cc-sub">${c.doc||''}</div>
       ${hasExam
-        ?`<div class="exam-badge">📅 ${ex.date}${ex.time?' '+ex.time:''}</div>${ex.room?`<div class="exam-badge" style="margin-top:2px;background:rgba(78,110,242,.15);color:var(--acc)">🏛 ${ex.room}</div>`:''} ${countdownHTML(days)}`
+        ?`<div class="exam-badge">${ex.date}${ex.time?' '+ex.time:''}</div>${ex.room?`<div class="exam-badge" style="margin-top:2px;background:rgba(78,110,242,.15);color:var(--acc)">🏛 ${ex.room}</div>`:''} ${countdownHTML(days)}`
         :`<div style="font-size:10px;color:var(--txt3);margin-top:6px">+ ${t('setExam')}</div>`
       }
     </div></div>`;
@@ -1624,7 +1670,7 @@ function openCourseDet(id){
       <div class="det-hero-content">
         <div class="det-name">${c.name}</div>
         <div class="det-dept">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
-        ${ex&&ex.date?`<div style="margin-top:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.25);border-radius:8px;padding:4px 10px;font-size:11px;color:#fff">📅 ${ex.date} ${ex.time||''} ${days!==null?'· '+countdownHTML(days):''}</div>`:''}
+        ${ex&&ex.date?`<div style="margin-top:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.25);border-radius:8px;padding:4px 10px;font-size:11px;color:#fff">${ex.date} ${ex.time||''} ${days!==null?'· '+countdownHTML(days):''}</div>`:''}
       </div>
     </div>
     <div class="det-grid">
@@ -2372,7 +2418,7 @@ function setTheme(cls,el){
   document.body.className=cls;currentTheme=cls;
   document.querySelectorAll('.theme-opt').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
-  ['dark','light','md3blue','apple','appledark'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
+  ['dark','light','md3blue','apple','appledark','glass-blue','glass-purple','glass-ocean'].forEach(n=>{const chk=document.getElementById('thc-'+n);if(chk)chk.style.display=cls==='th-'+n?'':'none'});
   document.getElementById('s-theme-val').textContent=TH_NAMES[cls][lang]||cls;
   lsSave();
 }
@@ -2441,7 +2487,7 @@ function updateLabels(){
   document.querySelectorAll('.lang-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.l===lang)});
   ['ar','en','tr'].forEach(x=>{const c=document.getElementById('lc-'+x);if(c)c.style.display=x===lang?'':'none'});
   document.querySelectorAll('.theme-opt').forEach(e=>{e.classList.toggle('sel',e.dataset.t===currentTheme)});
-  ['dark','light','md3blue','apple','appledark'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
+  ['dark','light','md3blue','apple','appledark','glass-blue','glass-purple','glass-ocean'].forEach(n=>{const c=document.getElementById('thc-'+n);if(c)c.style.display='th-'+n===currentTheme?'':'none'});
   set('s-theme-val',TH_NAMES[currentTheme]?.[lang]||'');
   set('s-lang-val',LANG_NAMES[lang]);
 }
@@ -2602,7 +2648,7 @@ function deskRenderDetail(){
       <div class="desk-det-hero-inner" style="background:linear-gradient(135deg,${col.b},${col.b}88)">
         <div class="desk-det-name">${c.name}</div>
         <div class="desk-det-sub">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
-        ${ex&&ex.date?`<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.8)">📅 ${ex.date} ${ex.time||''}</div>${days!==null?countdownHTML(days):''}`:'' }
+        ${ex&&ex.date?`<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.8)">${ex.date} ${ex.time||''}</div>${days!==null?countdownHTML(days):''}`:'' }
       </div>
     </div>
     <div class="desk-det-body">
