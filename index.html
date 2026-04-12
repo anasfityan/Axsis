@@ -430,16 +430,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
 .stat-l{font-size:9px;color:var(--txt3);margin-top:1px;text-transform:uppercase;letter-spacing:.4px}
 
 /* ===== WEEKLY SCHEDULE GRID (Anadolu style) ===== */
-.week-wrap{overflow-x:auto;margin-bottom:12px}
-.week-grid{min-width:520px;border:1px solid var(--bord);border-radius:var(--r);overflow:hidden}
-.week-head{display:grid;grid-template-columns:60px repeat(5,1fr);background:var(--sur3)}
+.week-wrap{overflow-x:hidden;margin-bottom:12px}
+.week-grid{width:100%;border:1px solid var(--bord);border-radius:var(--r);overflow:hidden}
+.week-head{display:grid;grid-template-columns:36px repeat(5,1fr);background:var(--sur3)}
 .wh-cell{
-  padding:8px 4px;text-align:center;font-size:10px;font-weight:700;
-  color:var(--txt3);border-left:1px solid var(--bord);letter-spacing:.3px;
+  padding:5px 2px;text-align:center;font-size:9px;font-weight:700;
+  color:var(--txt3);border-left:1px solid var(--bord);letter-spacing:0;
 }
-.wh-cell:first-child{border-left:none;font-size:9px}
+.wh-cell:first-child{border-left:none;font-size:8px}
 .wh-cell.today{color:var(--acc);background:rgba(78,110,242,.1)}
-.week-body{display:grid;grid-template-columns:60px repeat(5,1fr)}
+.week-body{display:grid;grid-template-columns:36px repeat(5,1fr)}
 .wc-day-col{min-height:100px}
 .wt-cell{
   padding:6px 2px;text-align:center;font-size:9px;color:var(--txt3);
@@ -457,8 +457,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
   cursor:pointer;transition:opacity .15s;
 }
 .wc-item:active{opacity:.7}
-.wc-item-name{font-size:9px;font-weight:700;color:#fff;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
-.wc-item-time{font-size:8px;color:rgba(255,255,255,.7)}
+.wc-item-name{font-size:8px;font-weight:700;color:#fff;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.wc-item-time{font-size:7px;color:rgba(255,255,255,.7)}
 
 /* ===== VIEW SWITCHER ===== */
 .vsw{display:flex;background:var(--sur2);border-radius:10px;padding:3px;margin-bottom:10px;gap:2px}
@@ -1527,7 +1527,7 @@ function renderWeek(){
   // Time slots 8am-8pm
   const slots=[];
   for(let h=8;h<=20;h++)slots.push(`${String(h).padStart(2,'0')}:00`);
-  const SLOT_H=52; // px per hour slot
+  const SLOT_H=44; // px per hour slot
 
   let html=`<div class="sec-label">${t('week')}</div>`;
   html+=`<div class="week-wrap"><div class="week-grid">`;
@@ -1541,7 +1541,7 @@ function renderWeek(){
 
   // Body — one row per day, using absolute positioning for overlaps
   const totalH=slots.length*SLOT_H;
-  html+=`<div style="display:grid;grid-template-columns:60px repeat(5,1fr);position:relative">`;
+  html+=`<div style="display:grid;grid-template-columns:36px repeat(5,1fr);position:relative">`;
 
   // Time column
   html+=`<div style="position:relative;height:${totalH}px">`;
