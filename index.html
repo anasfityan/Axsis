@@ -612,21 +612,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
 .file-type-btn span:last-child{font-size:9px;font-weight:700;color:var(--txt3)}
 .file-type-btn.sel span:last-child{color:var(--acc)}
 
-/* ===== FILE FOLDERS ===== */
-.file-folder{margin-bottom:6px;border-radius:12px;overflow:hidden;border:1px solid var(--bord)}
-.file-folder-head{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;
-  background:var(--sur2);cursor:pointer;transition:background .15s;
-  user-select:none;
-}
-.file-folder-head:hover{background:var(--sur3)}
-.file-folder-ico{font-size:16px;flex-shrink:0}
-.file-folder-name{font-size:13px;font-weight:700;color:var(--txt);flex:1}
-.file-folder-count{font-size:10px;color:var(--txt3);background:var(--sur3);padding:2px 7px;border-radius:8px}
-.file-folder-arrow{font-size:14px;color:var(--txt3);transition:transform .2s;display:inline-block}
-.file-folder-arrow.open{transform:rotate(90deg)}
-.file-folder-body{display:none;background:var(--bg);padding:6px}
-.file-folder-body.open{display:block}
 /* ===== SECTION LABEL ===== */
 .sec-label{font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;margin:12px 0 6px;padding:0 2px}
 </style>
@@ -795,33 +780,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   </div>
 </div>
 
-<!-- EDIT FILE OVERLAY -->
-<div class="ov" id="ov-editfile" onclick="ovClick(event,'ov-editfile')">
-<div class="sub-sheet">
-  <div class="sh"></div>
-  <div class="st">تعديل الملف</div>
-  <input type="hidden" id="ef-cid">
-  <input type="hidden" id="ef-fid">
-  <div class="field">
-    <label>المجلد</label>
-    <input id="ef-folder" type="text" placeholder="مثال: فيزا  أو  فينال  أو اتركه فارغاً" list="ef-folder-suggestions">
-    <datalist id="ef-folder-suggestions"></datalist>
-  </div>
-  <div class="field">
-    <label>اسم الملف</label>
-    <input id="ef-name" type="text">
-  </div>
-  <div class="field">
-    <label>ملاحظة</label>
-    <input id="ef-note" type="text" placeholder="اختياري">
-  </div>
-  <div class="mbtns">
-    <button class="mb mb-c" onclick="playClick();closeEditFile()">إلغاء</button>
-    <button class="mb mb-s" onclick="playClick();saveEditFile()">حفظ</button>
-  </div>
-</div>
-</div>
-
 <!-- OVERLAYS -->
 <div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
@@ -946,9 +904,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
         <button onclick="clearSelectedFile()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px">✕</button>
       </div>
     </div>
-    <div class="field"><label id="lbl-ffolder-upload">المجلد (اختياري)</label>
-      <input id="f-ffolder-upload" type="text" placeholder="مثال: فيزا  أو  فينال" list="folder-suggestions">
-    </div>
     <div class="field"><label id="lbl-fname-upload">اسم الملف (اختياري)</label><input id="f-fname-upload" type="text" placeholder="سيُأخذ من اسم الملف تلقائياً"></div>
     <div class="field"><label id="lbl-fnote-upload">ملاحظة</label><input id="f-fnote-upload" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
     <div class="mbtns">
@@ -966,10 +921,6 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
         <div class="file-type-btn" data-t="doc" onclick="selFileType('doc',this)"><span>📝</span><span id="lbl-ftype-doc">ملف</span></div>
         <div class="file-type-btn" data-t="link" onclick="selFileType('link',this)"><span>🔗</span><span id="lbl-ftype-link">رابط</span></div>
       </div>
-    </div>
-    <div class="field"><label id="lbl-ffolder">المجلد (اختياري)</label>
-      <input id="f-ffolder" type="text" placeholder="مثال: فيزا  أو  فينال" list="folder-suggestions">
-      <datalist id="folder-suggestions"></datalist>
     </div>
     <div class="field"><label id="lbl-fname">اسم الملف</label><input id="f-fname" type="text" placeholder="مثال: محاضرة الأسبوع 3"></div>
     <div class="field"><label id="lbl-furl">الرابط / URL</label><input id="f-furl" type="url" placeholder="https://drive.google.com/..."></div>
@@ -1652,120 +1603,26 @@ function openCourseDet(id){
           ${t('addFile')}
         </button>
       </div>
-      ${cf.length ? renderFileGroups(cf,${c.id}) : `<div class="file-empty">${t('noFilesYet')}</div>`}
+      ${cf.length
+        ?cf.map(f=>`
+          <div class="file-item" onclick="openFileURL('${f.url}')">
+            <div class="file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
+            <div class="file-info">
+              <div class="file-name">${f.name}</div>
+              <div class="file-meta">${f.note||f.type||''} ${f.date?'· '+f.date:''}</div>
+            </div>
+            <button class="file-del" onclick="event.stopPropagation();playClick();deleteFile(${c.id},${f.id})">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`).join('')
+        :`<div class="file-empty">${t('noFilesYet')}</div>`
+      }
     </div>
   `;
   document.getElementById('ov-det').classList.add('open');
 }
 function closeDet(){document.getElementById('ov-det').classList.remove('open')}
 function openFileURL(url){if(url)window.open(url,'_blank')}
-
-// ===== FILE GROUP RENDERER =====
-function renderFileGroups(cf, courseId){
-  // Separate files by folder
-  const folderMap = {};
-  const noFolder = [];
-  cf.forEach(f=>{
-    if(f.folder){
-      if(!folderMap[f.folder]) folderMap[f.folder]=[];
-      folderMap[f.folder].push(f);
-    } else {
-      noFolder.push(f);
-    }
-  });
-
-  const fileItemH = (f, cid) => `
-    <div class="file-item" onclick="openFileURL('${f.url}')">
-      <div class="file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
-      <div class="file-info">
-        <div class="file-name">${f.name}</div>
-        <div class="file-meta">${f.folder?'📁 '+f.folder+' · ':''}${f.note||f.type||''} ${f.date?'· '+f.date:''}</div>
-      </div>
-      <button class="file-del" style="background:rgba(78,110,242,.12);margin-left:4px" title="تعديل" onclick="event.stopPropagation();playClick();openEditFile(${cid},${f.id})">
-        <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
-      </button>
-      <button class="file-del" onclick="event.stopPropagation();playClick();deleteFile(${cid},${f.id})">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>`;
-
-  let h = '';
-
-  // Render folders first
-  const folderEmojis = ['📁','📂','🗂️','📋','📌'];
-  let fi = 0;
-  Object.entries(folderMap).forEach(([folderName, ffiles])=>{
-    const folderId = 'folder-'+courseId+'-'+folderName.replace(/\s/g,'_');
-    const ico = folderEmojis[fi++ % folderEmojis.length];
-    h += `<div class="file-folder">
-      <div class="file-folder-head" onclick="toggleFolder('${folderId}')">
-        <span class="file-folder-ico">${ico}</span>
-        <span class="file-folder-name">${folderName}</span>
-        <span class="file-folder-count">${ffiles.length}</span>
-        <span class="file-folder-arrow" id="${folderId}-arrow">›</span>
-      </div>
-      <div class="file-folder-body" id="${folderId}">
-        ${ffiles.map(f=>fileItemH(f, courseId)).join('')}
-      </div>
-    </div>`;
-  });
-
-  // Render files without folder directly
-  h += noFolder.map(f=>fileItemH(f, courseId)).join('');
-  return h;
-}
-
-function toggleFolder(id){
-  const body = document.getElementById(id);
-  const arrow = document.getElementById(id+'-arrow');
-  if(!body)return;
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  if(arrow) arrow.classList.toggle('open', !isOpen);
-}
-
-// Desktop version — uses desk-file-item styles
-function renderFileGroupsDesk(cf, courseId){
-  const folderMap = {};
-  const noFolder = [];
-  cf.forEach(f=>{
-    if(f.folder){if(!folderMap[f.folder])folderMap[f.folder]=[];folderMap[f.folder].push(f);}
-    else noFolder.push(f);
-  });
-
-  const deskItemH = (f, cid) => `
-    <div class="desk-file-item" onclick="openFileURL('${f.url}')">
-      <div class="desk-file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
-      <div style="flex:1;min-width:0">
-        <div class="desk-file-name">${f.name}</div>
-        <div style="font-size:9px;color:var(--txt3)">${f.folder?'📁 '+f.folder+' · ':''}${f.note||f.type||''}</div>
-      </div>
-      <button class="desk-file-del" style="background:rgba(78,110,242,.12);margin-left:3px" title="تعديل" onclick="event.stopPropagation();playClick();openEditFile(${cid},${f.id})">
-        <svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
-      </button>
-      <button class="desk-file-del" onclick="event.stopPropagation();playClick();deleteFile(${cid},${f.id})">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>`;
-
-  let h = '';
-  Object.entries(folderMap).forEach(([folderName, ffiles])=>{
-    const fid2 = 'df-'+courseId+'-'+folderName.replace(/\s/g,'_');
-    h += `<div class="file-folder" style="margin:0 0 5px">
-      <div class="file-folder-head" onclick="toggleFolder('${fid2}')">
-        <span class="file-folder-ico">📁</span>
-        <span class="file-folder-name" style="font-size:12px">${folderName}</span>
-        <span class="file-folder-count">${ffiles.length}</span>
-        <span class="file-folder-arrow" id="${fid2}-arrow">›</span>
-      </div>
-      <div class="file-folder-body" id="${fid2}" style="padding:4px">
-        ${ffiles.map(f=>deskItemH(f,courseId)).join('')}
-      </div>
-    </div>`;
-  });
-  h += noFolder.map(f=>deskItemH(f,courseId)).join('');
-  return h;
-}
 
 // ===== GOOGLE DRIVE =====
 // ===== FIREBASE CONFIG =====
@@ -2131,8 +1988,7 @@ async function uploadAndSave(){
       const resp=JSON.parse(xhr.responseText);
       const driveUrl='https://drive.google.com/file/d/'+resp.id+'/view';
       if(!files[cid])files[cid]=[];
-      const folderUp=document.getElementById('f-ffolder-upload')?document.getElementById('f-ffolder-upload').value.trim():'';
-      files[cid].push({id:fid++,name:customName,url:driveUrl,type,note,folder:folderUp||'',date:new Date().toLocaleDateString('ar-SA'),driveId:resp.id});
+      files[cid].push({id:fid++,name:customName,url:driveUrl,type,note,date:new Date().toLocaleDateString('ar-SA'),driveId:resp.id});
       playOk();lsSave();
       setTimeout(()=>{closeFile();render();},800);
     };
@@ -2187,13 +2043,6 @@ function openAddFile(courseId){
   document.getElementById('f-fname').value='';
   document.getElementById('f-furl').value='';
   document.getElementById('f-fnote').value='';
-  document.getElementById('f-ffolder').value='';
-  document.getElementById('f-ffolder-upload').value='';
-  // Populate folder suggestions from existing files
-  const cid2=courseId;
-  const existingFolders=[...new Set((files[cid2]||[]).map(f=>f.folder).filter(Boolean))];
-  const dl=document.getElementById('folder-suggestions');
-  if(dl)dl.innerHTML=existingFolders.map(f=>`<option value="${f}">`).join('');
   selFileType_='pdf';
   document.querySelectorAll('.file-type-btn').forEach((b,i)=>b.classList.toggle('sel',i===0));
 
@@ -2214,49 +2063,14 @@ function saveFile(){
   const url=document.getElementById('f-furl').value.trim();
   if(!name||!url)return;
   const cid=parseInt(document.getElementById('file-cid').value);
-  const folder=document.getElementById('f-ffolder').value.trim();
   if(!files[cid])files[cid]=[];
-  files[cid].push({id:fid++,name,url,type:selFileType_,note:document.getElementById('f-fnote').value.trim(),folder:folder||'',date:new Date().toLocaleDateString('ar-SA')});
+  files[cid].push({id:fid++,name,url,type:selFileType_,note:document.getElementById('f-fnote').value.trim(),date:new Date().toLocaleDateString('ar-SA')});
   playOk();lsSave();closeFile();render();
-  if(isDesktop())deskRender();
 }
 function deleteFile(courseId,fileId){
   if(!confirm(t('deleteFile')))return;
   if(files[courseId])files[courseId]=files[courseId].filter(f=>f.id!==fileId);
   lsSave();render();
-  if(isDesktop())deskRender();
-}
-
-// ===== EDIT FILE =====
-function openEditFile(courseId, fileId){
-  const cf = files[courseId]||[];
-  const f = cf.find(x=>x.id===fileId);
-  if(!f)return;
-  document.getElementById('ef-cid').value=courseId;
-  document.getElementById('ef-fid').value=fileId;
-  document.getElementById('ef-name').value=f.name||'';
-  document.getElementById('ef-note').value=f.note||'';
-  document.getElementById('ef-folder').value=f.folder||'';
-  // Populate folder suggestions
-  const existingFolders=[...new Set(cf.map(x=>x.folder).filter(Boolean))];
-  const dl=document.getElementById('ef-folder-suggestions');
-  if(dl)dl.innerHTML=existingFolders.map(fn=>`<option value="${fn}">`).join('');
-  document.getElementById('ov-editfile').classList.add('open');
-}
-function closeEditFile(){
-  document.getElementById('ov-editfile').classList.remove('open');
-}
-function saveEditFile(){
-  const cid=parseInt(document.getElementById('ef-cid').value);
-  const fid2=parseInt(document.getElementById('ef-fid').value);
-  if(!files[cid])return;
-  const idx=files[cid].findIndex(f=>f.id===fid2);
-  if(idx<0)return;
-  files[cid][idx].name=document.getElementById('ef-name').value.trim()||files[cid][idx].name;
-  files[cid][idx].note=document.getElementById('ef-note').value.trim();
-  files[cid][idx].folder=document.getElementById('ef-folder').value.trim();
-  playOk();lsSave();closeEditFile();render();
-  if(isDesktop())deskRender();
 }
 
 // ===== ADD/EDIT COURSE =====
@@ -2616,7 +2430,18 @@ function deskRenderDetail(){
       <button class="desk-add-file-btn" onclick="playClick();openAddFile(${c.id})">+ ${t('addFile')}</button>
     </div>
     <div class="desk-file-list">
-      ${cf.length ? renderFileGroupsDesk(cf, c.id) : `<div class="desk-file-empty">${t('noFilesYet')}</div>`}
+      ${cf.length?cf.map(f=>`
+        <div class="desk-file-item" onclick="openFileURL('${f.url}')">
+          <div class="desk-file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
+          <div style="flex:1;min-width:0">
+            <div class="desk-file-name">${f.name}</div>
+            <div style="font-size:9px;color:var(--txt3)">${f.note||f.type||''}</div>
+          </div>
+          <button class="desk-file-del" onclick="event.stopPropagation();playClick();deleteFile(${c.id},${f.id})">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>`).join('')
+      :`<div class="desk-file-empty">${t('noFilesYet')}</div>`}
     </div>
   `;
 }
