@@ -795,6 +795,33 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-he
   </div>
 </div>
 
+<!-- EDIT FILE OVERLAY -->
+<div class="ov" id="ov-editfile" onclick="ovClick(event,'ov-editfile')">
+<div class="sub-sheet">
+  <div class="sh"></div>
+  <div class="st">تعديل الملف</div>
+  <input type="hidden" id="ef-cid">
+  <input type="hidden" id="ef-fid">
+  <div class="field">
+    <label>المجلد</label>
+    <input id="ef-folder" type="text" placeholder="مثال: فيزا  أو  فينال  أو اتركه فارغاً" list="ef-folder-suggestions">
+    <datalist id="ef-folder-suggestions"></datalist>
+  </div>
+  <div class="field">
+    <label>اسم الملف</label>
+    <input id="ef-name" type="text">
+  </div>
+  <div class="field">
+    <label>ملاحظة</label>
+    <input id="ef-note" type="text" placeholder="اختياري">
+  </div>
+  <div class="mbtns">
+    <button class="mb mb-c" onclick="playClick();closeEditFile()">إلغاء</button>
+    <button class="mb mb-s" onclick="playClick();saveEditFile()">حفظ</button>
+  </div>
+</div>
+</div>
+
 <!-- OVERLAYS -->
 <div class="ov" id="ov-add" onclick="ovClick(event,'ov-add')">
 <div class="sheet">
@@ -1652,8 +1679,11 @@ function renderFileGroups(cf, courseId){
       <div class="file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
       <div class="file-info">
         <div class="file-name">${f.name}</div>
-        <div class="file-meta">${f.note||f.type||''} ${f.date?'· '+f.date:''}</div>
+        <div class="file-meta">${f.folder?'📁 '+f.folder+' · ':''}${f.note||f.type||''} ${f.date?'· '+f.date:''}</div>
       </div>
+      <button class="file-del" style="background:rgba(78,110,242,.12);margin-left:4px" title="تعديل" onclick="event.stopPropagation();playClick();openEditFile(${cid},${f.id})">
+        <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+      </button>
       <button class="file-del" onclick="event.stopPropagation();playClick();deleteFile(${cid},${f.id})">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -1708,8 +1738,11 @@ function renderFileGroupsDesk(cf, courseId){
       <div class="desk-file-ico" style="background:${FILE_COLORS[f.type]||'rgba(78,110,242,.15)'}">${FILE_ICONS[f.type]||'📎'}</div>
       <div style="flex:1;min-width:0">
         <div class="desk-file-name">${f.name}</div>
-        <div style="font-size:9px;color:var(--txt3)">${f.note||f.type||''}</div>
+        <div style="font-size:9px;color:var(--txt3)">${f.folder?'📁 '+f.folder+' · ':''}${f.note||f.type||''}</div>
       </div>
+      <button class="desk-file-del" style="background:rgba(78,110,242,.12);margin-left:3px" title="تعديل" onclick="event.stopPropagation();playClick();openEditFile(${cid},${f.id})">
+        <svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+      </button>
       <button class="desk-file-del" onclick="event.stopPropagation();playClick();deleteFile(${cid},${f.id})">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -2191,6 +2224,39 @@ function deleteFile(courseId,fileId){
   if(!confirm(t('deleteFile')))return;
   if(files[courseId])files[courseId]=files[courseId].filter(f=>f.id!==fileId);
   lsSave();render();
+  if(isDesktop())deskRender();
+}
+
+// ===== EDIT FILE =====
+function openEditFile(courseId, fileId){
+  const cf = files[courseId]||[];
+  const f = cf.find(x=>x.id===fileId);
+  if(!f)return;
+  document.getElementById('ef-cid').value=courseId;
+  document.getElementById('ef-fid').value=fileId;
+  document.getElementById('ef-name').value=f.name||'';
+  document.getElementById('ef-note').value=f.note||'';
+  document.getElementById('ef-folder').value=f.folder||'';
+  // Populate folder suggestions
+  const existingFolders=[...new Set(cf.map(x=>x.folder).filter(Boolean))];
+  const dl=document.getElementById('ef-folder-suggestions');
+  if(dl)dl.innerHTML=existingFolders.map(fn=>`<option value="${fn}">`).join('');
+  document.getElementById('ov-editfile').classList.add('open');
+}
+function closeEditFile(){
+  document.getElementById('ov-editfile').classList.remove('open');
+}
+function saveEditFile(){
+  const cid=parseInt(document.getElementById('ef-cid').value);
+  const fid2=parseInt(document.getElementById('ef-fid').value);
+  if(!files[cid])return;
+  const idx=files[cid].findIndex(f=>f.id===fid2);
+  if(idx<0)return;
+  files[cid][idx].name=document.getElementById('ef-name').value.trim()||files[cid][idx].name;
+  files[cid][idx].note=document.getElementById('ef-note').value.trim();
+  files[cid][idx].folder=document.getElementById('ef-folder').value.trim();
+  playOk();lsSave();closeEditFile();render();
+  if(isDesktop())deskRender();
 }
 
 // ===== ADD/EDIT COURSE =====
