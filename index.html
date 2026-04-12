@@ -440,6 +440,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
 .wh-cell:first-child{border-left:none;font-size:9px}
 .wh-cell.today{color:var(--acc);background:rgba(78,110,242,.1)}
 .week-body{display:grid;grid-template-columns:60px repeat(5,1fr)}
+.wc-day-col{min-height:100px}
 .wt-cell{
   padding:6px 2px;text-align:center;font-size:9px;color:var(--txt3);
   border-top:1px solid var(--bord);border-left:1px solid var(--bord);
@@ -1515,55 +1516,84 @@ function render(){
 // ===== WEEKLY GRID (Anadolu style) =====
 function renderWeek(){
   const wdays=getWeekDays();
-  const arDays=WEEK_DAYS_AR; // now Mon-Fri
-  const todayJs=new Date().getDay(); // 0=Sun,1=Mon,...,5=Fri,6=Sat
-  // Our array: index 0=Mon(1), 1=Tue(2), 2=Wed(3), 3=Thu(4), 4=Fri(5)
-  const todayIdx=todayJs-1; // Mon→0, Tue→1 ... Fri→4; Sun/Sat → -1/5 = no highlight
+  const arDays=WEEK_DAYS_AR; // Mon-Fri
+  const todayJs=new Date().getDay();
+  const todayIdx=todayJs-1; // Mon→0 ... Fri→4
+
+  // Build per-day course lists
+  const byDay={};
+  arDays.forEach(d=>{byDay[d]=courses.filter(c=>c.day===d);});
+
   // Time slots 8am-8pm
   const slots=[];
   for(let h=8;h<=20;h++)slots.push(`${String(h).padStart(2,'0')}:00`);
+  const SLOT_H=52; // px per hour slot
 
   let html=`<div class="sec-label">${t('week')}</div>`;
   html+=`<div class="week-wrap"><div class="week-grid">`;
-  // Header
+
+  // Header row
   html+=`<div class="week-head"><div class="wh-cell">${t('time')}</div>`;
   arDays.forEach((d,i)=>{
-    const active=i===todayIdx?'today':'';
-    html+=`<div class="wh-cell ${active}">${wdays[i]}</div>`;
+    html+=`<div class="wh-cell ${i===todayIdx?'today':''}">${wdays[i]}</div>`;
   });
   html+=`</div>`;
-  // Body
-  html+=`<div class="week-body" style="display:block">`;
+
+  // Body — one row per day, using absolute positioning for overlaps
+  const totalH=slots.length*SLOT_H;
+  html+=`<div style="display:grid;grid-template-columns:60px repeat(5,1fr);position:relative">`;
+
+  // Time column
+  html+=`<div style="position:relative;height:${totalH}px">`;
   slots.forEach((slot,si)=>{
-    html+=`<div style="display:grid;grid-template-columns:60px repeat(5,1fr)">`;
-    html+=`<div class="wt-cell">${slot}</div>`;
-    arDays.forEach(dayAr=>{
-      const slotCourses=courses.filter(c=>{
-        if(c.day!==dayAr)return false;
-        return c.s<=slot&&c.e>slot;
-      });
-      html+=`<div class="wc-cell">`;
-      if(slotCourses.length&&slotCourses[0].s===slot){
-        // Only render at start time
-        slotCourses.forEach(c=>{
-          const col=COLS[c.ci||0];
-          html+=`<div class="wc-item" style="background:${col.b}" onclick="playClick();openCourseDet(${c.id})">
-            <div class="wc-item-name">${c.name}</div>
-            <div class="wc-item-time">${c.s}–${c.e}</div>
-          </div>`;
-        });
-      } else if(!slotCourses.length||slotCourses[0].s!==slot){
-        // check if inside a block
-        const inside=courses.filter(c=>c.day===dayAr&&c.s<slot&&c.e>slot);
-        if(inside.length){
-          const col=COLS[inside[0].ci||0];
-          html+=`<div style="height:100%;border-right:3px solid ${col.b};opacity:.25;box-sizing:border-box"></div>`;
-        }
-      }
-      html+=`</div>`;
+    html+=`<div class="wt-cell" style="position:absolute;top:${si*SLOT_H}px;height:${SLOT_H}px;width:100%">${slot}</div>`;
+  });
+  html+=`</div>`;
+
+  // Day columns — absolute positioned cards
+  arDays.forEach(dayAr=>{
+    const dayCourses=byDay[dayAr];
+    html+=`<div class="wc-day-col" style="position:relative;height:${totalH}px;border-left:1px solid var(--bord)">`;
+
+    // Grid lines
+    slots.forEach((slot,si)=>{
+      html+=`<div style="position:absolute;top:${si*SLOT_H}px;width:100%;height:${SLOT_H}px;border-bottom:1px solid var(--bord);box-sizing:border-box"></div>`;
     });
+
+    // Detect overlapping groups using interval scheduling
+    // Assign column index to each course
+    const cols=[];
+    const assigned=[];
+    dayCourses.forEach(c=>{
+      let colIdx=0;
+      while(assigned.some(a=>a.col===colIdx&&a.e>c.s&&a.s<c.e)){colIdx++;}
+      assigned.push({id:c.id,s:c.s,e:c.e,col:colIdx});
+      cols.push({c,colIdx});
+    });
+    const maxCols=cols.length?Math.max(...cols.map(x=>x.colIdx))+1:1;
+
+    cols.forEach(({c,colIdx})=>{
+      const col=COLS[c.ci||0];
+      // Calculate top and height in px
+      const startH=parseInt(c.s.split(':')[0])+(parseInt(c.s.split(':')[1]||0)/60);
+      const endH=parseInt(c.e.split(':')[0])+(parseInt(c.e.split(':')[1]||0)/60);
+      const top=(startH-8)*SLOT_H;
+      const height=(endH-startH)*SLOT_H-2;
+      const w=maxCols>1?`calc(${100/maxCols}% - 3px)`:'calc(100% - 4px)';
+      const left=maxCols>1?`calc(${colIdx*(100/maxCols)}%)`:'2px';
+      html+=`<div class="wc-item" style="
+        position:absolute;top:${top}px;left:${left};width:${w};height:${height}px;
+        background:${col.b};border-radius:6px;overflow:hidden;
+        box-shadow:0 2px 8px rgba(0,0,0,.3);
+      " onclick="playClick();openCourseDet(${c.id})">
+        <div class="wc-item-name" style="-webkit-line-clamp:2">${c.name}</div>
+        <div class="wc-item-time">${c.s}–${c.e}</div>
+      </div>`;
+    });
+
     html+=`</div>`;
   });
+
   html+=`</div></div></div>`;
   return html;
 }
