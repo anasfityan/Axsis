@@ -2634,17 +2634,25 @@ function closeExam(){document.getElementById('ov-exam').classList.remove('open')
 // ===== GRADES =====
 function renderGrades(){
   const merged = mergeGradesWithCourses();
-  const hasAny = merged.some(g=>g.midterm||g.final||g.grade);
 
   let h=`<div class="sec-label" style="margin-bottom:12px">${t('grades')} — Sınav Sonuçları</div>`;
 
-  if(!grades.length&&!hasAny){
+  // No courses at all
+  if(!courses.length){
     h+=`<div class="empty">
       <div class="empty-ico"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
       <p>${t('grades')}</p>
       <small>${lang==='tr'?'AKSIS eklentisinden içe aktarın':lang==='en'?'Import from AKSIS extension via Settings':'استورد بياناتك من إضافة AKSIS عبر الإعدادات'}</small>
     </div>`;
     return h;
+  }
+
+  // Show banner if no real grades imported yet
+  if(!grades.length){
+    h+=`<div style="background:rgba(78,110,242,.08);border:1px solid rgba(78,110,242,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span style="font-size:12px;color:var(--txt2)">${lang==='tr'?'Notlar gösterilmiyor. AKSIS eklentisinden içe aktarın.':lang==='en'?'No grades imported yet. Use the AKSIS extension.':'لم تُستورد الدرجات بعد — استخدم إضافة AKSIS'}</span>
+    </div>`;
   }
 
   // Summary stats
