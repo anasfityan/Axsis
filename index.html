@@ -1850,7 +1850,8 @@ function openCourseDet(id){
   const cf=files[id]||[];
   const days=ex?daysUntil(ex.date):null;
   document.getElementById('det-body').innerHTML=`
-    <div class="det-hero" style="background:linear-gradient(135deg,${col.b},${col.b}88)">
+    <div class="det-hero" style="background:linear-gradient(135deg,${col.b},${col.b}88);position:relative;overflow:hidden">
+      <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${getCourseIllustration(c.name)}</svg>
       <div class="det-hero-content">
         <div class="det-name">${c.name}</div>
         <div class="det-dept">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
@@ -2717,6 +2718,35 @@ function mergeGradesWithCourses(){
 }
 
 // Grades rendering handled inside render() below
+// ===== COURSE ILLUSTRATION =====
+function getCourseIllustration(name){
+  const n=(name||'').toLowerCase();
+  if(/hukuk|law|legal|justice|adalet|borç|ceza|anayasa/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><circle cx="110" cy="45" r="28"/><line x1="82" y1="45" x2="138" y2="45"/><line x1="110" y1="45" x2="90" y2="72"/><line x1="110" y1="45" x2="130" y2="72"/><rect x="95" y="72" width="30" height="5" rx="2"/><line x1="88" y1="55" x2="82" y2="65"/><line x1="82" y1="65" x2="98" y2="65"/><line x1="132" y1="55" x2="138" y2="65"/><line x1="138" y1="65" x2="122" y2="65"/><circle cx="30" cy="30" r="14" opacity=".4"/><circle cx="148" cy="72" r="9" opacity=".3"/></g>`;
+  if(/econom|financ|maliye|iktisat|fisc|budget|tax|vergi|market|muhasebe|accounting/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><polyline points="15,82 40,56 62,66 88,34 114,46 142,18"/><circle cx="40" cy="56" r="3" fill="#fff"/><circle cx="62" cy="66" r="3" fill="#fff"/><circle cx="88" cy="34" r="3" fill="#fff"/><circle cx="114" cy="46" r="3" fill="#fff"/><circle cx="142" cy="18" r="3" fill="#fff"/><line x1="15" y1="90" x2="155" y2="90"/><line x1="15" y1="90" x2="15" y2="12"/><rect x="58" y="68" width="12" height="22" rx="2" opacity=".5"/><rect x="84" y="48" width="12" height="42" rx="2" opacity=".5"/><rect x="110" y="58" width="12" height="32" rx="2" opacity=".4"/></g>`;
+  if(/math|stat|calcul|algebra|analiz|istatistik|matematik|olasılık|probability/.test(n))
+    return`<g opacity=".2" fill="#fff" font-family="serif"><text x="12" y="52" font-size="30" opacity=".65">∑</text><text x="68" y="42" font-size="24" opacity=".5">π</text><text x="112" y="62" font-size="22" opacity=".45">∫</text><text x="44" y="82" font-size="20" opacity=".4">∞</text><text x="132" y="32" font-size="18" opacity=".3">Δ</text><circle cx="148" cy="78" r="16" fill="none" stroke="#fff" stroke-width="1.2" opacity=".15"/></g>`;
+  if(/computer|program|software|code|algorithm|data|network|bilgisayar|yazılım|siber/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><rect x="18" y="22" width="124" height="76" rx="5"/><line x1="18" y1="38" x2="142" y2="38"/><circle cx="29" cy="30" r="3" fill="#fff"/><circle cx="41" cy="30" r="3" fill="#fff"/><circle cx="53" cy="30" r="3" fill="#fff"/><text x="26" y="58" font-size="11" fill="#fff" opacity=".75" font-family="monospace">&lt;/code&gt;</text><text x="26" y="72" font-size="11" fill="#fff" opacity=".55" font-family="monospace">  fn();</text><text x="26" y="86" font-size="11" fill="#fff" opacity=".75" font-family="monospace">return();</text></g>`;
+  if(/yönetim|management|admin|kamu|public|policy|governance|idare/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><rect x="58" y="12" width="44" height="28" rx="3"/><line x1="80" y1="40" x2="80" y2="52"/><line x1="35" y1="52" x2="125" y2="52"/><rect x="18" y="52" width="34" height="26" rx="3"/><rect x="63" y="52" width="34" height="26" rx="3"/><rect x="108" y="52" width="34" height="26" rx="3"/><line x1="35" y1="52" x2="35" y2="42"/><line x1="125" y1="52" x2="125" y2="42"/><circle cx="142" cy="22" r="11" opacity=".25"/></g>`;
+  if(/international|global|uluslararası|foreign|avrupa|european|world|dünya/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><ellipse cx="80" cy="55" rx="50" ry="50"/><ellipse cx="80" cy="55" rx="25" ry="50"/><line x1="30" y1="55" x2="130" y2="55"/><line x1="80" y1="5" x2="80" y2="105"/><ellipse cx="80" cy="55" rx="50" ry="18" opacity=".5"/><circle cx="138" cy="18" r="9" opacity=".3"/></g>`;
+  if(/business|commerce|işletme|ticaret|trade|enterprise|girişim/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><rect x="22" y="28" width="116" height="58" rx="4"/><line x1="22" y1="48" x2="138" y2="48"/><path d="M58 28 Q58 16 80 16 Q102 16 102 28"/><circle cx="80" cy="38" r="6" fill="#fff" opacity=".4"/><line x1="40" y1="62" x2="72" y2="62"/><line x1="40" y1="72" x2="100" y2="72"/></g>`;
+  if(/social|sosyal|sociology|davranış|behaviour|psychology|psikoloji|toplum/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><circle cx="52" cy="38" r="16"/><circle cx="108" cy="38" r="16"/><circle cx="80" cy="70" r="16"/><line x1="52" y1="54" x2="66" y2="62"/><line x1="108" y1="54" x2="94" y2="62"/><line x1="68" y1="38" x2="92" y2="38"/><circle cx="142" cy="28" r="10" opacity=".25"/></g>`;
+  if(/history|tarih|heritage|ottoman|osmanlı|civilization|medeniyet/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><rect x="28" y="18" width="104" height="78" rx="2"/><line x1="28" y1="34" x2="132" y2="34"/><line x1="48" y1="18" x2="48" y2="96"/><circle cx="90" cy="60" r="22" opacity=".4"/><line x1="90" y1="38" x2="90" y2="82"/><line x1="68" y1="60" x2="112" y2="60"/></g>`;
+  if(/science|physic|chemist|bilim|fizik|kimya|biyoloji|engineering|mühendis/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><circle cx="80" cy="52" r="30"/><ellipse cx="80" cy="52" rx="30" ry="12" transform="rotate(60,80,52)"/><ellipse cx="80" cy="52" rx="30" ry="12" transform="rotate(-60,80,52)"/><circle cx="80" cy="52" r="5" fill="#fff" opacity=".5"/><circle cx="110" cy="52" r="4" fill="#fff" opacity=".4"/><circle cx="55" cy="26" r="4" fill="#fff" opacity=".4"/></g>`;
+  if(/language|linguist|literature|edebiyat|dil|iletişim|communication/.test(n))
+    return`<g opacity=".18" stroke="#fff" stroke-width="1.5" fill="none"><path d="M18 32 Q50 12 80 32 Q110 52 142 32"/><path d="M18 56 Q50 36 80 56 Q110 76 142 56"/><path d="M18 80 Q50 60 80 80 Q110 100 142 80"/><circle cx="32" cy="18" r="6" opacity=".4"/><circle cx="128" cy="86" r="8" opacity=".3"/></g>`;
+  // Default geometric
+  return`<g opacity=".15" stroke="#fff" stroke-width="1.2" fill="none"><polygon points="80,10 140,50 140,90 80,110 20,90 20,50"/><polygon points="80,28 122,52 122,80 80,92 38,80 38,52"/><circle cx="80" cy="60" r="15" opacity=".5"/></g>`;
+}
+
 function openSearch(){
   document.getElementById('ov-search').classList.add('open');
   setTimeout(()=>{const inp=document.getElementById('search-input');if(inp)inp.focus();},200);
@@ -3201,10 +3231,13 @@ function deskRenderDetail(){
   const days=ex?daysUntil(ex.date):null;
   content.innerHTML=`
     <div class="desk-det-hero">
-      <div class="desk-det-hero-inner" style="background:linear-gradient(135deg,${col.b},${col.b}88)">
-        <div class="desk-det-name">${c.name}</div>
-        <div class="desk-det-sub">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
-        ${ex&&ex.date?`<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.8)">${ex.date} ${ex.time||''}</div>${days!==null?countdownHTML(days):''}`:'' }
+      <div class="desk-det-hero-inner" style="background:linear-gradient(135deg,${col.b},${col.b}88);position:relative;overflow:hidden">
+        <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${getCourseIllustration(c.name)}</svg>
+        <div style="position:relative;z-index:1">
+          <div class="desk-det-name">${c.name}</div>
+          <div class="desk-det-sub">${[c.dept,c.code].filter(Boolean).join(' · ')}</div>
+          ${ex&&ex.date?`<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.8)">${ex.date} ${ex.time||''}</div>${days!==null?countdownHTML(days):''}`:'' }
+        </div>
       </div>
     </div>
     <div class="desk-det-body">
