@@ -1564,8 +1564,9 @@ function render(){
   const cont=document.getElementById('content');
   let h='';
 
-  if(tab==='week'){h=renderWeek();cont.innerHTML=h;return;}
-  if(tab==='notif'){h=renderNotif();cont.innerHTML=h;return;}
+  if(tab==='week'){h=renderWeek();cont.innerHTML=h;if(isDesktop())deskRender();return;}
+  if(tab==='notif'){h=renderNotif();cont.innerHTML=h;if(isDesktop())deskRender();return;}
+  if(tab==='grades'){cont.innerHTML=renderGrades();if(isDesktop())deskRender();return;}
 
   // Stats
   const examCount=Object.keys(exams).length;
@@ -2715,20 +2716,7 @@ function mergeGradesWithCourses(){
   return courses.map(c=>({course:c.name,code:c.code,midterm:'',final:'',grade:'',ci:c.ci}));
 }
 
-// Hook grades into render()
-const _origRender = render;
-function render(){
-  if(tab==='grades'){
-    updateLabels();
-    document.getElementById('content').innerHTML=renderGrades();
-    if(isDesktop())deskRender();
-    return;
-  }
-  _origRender();
-}
-
-// Hook grades into deskRender
-const _origDeskRender = typeof deskRender==='function'?deskRender:null;
+// Grades rendering handled inside render() below
 function openSearch(){
   document.getElementById('ov-search').classList.add('open');
   setTimeout(()=>{const inp=document.getElementById('search-input');if(inp)inp.focus();},200);
