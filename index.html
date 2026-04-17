@@ -270,9 +270,9 @@
   .desk-main-body::before{
     content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
     background-image:
-      linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
-    background-size:40px 40px;
+      linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:36px 36px;
   }
   .desk-main-body>*{position:relative;z-index:1;}
 
@@ -286,8 +286,8 @@
   .desk-detail::before{
     content:'';position:fixed;top:0;right:0;
     width:280px;height:100vh;pointer-events:none;z-index:0;
-    background-image:radial-gradient(circle,rgba(255,255,255,.025) 1px,transparent 1px);
-    background-size:20px 20px;
+    background-image:radial-gradient(circle,rgba(255,255,255,.09) 1.5px,transparent 1.5px);
+    background-size:18px 18px;
   }
   .desk-detail>*{position:relative;z-index:1;}
   .desk-detail-empty{
@@ -2653,7 +2653,6 @@ function renderGrades(){
 
   let h=`<div class="sec-label" style="margin-bottom:12px">${t('grades')} — Sınav Sonuçları</div>`;
 
-  // No courses at all
   if(!courses.length){
     h+=`<div class="empty">
       <div class="empty-ico"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
@@ -2665,55 +2664,64 @@ function renderGrades(){
 
   // Banner if no grades yet
   if(!grades.length){
-    h+=`<div style="background:rgba(78,110,242,.08);border:1px solid rgba(78,110,242,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+    h+=`<div style="background:rgba(78,110,242,.1);border:1px solid rgba(78,110,242,.25);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
       <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span style="font-size:12px;color:var(--txt2)">${lang==='tr'?'Notlar yüklenmedi. AKSIS eklentisinden içe aktarın.':lang==='en'?'No grades imported yet. Use the AKSIS extension.':'لم تُستورد الدرجات بعد — استخدم إضافة AKSIS'}</span>
     </div>`;
   }
 
-  // ===== GPA Summary card (like university system) =====
-  if(grades.length){
-    // Calculate GNO from grades
-    const GL={'AA':4.0,'BA':3.5,'BB':3.0,'CB':2.5,'CC':2.0,'DC':1.5,'DD':1.0,'FF':0.0};
-    let totalPts=0,totalCr=0;
-    merged.forEach(g=>{
-      const cr=parseInt(g.credit)||3;
-      const gv=GL[g.grade];
-      if(gv!==undefined){totalPts+=gv*cr;totalCr+=cr;}
-    });
-    const gno=totalCr?totalPts/totalCr:0;
-    const gnoColor=gno>=3.5?'var(--grn)':gno>=2.5?'var(--acc)':gno>=1.0?'var(--ylw)':'var(--red)';
-    h+=`<div style="background:var(--sur);border:1px solid var(--bord);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
-      <div><div style="font-size:10px;color:var(--txt3);margin-bottom:4px">${lang==='tr'?'Yarıyıl Kredi':lang==='en'?'Credits':'الكريدت'}</div><div style="font-size:18px;font-weight:900;color:var(--acc)">${totalCr}</div></div>
-      <div><div style="font-size:10px;color:var(--txt3);margin-bottom:4px">GNO</div><div style="font-size:18px;font-weight:900;color:${gnoColor}">${gno.toFixed(2)}</div></div>
-      <div><div style="font-size:10px;color:var(--txt3);margin-bottom:4px">${lang==='tr'?'Ders Sayısı':lang==='en'?'Courses':'المواد'}</div><div style="font-size:18px;font-weight:900;color:var(--txt)">${merged.length}</div></div>
-    </div>`;
-  }
+  // GNO Summary card
+  const GL={'AA':4.0,'BA':3.5,'BB':3.0,'CB':2.5,'CC':2.0,'DC':1.5,'DD':1.0,'FF':0.0};
+  let totalPts=0,totalCr=0;
+  merged.forEach(g=>{
+    const cr=parseInt(g.credit)||3;
+    const gv=GL[g.grade];
+    if(gv!==undefined){totalPts+=gv*cr;totalCr+=cr;}
+  });
+  const gno=totalCr?totalPts/totalCr:0;
+  const gnoColor=gno>=3.5?'var(--grn)':gno>=2.5?'var(--acc)':gno>=1.0?'var(--ylw)':'var(--txt3)';
 
-  // ===== Table header (like university system) =====
-  h+=`<div style="background:var(--sur3);border-radius:10px 10px 0 0;padding:8px 12px;display:grid;grid-template-columns:80px 1fr 52px 44px 44px;gap:8px;align-items:center;border:1px solid var(--bord);border-bottom:none">
-    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase">${lang==='tr'?'Ders Kodu':lang==='en'?'Code':'الكود'}</span>
-    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase">${lang==='tr'?'Ders Adı':lang==='en'?'Course':'المادة'}</span>
-    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;text-align:center">Not</span>
-    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;text-align:center">Kredi</span>
-    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;text-align:center">AKTS</span>
+  h+=`<div style="background:var(--sur);border:1px solid var(--bord);border-radius:14px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+    <div>
+      <div style="font-size:10px;color:var(--txt3);margin-bottom:6px;letter-spacing:.5px">${lang==='tr'?'Yarıyıl Kredi':lang==='en'?'Credits':'الكريدت'}</div>
+      <div style="font-size:22px;font-weight:900;color:var(--acc)">${totalCr||'—'}</div>
+    </div>
+    <div style="border-left:1px solid var(--bord);border-right:1px solid var(--bord)">
+      <div style="font-size:10px;color:var(--txt3);margin-bottom:6px;letter-spacing:.5px">GNO</div>
+      <div style="font-size:22px;font-weight:900;color:${gnoColor}">${totalCr?gno.toFixed(2):'—'}</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--txt3);margin-bottom:6px;letter-spacing:.5px">${lang==='tr'?'Ders Sayısı':lang==='en'?'Courses':'المواد'}</div>
+      <div style="font-size:22px;font-weight:900;color:var(--txt)">${merged.length}</div>
+    </div>
   </div>`;
 
-  // ===== Table rows =====
+  // Table header — NO code column
+  h+=`<div style="background:var(--sur3);border-radius:10px 10px 0 0;padding:9px 14px;display:grid;grid-template-columns:1fr 54px 44px 44px;gap:8px;align-items:center;border:1px solid var(--bord);border-bottom:none">
+    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.6px;text-transform:uppercase">${lang==='tr'?'Ders Adı':lang==='en'?'Course':'اسم المادة'}</span>
+    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.6px;text-transform:uppercase;text-align:center">Not</span>
+    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.6px;text-transform:uppercase;text-align:center">Kredi</span>
+    <span style="font-size:9px;font-weight:700;color:var(--txt3);letter-spacing:.6px;text-transform:uppercase;text-align:center">AKTS</span>
+  </div>`;
+
+  // Table rows
   merged.forEach((g,i)=>{
-    const status=gradeStatus(g);
     const isLast=i===merged.length-1;
-    const credit=g.credit||3;
-    const akts=g.akts||5;
-    h+=`<div style="background:var(--sur);border:1px solid var(--bord);border-top:none;${isLast?'border-radius:0 0 10px 10px;':''} padding:10px 12px;display:grid;grid-template-columns:80px 1fr 52px 44px 44px;gap:8px;align-items:center;animation:fi .2s ease both;transition:background .15s"
+    const status=gradeStatus(g);
+    const credit=parseInt(g.credit)||3;
+    const akts=parseInt(g.akts)||5;
+    const hasGrade=g.grade&&g.grade!=='--'&&g.grade!=='';
+    h+=`<div style="background:var(--sur);border:1px solid var(--bord);border-top:none;${isLast?'border-radius:0 0 10px 10px;':''}padding:11px 14px;display:grid;grid-template-columns:1fr 54px 44px 44px;gap:8px;align-items:center;transition:background .12s;cursor:default"
       onmouseover="this.style.background='var(--sur2)'" onmouseout="this.style.background='var(--sur)'">
-      <span style="font-size:10px;color:var(--txt3);font-weight:600">${g.code||'—'}</span>
-      <span style="font-size:12px;font-weight:700;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g.course||g.name||'—'}</span>
+      <span style="font-size:12px;font-weight:700;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${g.course||g.name||''}">${g.course||g.name||'—'}</span>
       <div style="text-align:center">
-        <span style="font-size:13px;font-weight:900;color:${status.color};background:${status.bg};padding:2px 8px;border-radius:8px;display:inline-block">${g.grade&&g.grade!=='--'?g.grade:'—'}</span>
+        ${hasGrade
+          ?`<span style="font-size:13px;font-weight:900;color:${status.color};background:${status.bg};padding:3px 10px;border-radius:8px;display:inline-block">${g.grade}</span>`
+          :`<span style="font-size:13px;color:var(--txt3)">—</span>`
+        }
       </div>
-      <span style="font-size:12px;font-weight:700;color:var(--txt2);text-align:center">${credit}</span>
-      <span style="font-size:12px;font-weight:700;color:var(--txt2);text-align:center">${akts}</span>
+      <span style="font-size:12px;font-weight:600;color:var(--txt2);text-align:center">${credit}</span>
+      <span style="font-size:12px;font-weight:600;color:var(--txt2);text-align:center">${akts}</span>
     </div>`;
   });
 
