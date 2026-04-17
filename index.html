@@ -1344,7 +1344,7 @@ const FILE_COLORS={pdf:'rgba(239,83,80,.15)',video:'rgba(124,77,255,.15)',doc:'r
 
 // ===== TRANSLATIONS =====
 const L={
-  ar:{courses:'المواد',exams:'الاختبارات',week:'الأسبوع',
+  ar:{courses:'المواد',exams:'الاختبارات',week:'الأسبوع',grades:'الدرجات',gradeExcellent:'ممتاز',gradeGood:'جيد',gradePass:'مقبول',gradeFail:'راسب',gradePending:'معلق',gradeConditional:'مشروط',
     name:'الاسم',doctor:'الدكتور',dept:'القسم',day:'اليوم',room:'القاعة',
     start:'البداية',end:'النهاية',notes:'ملاحظات',color:'اللون',
     cancel:'إلغاء',save:'حفظ',del:'حذف',edit:'تعديل',all:'الكل',
@@ -1391,7 +1391,7 @@ const L={
     syncTitle:'مزامنة Drive',signoutSync:'فصل الحساب',
     aksisTitle:'نظام جامعة إسطنبول',aksisClose:'إغلاق',aksisReload:'إعادة تحميل',aksisExternal:'فتح في المتصفح',
   },
-  en:{courses:'Courses',exams:'Exams',week:'Week',
+  en:{courses:'Courses',exams:'Exams',week:'Week',grades:'Grades',gradeExcellent:'Excellent',gradeGood:'Good',gradePass:'Pass',gradeFail:'Fail',gradePending:'Pending',gradeConditional:'Conditional',
     name:'Name',doctor:'Instructor',dept:'Department',day:'Day',room:'Room',
     start:'Start',end:'End',notes:'Notes',color:'Color',
     cancel:'Cancel',save:'Save',del:'Delete',edit:'Edit',all:'All',
@@ -1438,7 +1438,7 @@ const L={
     syncTitle:'Drive Sync',signoutSync:'Disconnect',
     aksisTitle:'Istanbul University System',aksisClose:'Close',aksisReload:'Reload',aksisExternal:'Open in Browser',
   },
-  tr:{courses:'Dersler',exams:'Sınavlar',week:'Hafta',
+  tr:{courses:'Dersler',exams:'Sınavlar',week:'Hafta',grades:'Notlar',gradeExcellent:'Mükemmel',gradeGood:'İyi',gradePass:'Geçer',gradeFail:'Başarısız',gradePending:'Bekliyor',gradeConditional:'Şartlı',
     name:'Ad',doctor:'Öğretim Üyesi',dept:'Bölüm',day:'Gün',room:'Derslik',
     start:'Başlangıç',end:'Bitiş',notes:'Notlar',color:'Renk',
     cancel:'İptal',save:'Kaydet',del:'Sil',edit:'Düzenle',all:'Tümü',
@@ -2094,9 +2094,6 @@ fbAuth.onAuthStateChanged(async user=>{
   if(user){
     onFirebaseReady(user);
     await syncFromFirestore();
-    // إعادة رسم الواجهة بعد تحميل البيانات من Firebase
-    updateLabels();render();
-    if(isDesktop())deskRender();
   } else {
     onFirebaseSignedOut();
   }
@@ -2637,13 +2634,13 @@ function renderGrades(){
   const merged = mergeGradesWithCourses();
   const hasAny = merged.some(g=>g.midterm||g.final||g.grade);
 
-  let h=`<div class="sec-label" style="margin-bottom:12px">الدرجات — Sınav Sonuçları</div>`;
+  let h=`<div class="sec-label" style="margin-bottom:12px">${t('grades')} — Sınav Sonuçları</div>`;
 
   if(!grades.length&&!hasAny){
     h+=`<div class="empty">
       <div class="empty-ico"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
-      <p>لا توجد درجات بعد</p>
-      <small>استورد بياناتك من إضافة AKSIS عبر الإعدادات</small>
+      <p>${t('grades')}</p>
+      <small>${lang==='tr'?'AKSIS eklentisinden içe aktarın':lang==='en'?'Import from AKSIS extension via Settings':'استورد بياناتك من إضافة AKSIS عبر الإعدادات'}</small>
     </div>`;
     return h;
   }
@@ -2652,9 +2649,9 @@ function renderGrades(){
   const graded=merged.filter(g=>g.grade&&g.grade!=='--'&&g.grade!=='');
   const passed=graded.filter(g=>parseFloat(g.grade)>=60||['AA','BA','BB','CB','CC'].includes(g.grade)).length;
   h+=`<div class="stats" style="margin-bottom:14px">
-    <div class="stat"><div class="stat-n">${merged.length}</div><div class="stat-l">مادة</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--grn)">${passed}</div><div class="stat-l">ناجح</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--org)">${merged.length-passed}</div><div class="stat-l">معلق</div></div>
+    <div class="stat"><div class="stat-n">${merged.length}</div><div class="stat-l">${t('courses')}</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--grn)">${passed}</div><div class="stat-l">${t('gradePass')}</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--org)">${merged.length-passed}</div><div class="stat-l">${t('gradePending')}</div></div>
   </div>`;
 
   merged.forEach(g=>{
@@ -2690,20 +2687,19 @@ function gradeBox(label,val,color){
 
 function gradeStatus(g){
   const val=g.grade||g.final||g.midterm||'';
-  if(!val||val==='--'||val==='')return{color:'var(--txt3)',bg:'rgba(147,143,153,.1)',lbl:'معلق'};
+  if(!val||val==='--'||val==='')return{color:'var(--txt3)',bg:'rgba(147,143,153,.1)',lbl:t('gradePending')};
   const n=parseFloat(val);
   if(!isNaN(n)){
-    if(n>=85)return{color:'var(--grn)',bg:'rgba(168,213,162,.12)',lbl:'ممتاز'};
-    if(n>=70)return{color:'var(--acc)',bg:'rgba(208,188,255,.12)',lbl:'جيد'};
-    if(n>=60)return{color:'var(--ylw)',bg:'rgba(244,225,108,.12)',lbl:'مقبول'};
-    return{color:'var(--red)',bg:'rgba(242,184,181,.12)',lbl:'راسب'};
+    if(n>=85)return{color:'var(--grn)',bg:'rgba(168,213,162,.12)',lbl:t('gradeExcellent')};
+    if(n>=70)return{color:'var(--acc)',bg:'rgba(208,188,255,.12)',lbl:t('gradeGood')};
+    if(n>=60)return{color:'var(--ylw)',bg:'rgba(244,225,108,.12)',lbl:t('gradePass')};
+    return{color:'var(--red)',bg:'rgba(242,184,181,.12)',lbl:t('gradeFail')};
   }
-  // Letter grade (Turkish system)
   const good=['AA','BA','BB','CB','CC'];
   const warn=['DC','DD'];
-  if(good.includes(val))return{color:'var(--grn)',bg:'rgba(168,213,162,.12)',lbl:'ناجح'};
-  if(warn.includes(val))return{color:'var(--ylw)',bg:'rgba(244,225,108,.12)',lbl:'مشروط'};
-  if(val==='FF')return{color:'var(--red)',bg:'rgba(242,184,181,.12)',lbl:'راسب'};
+  if(good.includes(val))return{color:'var(--grn)',bg:'rgba(168,213,162,.12)',lbl:t('gradeGood')};
+  if(warn.includes(val))return{color:'var(--ylw)',bg:'rgba(244,225,108,.12)',lbl:t('gradeConditional')};
+  if(val==='FF')return{color:'var(--red)',bg:'rgba(242,184,181,.12)',lbl:t('gradeFail')};
   return{color:'var(--txt3)',bg:'rgba(147,143,153,.1)',lbl:val};
 }
 
@@ -2994,7 +2990,7 @@ function updateLabels(){
   const greet={ar:h<12?'صباح الخير':h<18?'مساء الخير':'مساء النور',en:h<12?'Good morning':h<18?'Good afternoon':'Good evening',tr:h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar'};
   const set=(id,txt)=>{const e=document.getElementById(id);if(e)e.textContent=txt};
   set('greeting',greet[lang]);
-  set('tc-lbl',t('courses')); set('te-lbl',t('exams')); set('tw-lbl',t('week'));
+  set('tc-lbl',t('courses')); set('te-lbl',t('exams')); set('tw-lbl',t('week'));set('tg-lbl',t('grades'));set('dnav-lbl-grades',t('grades'));
   set('tc-n',courses.length); set('te-n',Object.keys(exams).length);
   // Course form
   set('lbl-cname',t('courseName')); set('lbl-cdoc',t('instructor'));
@@ -3153,7 +3149,7 @@ function deskRenderMain(){
     return;
   }
   if(deskTab==='grades'){
-    if(mt)mt.textContent='الدرجات';
+    if(mt)mt.textContent=t('grades');
     if(fb)fb.innerHTML='';
     if(tb)tb.style.display='none';
     mb.innerHTML=renderGrades();
