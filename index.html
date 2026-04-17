@@ -3126,22 +3126,88 @@ function exportData(){
   a.click();
 }
 function importData(){document.getElementById('import-input').click()}
+// ===== استرجاع البيانات من Firebase =====
+async function restoreFromCloud(){
+  if(!fbUid){
+    alert('يجب تسجيل الدخول أولاً عبر زر ربط Google');
+    return;
+  }
+  if(!confirm('سيتم استرجاع بياناتك من السحابة. هل تريد المتابعة؟')) return;
+  showSyncBar('⏳','جاري الاسترجاع من السحابة...','var(--acc)');
+  try{
+    const doc=await fbDb.collection('users').doc(fbUid).get();
+    if(!doc.exists){
+      showSyncBar('⚠️','لا توجد بيانات محفوظة في السحابة','var(--ylw)');
+      setTimeout(hideSyncBar,3000);
+      return;
+    }
+    const data=doc.data();
+    if(data.courses&&Array.isArray(data.courses)&&data.courses.length>0){
+      courses=data.courses;
+    }
+    if(data.exams)exams=data.exams;
+    if(data.files)files=data.files;
+    if(data.nid)nid=data.nid;
+    lsSave();
+    closeSettings();
+    render();
+    if(isDesktop())deskRender();
+    showSyncBar('✅',`تم الاسترجاع — ${courses.length} مادة`,'var(--grn)');
+    setTimeout(hideSyncBar,3000);
+  }catch(err){
+    showSyncBar('❌','خطأ في الاسترجاع: '+err.message,'var(--red)');
+    setTimeout(hideSyncBar,4000);
+  }
+}
+
 function handleImport(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
       const data=JSON.parse(ev.target.result);
-      if(data.courses)courses=data.courses;
+
+      // ===== حماية البيانات الموجودة =====
+      // إذا الملف جاء من إضافة AKSIS (يحتوي _aksis_grades)
+      // نستورد الدرجات فقط ونحافظ على المواد الموجودة
+      const isAksisFile = !!data._aksis_grades || 
+                          (data.version==='2.0' && data._aksis_messages!==undefined);
+
+      if(isAksisFile){
+        // استيراد الدرجات فقط
+        if(data._aksis_grades&&Array.isArray(data._aksis_grades)&&data._aksis_grades.length){
+          grades=data._aksis_grades;
+          localStorage.setItem('mw2_grades',JSON.stringify(grades));
+        }
+        // دمج المواد — أضف فقط المواد غير الموجودة (بدون حذف الموجودة)
+        if(data.courses&&Array.isArray(data.courses)&&data.courses.length){
+          const existingNames=courses.map(c=>(c.name||'').toLowerCase().trim());
+          let added=0;
+          data.courses.forEach(nc=>{
+            const nm=(nc.name||'').toLowerCase().trim();
+            if(nm&&!existingNames.includes(nm)){
+              courses.push({...nc,id:nid++});
+              existingNames.push(nm);
+              added++;
+            }
+          });
+          if(added>0) showSyncBar('✅',`تم إضافة ${added} مادة جديدة`,'var(--grn)');
+        }
+        lsSave();closeSettings();render();
+        if(isDesktop())deskRender();
+        alert(t('importOk'));
+        return;
+      }
+
+      // ===== استيراد عادي (ملف تصدير موادي) =====
+      // هنا نستبدل كل شيء لأن المستخدم يريد استعادة نسخة احتياطية
+      if(data.courses&&Array.isArray(data.courses)&&data.courses.length>0){
+        courses=data.courses;
+      }
       if(data.exams)exams=data.exams;
       if(data.files)files=data.files;
       if(data.nid)nid=data.nid;
-      // Save Aksis grades if present
-      if(data._aksis_grades&&Array.isArray(data._aksis_grades)){
-        grades=data._aksis_grades;
-        localStorage.setItem('mw2_grades',JSON.stringify(grades));
-      } else if(data.grades&&Array.isArray(data.grades)){
-        // also support direct grades field
+      if(data.grades&&Array.isArray(data.grades)){
         grades=data.grades;
         localStorage.setItem('mw2_grades',JSON.stringify(grades));
       }
