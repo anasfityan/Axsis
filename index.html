@@ -1506,7 +1506,10 @@ function lsSave(){
     localStorage.setItem('mw2_theme',currentTheme);
     localStorage.setItem('mw2_view',view);
     localStorage.setItem('mw2_sz',sz);
-    localStorage.setItem('mw2_last_save',''+Date.now());
+    // NOTE: mw2_last_save is intentionally NOT set here.
+    // It is only set inside scheduleSyncToFirestore() when fbUser is signed in,
+    // so that theme/language changes before login do not make local data appear
+    // newer than the cloud, which would overwrite real data with demo courses.
   }catch(e){}
   // Auto-sync to Firestore 2 seconds after any change
   scheduleSyncToFirestore();
@@ -2253,6 +2256,13 @@ async function syncToFirestore(){
   isSyncing=false;
 }
 
+// Default demo course names — detect a "fresh / never-synced" local state
+const DEFAULT_DEMO_NAMES = ['رياضيات 2','برمجة متقدمة'];
+function isDefaultDemoCourses(){
+  if(courses.length!==2)return false;
+  return courses.every(c=>DEFAULT_DEMO_NAMES.includes(c.name));
+}
+
 async function syncFromFirestore(){
   if(!fbUid)return;
   showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
@@ -2268,26 +2278,22 @@ async function syncFromFirestore(){
 
     const data=doc.data();
     const cloudCourses = Array.isArray(data.courses) ? data.courses : [];
-    const localCourses = courses;
 
-    // Compare by updated timestamp — cloud wins if it has a newer timestamp
-    // If no timestamp available, the one with MORE courses wins
-    const cloudUpdated = data.updated ? data.updated.toMillis() : 0;
+    // mw2_last_save is ONLY set when the user is signed in and a sync happened.
+    // A value of 0 means "this device has never synced before".
     const localUpdated = parseInt(localStorage.getItem('mw2_last_save')||'0');
+    const cloudUpdated = data.updated ? data.updated.toMillis() : 0;
 
-    let useCloud = false;
-    if(cloudUpdated > localUpdated){
-      // Cloud is newer
-      useCloud = true;
-    } else if(cloudUpdated === localUpdated){
-      // Same time — more courses wins
-      useCloud = cloudCourses.length >= localCourses.length;
-    } else {
-      // Local is newer — push local to cloud
-      useCloud = false;
-    }
+    // Always prefer cloud when:
+    //   1. Device has never synced (localUpdated === 0), OR
+    //   2. Cloud timestamp is strictly newer, OR
+    //   3. Local still contains only the default demo courses
+    const neverSynced = (localUpdated === 0);
+    const cloudIsNewer = (cloudUpdated > localUpdated);
+    const localIsDemo  = isDefaultDemoCourses();
+    const useCloud = (neverSynced || cloudIsNewer || localIsDemo) && cloudCourses.length > 0;
 
-    if(useCloud && cloudCourses.length > 0){
+    if(useCloud){
       courses = cloudCourses;
       if(data.exams) exams=data.exams;
       if(data.files) files=data.files;
@@ -2303,12 +2309,12 @@ async function syncFromFirestore(){
       updateLabels();render();
       if(isDesktop())deskRender();
     } else {
-      // Local is newer or equal — push local up to cloud
+      // Local is newer — push local up to cloud
       hideSyncBar();
       await syncToFirestore();
     }
   }catch(err){
-    showSyncBar('❌',t('syncError'),'var(--red)');
+    showSyncBar('❌',t('syncError')+': '+err.message,'var(--red)');
     setTimeout(hideSyncBar,4000);
   }
 }
