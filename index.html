@@ -3171,7 +3171,9 @@ function handleImport(e){
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
-      const data=JSON.parse(ev.target.result);
+      let raw=ev.target.result;
+      if(typeof raw==='string')raw=raw.replace(/^\uFEFF/,'').trim();
+      const data=JSON.parse(raw);
 
       // ===== حماية البيانات الموجودة =====
       // إذا الملف جاء من إضافة AKSIS (يحتوي _aksis_grades)
@@ -3220,7 +3222,7 @@ function handleImport(e){
       lsSave();closeSettings();render();
       if(isDesktop())deskRender();
       alert(t('importOk'));
-    }catch(err){alert(t('importErr'));}
+    }catch(err){console.error('استيراد فشل:',err);alert(t('importErr')+'\n'+err.message);}
   };reader.readAsText(file);
 }
 
