@@ -12,10 +12,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
 <meta name="theme-color" id="meta-theme" content="#111114">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="/icon-192.png" type="image/png">
-<link rel="icon" href="/icon-512.png" type="image/png">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="icon" href="./icon-512.png" type="image/png">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -2499,7 +2499,6 @@ async function syncFromFirestore(){
 
   showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
   try{
-    logDriveSync('Download started', {fbUid, driveTokenPresent: !!driveToken});
     const data=await loadDriveSyncData();
     if(!data){
       hideSyncBar();
@@ -3651,7 +3650,7 @@ window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();
 if('serviceWorker' in navigator && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1'){
   window.addEventListener('load', async ()=>{
     try{
-      const reg = await navigator.serviceWorker.register('/sw.js');
+      const reg = await navigator.serviceWorker.register('./sw.js');
       console.log('ServiceWorker registered', reg);
     }catch(err){
       console.error('ServiceWorker registration failed:', err);
