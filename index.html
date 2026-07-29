@@ -6,12 +6,16 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="موادي">
 <meta name="theme-color" id="meta-theme" content="#111114">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="icon" href="/icon-512.png" type="image/png">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>موادي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -2133,7 +2137,23 @@ function onFirebaseSignedOut(){
 }
 
 function firebaseSignIn(){
+  const isEmbedded = (()=>{
+    try{return window.self !== window.top || window.location.hostname.includes('github.dev') || window.location.hostname.includes('github.io');}
+    catch(e){return true;}
+  })();
+
+  if(isEmbedded){
+    console.warn('Using redirect sign-in because popup auth is not reliable in this environment.');
+    try{ fbAuth.signInWithRedirect(fbGoogleProvider); return; }
+    catch(e){ console.error('signInWithRedirect failed', e); }
+  }
+
   fbAuth.signInWithPopup(fbGoogleProvider).catch(err=>{
+    console.error('signInWithPopup failed', err);
+    const msg = (err && err.message) ? err.message.toLowerCase() : '';
+    if(err && (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || msg.includes('popup'))){
+      try{ fbAuth.signInWithRedirect(fbGoogleProvider); return; }catch(e){ console.error('signInWithRedirect fallback failed', e); }
+    }
     showSyncBar('❌','Sign-in error: '+err.message,'var(--red)');
     setTimeout(hideSyncBar,4000);
   });
@@ -2228,21 +2248,227 @@ function updateConnDot(connected){
 }
 
 function handleSyncBtn(){
-  if(fbUser){syncToFirestore();}
-  else{firebaseSignIn();}
+  try{
+    if(fbUser){
+      return syncToFirestore();
+    }
+    return firebaseSignIn();
+  }catch(err){
+    const detail = err && err.stack ? err.stack : String(err);
+    console.error('[Sync Button] handler error', err);
+    alert(detail);
+    throw err;
+  }
+}
+
+function buildSyncPayload(){
+  return {
+    version:'3.0',
+    courses,
+    exams,
+    files,
+    nid,
+    fid,
+    updatedAt:new Date().toISOString()
+  };
+}
+
+function applySyncPayload(data){
+  const cloudCourses = Array.isArray(data && data.courses) ? data.courses : [];
+  if(!cloudCourses.length){
+    throw new Error('No data found in the Drive backup file.');
+  }
+
+  courses = cloudCourses;
+  if(data.exams) exams=data.exams;
+  if(data.files) files=data.files;
+  if(data.nid)   nid=parseInt(data.nid)||nid;
+  if(data.fid)   fid=parseInt(data.fid)||fid;
+
+  localStorage.setItem('mw2_courses',JSON.stringify(courses));
+  localStorage.setItem('mw2_exams',JSON.stringify(exams));
+  localStorage.setItem('mw2_files',JSON.stringify(files));
+  localStorage.setItem('mw2_nid',''+nid);
+  localStorage.setItem('mw2_fid',''+fid);
+}
+
+function formatSyncError(err){
+  if(!err) return 'Unknown error';
+  if(err instanceof Error){
+    const data={name:err.name,message:err.message,stack:err.stack};
+    Object.keys(err).forEach(k=>{ if(k!=='stack'&&k!=='message'&&k!=='name') data[k]=err[k]; });
+    try{return JSON.stringify(data,null,2);}catch(_){return String(err);}
+  }
+  try{return JSON.stringify(err,null,2);}catch(_){return String(err);}
+}
+
+function showDriveSyncError(err){
+  const detail=formatSyncError(err);
+  console.error('[Drive Sync] Error', err);
+  alert(detail);
+}
+
+async function requestDriveToken(){
+  if(driveToken) return driveToken;
+  return new Promise((resolve,reject)=>{
+    try{
+      if(!window.google || !window.google.accounts || !window.google.accounts.oauth2){
+        const err = new Error('Google Identity Services is not available.');
+        reject(err);
+        return;
+      }
+      const client=google.accounts.oauth2.initTokenClient({
+        client_id:GDRIVE_CLIENT_ID,
+        scope:GDRIVE_SCOPE,
+        callback:(resp)=>{
+          if(resp && resp.error){
+            const err = new Error(resp.error_description || resp.error || 'Google Drive authorization failed.');
+            err.response = resp;
+            reject(err);
+            return;
+          }
+          const accessToken = resp && resp.access_token ? resp.access_token : null;
+          if(!accessToken){
+            const err = new Error('Google Drive did not return an access token.');
+            err.response = resp;
+            reject(err);
+            return;
+          }
+          driveToken=accessToken;
+          resolve(accessToken);
+        }
+      });
+      client.requestAccessToken();
+    }catch(e){
+      reject(e);
+    }
+  });
+}
+
+async function driveApiRequest(url, options={}, fallbackMessage){
+  let res;
+  try{
+    res=await fetch(url, options);
+  }catch(err){
+    const error = new Error('Network error: '+(err && err.message ? err.message : String(err)));
+    error.url = url;
+    error.options = options;
+    throw error;
+  }
+
+  const contentType = res.headers.get('content-type') || '';
+  const rawText = await res.text();
+  let parsed=null;
+  if(rawText){
+    try{ parsed=JSON.parse(rawText); }catch(_){ parsed=rawText; }
+  }
+
+  if(!res.ok){
+    const detail = (parsed && parsed.error && parsed.error.message) ? parsed.error.message : (parsed && parsed.message ? parsed.message : rawText || fallbackMessage || 'Google Drive request failed');
+    const error = new Error((detail || fallbackMessage || 'Google Drive request failed')+' (HTTP '+res.status+')');
+    error.status = res.status;
+    error.url = url;
+    error.contentType = contentType;
+    error.responseText = rawText;
+    error.responseParsed = parsed;
+    error.options = options;
+    throw error;
+  }
+
+  return parsed;
+}
+
+async function getDriveFolderId(){
+  const q=encodeURIComponent('name="موادي" and mimeType="application/vnd.google-apps.folder" and trashed=false');
+  const data=await driveApiRequest('https://www.googleapis.com/drive/v3/files?q='+q+'&fields=files(id,name)',{headers:{Authorization:'Bearer '+driveToken}},'Unable to list Drive folders');
+  if(data && data.files && data.files.length) return data.files[0].id;
+
+  const created=await driveApiRequest('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},body:JSON.stringify({name:'موادي',mimeType:'application/vnd.google-apps.folder'})},'Unable to create Drive folder');
+  return created && created.id ? created.id : null;
+}
+
+async function findDriveSyncFileId(){
+  const q=encodeURIComponent('name="mawadi-sync.json" and trashed=false');
+  const data=await driveApiRequest('https://www.googleapis.com/drive/v3/files?q='+q+'&fields=files(id,name)',{headers:{Authorization:'Bearer '+driveToken}},'Unable to search the Drive sync file');
+  return data && data.files && data.files[0] ? data.files[0].id : null;
+}
+
+async function saveDriveSyncData(payload){
+  await requestDriveToken();
+  const folderId=await getDriveFolderId();
+  if(!folderId){ throw new Error('Google Drive folder could not be created.'); }
+
+  const metadata={name:'mawadi-sync.json',mimeType:'application/json',parents:[folderId]};
+  const fileId=await findDriveSyncFileId();
+  if(fileId){
+    return driveApiRequest(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+      method:'PATCH',
+      headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
+      body:JSON.stringify(payload,null,2)
+    },'Unable to update the Drive sync file');
+  }
+
+  const created=await driveApiRequest('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},body:JSON.stringify(metadata)},'Unable to create the Drive sync file');
+  if(!created || !created.id){ throw new Error('Google Drive did not return a file ID.'); }
+  return driveApiRequest(`https://www.googleapis.com/upload/drive/v3/files/${created.id}?uploadType=media`,{
+    method:'PATCH',
+    headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
+    body:JSON.stringify(payload,null,2)
+  },'Unable to upload the Drive sync file');
+}
+
+async function loadDriveSyncData(){
+  await requestDriveToken();
+  const fileId=await findDriveSyncFileId();
+  if(!fileId){ return null; }
+
+  let res;
+  try{
+    res=await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,{headers:{Authorization:'Bearer '+driveToken}});
+  }catch(err){
+    throw new Error('Network error while downloading from Drive: '+(err && err.message ? err.message : String(err)));
+  }
+
+  if(!res.ok){
+    let detail='';
+    try{
+      const payload=await res.json();
+      detail=payload && (payload.error && payload.error.message ? payload.error.message : payload.message || JSON.stringify(payload));
+    }catch(_){
+      try{ detail=await res.text(); }catch(e){}
+    }
+    throw new Error((detail || 'Unable to download the Drive backup')+' (HTTP '+res.status+')');
+  }
+
+  const text=await res.text();
+  if(!text) return null;
+  try{ return JSON.parse(text); }catch(_){ return text; }
 }
 
 // ===== FIRESTORE SYNC =====
 async function syncToFirestore(){
-  if(!fbUid||isSyncing)return;
+  if(isSyncing){ return; }
+  if(!navigator.onLine){
+    showSyncBar('❌',t('syncError')+': offline','var(--red)');
+    setTimeout(hideSyncBar,4000);
+    return;
+  }
+
   isSyncing=true;
   showSyncBar('⏳',t('syncing'),'var(--acc)');
   try{
-    await fbDb.collection('users').doc(fbUid).set({
-      courses,exams,files,nid,fid,
-      updated:firebase.firestore.FieldValue.serverTimestamp(),
-      version:'3.0'
-    },{merge:false});
+    const payload=buildSyncPayload();
+    await saveDriveSyncData(payload);
+
+    if(fbUid){
+      try{
+        await fbDb.collection('users').doc(fbUid).set(payload,{merge:false});
+      }catch(fbErr){
+        console.warn('Firestore fallback failed', fbErr);
+      }
+    }
+
+    localStorage.setItem('mw2_last_save',''+Date.now());
     const now=new Date().toLocaleTimeString(
       lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',
       {hour:'2-digit',minute:'2-digit'}
@@ -2250,8 +2476,9 @@ async function syncToFirestore(){
     showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
     setTimeout(hideSyncBar,3000);
   }catch(err){
-    showSyncBar('❌',t('syncError')+': '+err.message,'var(--red)');
-    setTimeout(hideSyncBar,5000);
+    showDriveSyncError(err);
+    showSyncBar('❌',t('syncError'),'var(--red)');
+    setTimeout(hideSyncBar,9000);
   }
   isSyncing=false;
 }
@@ -2264,58 +2491,43 @@ function isDefaultDemoCourses(){
 }
 
 async function syncFromFirestore(){
-  if(!fbUid)return;
+  if(!fbUid && !driveToken){
+    showSyncBar('❌',t('syncError')+': '+t('notConnected'),'var(--red)');
+    setTimeout(hideSyncBar,4000);
+    return;
+  }
+
   showSyncBar('⏳',t('loadingFromDrive'),'var(--acc)');
   try{
-    const doc=await fbDb.collection('users').doc(fbUid).get();
-
-    if(!doc.exists){
-      // Nothing in cloud yet — push local data up
+    logDriveSync('Download started', {fbUid, driveTokenPresent: !!driveToken});
+    const data=await loadDriveSyncData();
+    if(!data){
       hideSyncBar();
       await syncToFirestore();
       return;
     }
 
-    const data=doc.data();
-    const cloudCourses = Array.isArray(data.courses) ? data.courses : [];
-
-    // mw2_last_save is ONLY set when the user is signed in and a sync happened.
-    // A value of 0 means "this device has never synced before".
     const localUpdated = parseInt(localStorage.getItem('mw2_last_save')||'0');
-    const cloudUpdated = data.updated ? data.updated.toMillis() : 0;
-
-    // Always prefer cloud when:
-    //   1. Device has never synced (localUpdated === 0), OR
-    //   2. Cloud timestamp is strictly newer, OR
-    //   3. Local still contains only the default demo courses
+    const cloudUpdated = data.updatedAt ? Date.parse(data.updatedAt) : 0;
     const neverSynced = (localUpdated === 0);
     const cloudIsNewer = (cloudUpdated > localUpdated);
-    const localIsDemo  = isDefaultDemoCourses();
-    const useCloud = (neverSynced || cloudIsNewer || localIsDemo) && cloudCourses.length > 0;
+    const localIsDemo = isDefaultDemoCourses();
+    const useCloud = (neverSynced || cloudIsNewer || localIsDemo) && Array.isArray(data.courses) && data.courses.length > 0;
 
     if(useCloud){
-      courses = cloudCourses;
-      if(data.exams) exams=data.exams;
-      if(data.files) files=data.files;
-      if(data.nid)   nid=parseInt(data.nid)||nid;
-      if(data.fid)   fid=parseInt(data.fid)||fid;
-      localStorage.setItem('mw2_courses',JSON.stringify(courses));
-      localStorage.setItem('mw2_exams',JSON.stringify(exams));
-      localStorage.setItem('mw2_files',JSON.stringify(files));
-      localStorage.setItem('mw2_nid',''+nid);
-      localStorage.setItem('mw2_fid',''+fid);
+      applySyncPayload(data);
       showSyncBar('✅',t('dataLoaded'),'var(--grn)');
       setTimeout(hideSyncBar,2500);
       updateLabels();render();
       if(isDesktop())deskRender();
     } else {
-      // Local is newer — push local up to cloud
       hideSyncBar();
       await syncToFirestore();
     }
   }catch(err){
-    showSyncBar('❌',t('syncError')+': '+err.message,'var(--red)');
-    setTimeout(hideSyncBar,4000);
+    console.error('syncFromFirestore error', err);
+    showSyncBar('❌',t('syncError')+': '+formatSyncError(err,'Unable to download from Google Drive.'),'var(--red)');
+    setTimeout(hideSyncBar,9000);
   }
 }
 
@@ -3436,11 +3648,29 @@ window.addEventListener('resize',()=>{if(isDesktop())deskRender();else render();
 // (defined above in fbAuth.onAuthStateChanged)
 
 // ===== PWA SERVICE WORKER =====
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1'){
+  window.addEventListener('load', async ()=>{
+    try{
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      console.log('ServiceWorker registered', reg);
+    }catch(err){
+      console.error('ServiceWorker registration failed:', err);
+    }
   });
 }
+
+// Accessibility fix: add `alt` to data-URI images that lack it
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{
+    document.querySelectorAll('img[src^="data:image"]').forEach(img=>{
+      if(!img.hasAttribute('alt')){
+        const btn = img.closest('button, .ib, .desk-foot-btn');
+        const title = btn && (btn.getAttribute('title') || btn.textContent.trim());
+        img.setAttribute('alt', title || 'image');
+      }
+    });
+  }catch(e){/* silent */}
+});
 </script>
 </body>
 </html>
