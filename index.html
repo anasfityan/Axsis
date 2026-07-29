@@ -2247,12 +2247,19 @@ function updateConnDot(connected){
   }
 }
 
-function handleSyncBtn(){
+async function handleSyncBtn(){
   try{
-    if(fbUser){
-      return syncToFirestore();
+    if(!fbUser){
+      firebaseSignIn();
+      return;
     }
-    return firebaseSignIn();
+
+    const token = await requestDriveToken();
+    if(!token){
+      throw new Error('Google Drive token was not received.');
+    }
+
+    await syncToFirestore();
   }catch(err){
     const detail = err && err.stack ? err.stack : String(err);
     console.error('[Sync Button] handler error', err);
@@ -2394,7 +2401,9 @@ async function findDriveSyncFileId(){
 }
 
 async function saveDriveSyncData(payload){
-  await requestDriveToken();
+  if(!driveToken){
+    throw new Error('Drive token is required before syncing.');
+  }
   const folderId=await getDriveFolderId();
   if(!folderId){ throw new Error('Google Drive folder could not be created.'); }
 
@@ -2418,7 +2427,9 @@ async function saveDriveSyncData(payload){
 }
 
 async function loadDriveSyncData(){
-  await requestDriveToken();
+  if(!driveToken){
+    throw new Error('Drive token is required before downloading.');
+  }
   const fileId=await findDriveSyncFileId();
   if(!fileId){ return null; }
 
@@ -2464,7 +2475,8 @@ async function syncToFirestore(){
       try{
         await fbDb.collection('users').doc(fbUid).set(payload,{merge:false});
       }catch(fbErr){
-        console.warn('Firestore fallback failed', fbErr);
+        console.error('Firestore fallback failed', fbErr);
+        throw fbErr;
       }
     }
 
@@ -2473,7 +2485,7 @@ async function syncToFirestore(){
       lang==='tr'?'tr-TR':lang==='en'?'en-US':'ar-SA',
       {hour:'2-digit',minute:'2-digit'}
     );
-    showSyncBar('✅',t('syncedAt')+' '+now,'var(--grn)');
+    showSyncBar('✅','تم رفع البيانات إلى Drive والـ Firestore بنجاح — '+now,'var(--grn)');
     setTimeout(hideSyncBar,3000);
   }catch(err){
     showDriveSyncError(err);
@@ -2515,7 +2527,7 @@ async function syncFromFirestore(){
 
     if(useCloud){
       applySyncPayload(data);
-      showSyncBar('✅',t('dataLoaded'),'var(--grn)');
+      showSyncBar('✅','تم تحميل البيانات من Drive بنجاح','var(--grn)');
       setTimeout(hideSyncBar,2500);
       updateLabels();render();
       if(isDesktop())deskRender();
