@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { PlaceholderPage } from '@/components/feedback/PlaceholderPage'
 import { AppShell } from '@/components/layout/AppShell'
 import { CoursesPage } from '@/features/courses/CoursesPage'
+import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { ExamsPage } from '@/features/exams/ExamsPage'
 import { FilesPage } from '@/features/files/FilesPage'
 import { GradesPage } from '@/features/grades/GradesPage'
@@ -13,7 +13,7 @@ export function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route path="/dashboard" element={<PlaceholderPage title="الرئيسية" description="ملخص المواد والاختبارات والملفات وحالة المزامنة." />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
         <Route path="/exams" element={<ExamsPage />} />
