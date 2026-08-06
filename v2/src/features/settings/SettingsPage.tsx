@@ -15,6 +15,7 @@ import {
   type BackupCollections,
 } from '@/features/settings/backup'
 import { DiagnosticsCard } from '@/features/settings/DiagnosticsCard'
+import { GoogleDriveBackupCard } from '@/features/settings/GoogleDriveBackupCard'
 import { SyncQueueCard } from '@/features/settings/SyncQueueCard'
 import { SyncReliabilityCard } from '@/features/settings/SyncReliabilityCard'
 
@@ -203,6 +204,7 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
+      <GoogleDriveBackupCard />
       <SyncQueueCard />
       <SyncReliabilityCard />
 
