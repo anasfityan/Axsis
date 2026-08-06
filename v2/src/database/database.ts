@@ -78,3 +78,5 @@ export async function removeRecord(storeName: string, id: string): Promise<void>
     transaction.onabort = () => reject(transaction.error ?? new Error("The local delete operation was aborted."))
   })
 }
+
+export const deleteRecord = removeRecord
