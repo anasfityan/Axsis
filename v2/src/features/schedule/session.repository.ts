@@ -1,5 +1,6 @@
-import { deleteRecord, getAllRecords, putRecord, stores } from '@/database/database'
+import { getAllRecords, putRecord, stores } from '@/database/database'
 import type { CourseSession, CourseSessionDraft } from '@/features/schedule/session.types'
+import { enqueueSyncOperation } from '@/services/sync/sync.repository'
 
 const DEVICE_KEY = 'axsis-v2-device-id'
 
@@ -43,9 +44,19 @@ export async function saveCourseSession(
   }
 
   await putRecord(stores.courseSessions, session)
+  await enqueueSyncOperation('courseSession', session.id, 'upsert', session)
   return session
 }
 
 export async function removeCourseSession(session: CourseSession): Promise<void> {
-  await deleteRecord(stores.courseSessions, session.id)
+  const now = new Date().toISOString()
+  const tombstone: CourseSession = {
+    ...session,
+    deletedAt: now,
+    updatedAt: now,
+    version: session.version + 1,
+    deviceId: getDeviceId(),
+  }
+  await putRecord(stores.courseSessions, tombstone)
+  await enqueueSyncOperation('courseSession', session.id, 'delete', tombstone)
 }
