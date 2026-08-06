@@ -9,6 +9,7 @@ type ThemeContextValue = {
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
+const OVERRIDE_STYLE_ID = 'axsis-theme-overrides'
 
 const themeVariables: Record<Theme, Record<string, string>> = {
   dark: {
@@ -39,6 +40,19 @@ const themeVariables: Record<Theme, Record<string, string>> = {
   },
 }
 
+function applyFixedSurfaceOverrides(theme: Theme): void {
+  let style = document.getElementById(OVERRIDE_STYLE_ID) as HTMLStyleElement | null
+  if (!style) {
+    style = document.createElement('style')
+    style.id = OVERRIDE_STYLE_ID
+    document.head.appendChild(style)
+  }
+
+  style.textContent = theme === 'light'
+    ? `.sidebar,.mobile-nav{background:rgba(255,255,255,.96)!important}.sidebar{box-shadow:-10px 0 35px rgba(15,23,42,.06)}body{background:radial-gradient(circle at top left,rgba(200,135,18,.07),transparent 26rem),var(--background)!important}`
+    : `.sidebar,.mobile-nav{background:rgba(17,22,34,.96)!important}.sidebar{box-shadow:none}body{background:radial-gradient(circle at top left,rgba(244,185,66,.05),transparent 26rem),var(--background)!important}`
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('axsis-v2-theme')
@@ -50,6 +64,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.dataset.theme = theme
     root.style.colorScheme = theme
     Object.entries(themeVariables[theme]).forEach(([name, value]) => root.style.setProperty(name, value))
+    applyFixedSurfaceOverrides(theme)
     localStorage.setItem('axsis-v2-theme', theme)
   }, [theme])
 
