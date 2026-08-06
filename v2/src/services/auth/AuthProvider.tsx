@@ -44,28 +44,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
 
     async function initialize(): Promise<void> {
-      const savedLocalSession = await localAdapter.getSession()
-      let savedCloudSession: AuthSession | null = null
-
-      if (firebaseConfigState.configured) {
-        const cloudAdapter = await getCloudAdapter()
+      try {
+        const savedLocalSession = await localAdapter.getSession()
         if (!active) return
-        unsubscribeCloud = cloudAdapter.subscribe((nextSession) => {
-          if (active) setCloudSession(nextSession)
-        })
-        savedCloudSession = await cloudAdapter.getSession()
-      }
+        setLocalSession(savedLocalSession)
 
-      if (!active) return
-      setLocalSession(savedLocalSession)
-      setCloudSession(savedCloudSession)
-      setLoading(false)
+        if (firebaseConfigState.configured) {
+          try {
+            const cloudAdapter = await getCloudAdapter()
+            if (!active) return
+            unsubscribeCloud = cloudAdapter.subscribe((nextSession) => {
+              if (active) setCloudSession(nextSession)
+            })
+            const savedCloudSession = await cloudAdapter.getSession()
+            if (active) setCloudSession(savedCloudSession)
+          } catch (cloudError) {
+            console.error('Cloud authentication initialization failed; continuing locally.', cloudError)
+          }
+        }
+      } catch (localError) {
+        console.error('Local authentication initialization failed.', localError)
+      } finally {
+        if (active) setLoading(false)
+      }
     }
 
-    void initialize().catch((error) => {
-      console.error(error)
-      if (active) setLoading(false)
-    })
+    void initialize()
 
     return () => {
       active = false
