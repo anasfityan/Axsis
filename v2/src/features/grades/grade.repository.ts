@@ -1,5 +1,6 @@
-import { deleteRecord, getAllRecords, putRecord, stores } from '@/database/database'
+import { getAllRecords, putRecord, stores } from '@/database/database'
 import type { GradeDraft, GradeItem } from '@/features/grades/grade.types'
+import { enqueueSyncOperation } from '@/services/sync/sync.repository'
 
 const DEVICE_KEY = 'axsis-v2-device-id'
 
@@ -38,9 +39,19 @@ export async function saveGrade(draft: GradeDraft, existing?: GradeItem): Promis
     deviceId: getDeviceId(),
   }
   await putRecord(stores.grades, grade)
+  await enqueueSyncOperation('grade', grade.id, 'upsert', grade)
   return grade
 }
 
 export async function removeGrade(grade: GradeItem): Promise<void> {
-  await deleteRecord(stores.grades, grade.id)
+  const now = new Date().toISOString()
+  const tombstone: GradeItem = {
+    ...grade,
+    deletedAt: now,
+    updatedAt: now,
+    version: grade.version + 1,
+    deviceId: getDeviceId(),
+  }
+  await putRecord(stores.grades, tombstone)
+  await enqueueSyncOperation('grade', grade.id, 'delete', tombstone)
 }
