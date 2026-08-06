@@ -51,7 +51,10 @@ export function downloadBackup(backup: AxsisBackup): void {
 }
 
 export async function parseBackup(text: string): Promise<AxsisBackup> {
-  const envelope = await parseAndVerifyBackupEnvelope(text)
+  return validateAxsisBackup(await parseAndVerifyBackupEnvelope(text))
+}
+
+export function validateAxsisBackup(envelope: BackupEnvelope): AxsisBackup {
   assertBackupCollections(envelope.payload)
   return envelope as AxsisBackup
 }
