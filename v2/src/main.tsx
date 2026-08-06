@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 
 import { App } from "@/app/App"
 import { ThemeProvider } from "@/app/ThemeProvider"
-import "@/design-system/globals.css"
+import "./design-system/globals.css"
 import { LanguageProvider } from "@/i18n/LanguageProvider"
 
 const root = document.getElementById("root")
