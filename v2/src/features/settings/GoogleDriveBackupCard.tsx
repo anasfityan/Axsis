@@ -22,6 +22,10 @@ export function GoogleDriveBackupCard() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  const latestBackup = backups[0] ?? null
+  const totalSize = backups.reduce((sum, backup) => sum + backup.sizeBytes, 0)
+  const deviceCount = new Set(backups.map((backup) => backup.deviceId)).size
+
   const refresh = useCallback(async () => {
     if (!tokenProvider.configured) return
     try {
@@ -115,6 +119,25 @@ export function GoogleDriveBackupCard() {
         {error ? <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300">{error}</div> : null}
         {message ? <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-300">{message}</div> : null}
 
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <SummaryItem label="عدد النسخ" value={String(backups.length)} />
+          <SummaryItem label="الحجم الإجمالي" value={formatBytes(totalSize)} />
+          <SummaryItem label="عدد الأجهزة" value={String(deviceCount)} />
+          <SummaryItem
+            label="آخر نسخة"
+            value={latestBackup ? formatDate(latestBackup.createdAt) : 'لا توجد'}
+          />
+        </div>
+
+        {latestBackup ? (
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-4 text-sm">
+            <p className="font-bold">آخر نسخة موثّقة</p>
+            <p className="mt-2 text-[var(--text-secondary)]">
+              {latestBackup.name} · إصدار {latestBackup.appVersion} · الجهاز {latestBackup.deviceId}
+            </p>
+          </div>
+        ) : null}
+
         <Button onClick={() => void upload()} disabled={busy || !tokenProvider.configured} className="gap-2">
           <Upload className="h-4 w-4" /> رفع نسخة جديدة
         </Button>
@@ -128,7 +151,7 @@ export function GoogleDriveBackupCard() {
                 <div>
                   <p className="font-bold">{item.name}</p>
                   <p className="mt-1 text-xs text-[var(--text-muted)]">
-                    {new Date(item.createdAt).toLocaleString('ar')} · {formatBytes(item.sizeBytes)} · إصدار {item.appVersion}
+                    {formatDate(item.createdAt)} · {formatBytes(item.sizeBytes)} · إصدار {item.appVersion} · الجهاز {item.deviceId}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -148,8 +171,21 @@ export function GoogleDriveBackupCard() {
   )
 }
 
+function SummaryItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-4">
+      <p className="text-xs text-[var(--text-muted)]">{label}</p>
+      <p className="mt-1 font-black">{value}</p>
+    </div>
+  )
+}
+
 function toMessage(error: unknown, fallback: string): string {
   return error instanceof Error && error.message ? error.message : fallback
+}
+
+function formatDate(value: string): string {
+  return new Date(value).toLocaleString('ar')
 }
 
 function formatBytes(value: number): string {
