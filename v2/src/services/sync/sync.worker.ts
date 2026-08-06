@@ -4,6 +4,7 @@ import {
   markSyncOperationProcessing,
   markSyncOperationSucceeded,
 } from '@/services/sync/sync.repository'
+import { saveSyncAudit } from '@/services/sync/sync.reliability'
 import type { SyncOperation } from '@/services/sync/sync.types'
 
 export type SyncOperationHandler = (operation: SyncOperation) => Promise<void>
@@ -73,19 +74,46 @@ export class SyncWorker {
     this.running = true
     this.emitState('running')
 
+    const startedAt = new Date()
+    let attempted = 0
+    let succeeded = 0
+    let failed = 0
+    let movedToDeadLetter = 0
+    let cycleError: string | null = null
+
     try {
       const operations = (await getReadySyncOperations()).slice(0, this.batchSize)
+      attempted = operations.length
+
       for (const operation of operations) {
         const processing = await markSyncOperationProcessing(operation)
         try {
           await this.handler(processing)
           await markSyncOperationSucceeded(processing)
+          succeeded += 1
         } catch (error) {
-          await markSyncOperationFailed(processing, error)
+          const updated = await markSyncOperationFailed(processing, error)
+          failed += 1
+          if (updated.status === 'failed') movedToDeadLetter += 1
         }
         this.onQueueChange?.()
       }
+    } catch (error) {
+      cycleError = error instanceof Error ? error.message : String(error)
+      throw error
     } finally {
+      const finishedAt = new Date()
+      await saveSyncAudit({
+        id: crypto.randomUUID(),
+        startedAt: startedAt.toISOString(),
+        finishedAt: finishedAt.toISOString(),
+        durationMs: finishedAt.getTime() - startedAt.getTime(),
+        attempted,
+        succeeded,
+        failed,
+        movedToDeadLetter,
+        error: cycleError,
+      })
       this.running = false
       this.emitState('idle')
     }
