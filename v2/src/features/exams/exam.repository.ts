@@ -1,5 +1,6 @@
-import { deleteRecord, getAllRecords, putRecord, stores } from '@/database/database'
+import { getAllRecords, putRecord, stores } from '@/database/database'
 import type { Exam, ExamDraft } from '@/features/exams/exam.types'
+import { enqueueSyncOperation } from '@/services/sync/sync.repository'
 
 const DEVICE_KEY = 'axsis-v2-device-id'
 
@@ -36,9 +37,19 @@ export async function saveExam(draft: ExamDraft, existing?: Exam): Promise<Exam>
     deviceId: getDeviceId(),
   }
   await putRecord(stores.exams, exam)
+  await enqueueSyncOperation('exam', exam.id, 'upsert', exam)
   return exam
 }
 
 export async function removeExam(exam: Exam): Promise<void> {
-  await deleteRecord(stores.exams, exam.id)
+  const now = new Date().toISOString()
+  const tombstone: Exam = {
+    ...exam,
+    deletedAt: now,
+    updatedAt: now,
+    version: exam.version + 1,
+    deviceId: getDeviceId(),
+  }
+  await putRecord(stores.exams, tombstone)
+  await enqueueSyncOperation('exam', exam.id, 'delete', tombstone)
 }
