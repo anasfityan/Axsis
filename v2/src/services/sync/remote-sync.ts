@@ -9,6 +9,7 @@ interface SyncCursorRecord {
 }
 
 const MAX_PULL_PAGES = 10
+const CLOUD_PAGE_SIZE = 100
 
 const storeByEntity: Record<SyncEntity, string> = {
   course: stores.courses,
@@ -26,19 +27,23 @@ export async function pullAndApplyCloudChanges(
   let applied = 0
 
   for (let page = 0; page < MAX_PULL_PAGES; page += 1) {
+    const previousCursor = cursor
     const result = await adapter.pullChanges(cursor)
 
     for (const change of result.changes) {
       if (await applyCloudChange(change)) applied += 1
     }
 
-    const nextCursor = result.nextCursor
-    if (nextCursor && nextCursor !== cursor) {
-      cursor = nextCursor
+    if (result.nextCursor && result.nextCursor !== cursor) {
+      cursor = result.nextCursor
       await writeCursor(userId, cursor)
     }
 
-    if (result.changes.length === 0 || !nextCursor || nextCursor === result.nextCursor && result.changes.length < 100) {
+    if (
+      result.changes.length < CLOUD_PAGE_SIZE
+      || !result.nextCursor
+      || result.nextCursor === previousCursor
+    ) {
       break
     }
   }
