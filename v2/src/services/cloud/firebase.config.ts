@@ -17,7 +17,7 @@ const requiredKeys = [
 ] as const
 
 type FirebaseEnvKey = (typeof requiredKeys)[number]
-type FirebaseEnv = Record<FirebaseEnvKey, string | undefined>
+type FirebaseEnv = Partial<Record<FirebaseEnvKey, string | undefined>>
 
 export interface FirebaseConfigState {
   configured: boolean
