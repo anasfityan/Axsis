@@ -16,6 +16,7 @@ import {
 } from '@/features/settings/backup'
 import { DiagnosticsCard } from '@/features/settings/DiagnosticsCard'
 import { SyncQueueCard } from '@/features/settings/SyncQueueCard'
+import { SyncReliabilityCard } from '@/features/settings/SyncReliabilityCard'
 
 const countLabels: Record<keyof BackupCollections, string> = {
   courses: 'المواد',
@@ -203,11 +204,12 @@ export function SettingsPage() {
       </Card>
 
       <SyncQueueCard />
+      <SyncReliabilityCard />
 
       <Card>
-        <CardHeader><CardTitle>المزامنة السحابية</CardTitle><CardDescription>غير مفعّلة بعد في V2.</CardDescription></CardHeader>
+        <CardHeader><CardTitle>المزامنة السحابية</CardTitle><CardDescription>Firestone مهيأة للحسابات السحابية عند توفير إعداد Firebase.</CardDescription></CardHeader>
         <CardContent className="text-sm leading-7 text-[var(--text-secondary)]">
-          ستُبنى Firestore كمصدر المزامنة السحابي، وسيبقى Google Drive للملفات والنسخ الاحتياطية الاختيارية. فشل أي خدمة سحابية لن يمنع العمل المحلي.
+          تعمل البيانات محليًا أولًا، ثم تُرفع وتُنزل تدريجيًا عبر Firestore. يبقى Google Drive مخصصًا للملفات والنسخ الاحتياطية الاختيارية، ولا يمنع فشل أي خدمة سحابية استخدام التطبيق محليًا.
         </CardContent>
       </Card>
     </div>
