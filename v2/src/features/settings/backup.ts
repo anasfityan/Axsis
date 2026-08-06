@@ -1,6 +1,11 @@
 import { getAllRecords, putRecord, stores } from '@/database/database'
-
-const BACKUP_VERSION = 1
+import {
+  createBackupEnvelope,
+  parseAndVerifyBackupEnvelope,
+  serializeBackupEnvelope,
+  type BackupEnvelope,
+} from '@/services/backup/backup-engine'
+import { getDeviceIdentity } from '@/services/device/device'
 
 export type BackupCollections = {
   courses: unknown[]
@@ -10,12 +15,7 @@ export type BackupCollections = {
   files: unknown[]
 }
 
-export type AxsisBackup = {
-  app: 'axsis-v2'
-  version: number
-  exportedAt: string
-  collections: BackupCollections
-}
+export type AxsisBackup = BackupEnvelope<BackupCollections>
 
 const collectionStores = {
   courses: stores.courses,
@@ -29,38 +29,44 @@ export async function createBackup(): Promise<AxsisBackup> {
   const entries = await Promise.all(
     Object.entries(collectionStores).map(async ([name, storeName]) => [name, await getAllRecords(storeName)] as const),
   )
+  const device = getDeviceIdentity()
 
-  return {
-    app: 'axsis-v2',
-    version: BACKUP_VERSION,
-    exportedAt: new Date().toISOString(),
-    collections: Object.fromEntries(entries) as BackupCollections,
-  }
+  return createBackupEnvelope(
+    Object.fromEntries(entries) as BackupCollections,
+    {
+      appVersion: device.appVersion,
+      deviceId: device.id,
+    },
+  )
 }
 
 export function downloadBackup(backup: AxsisBackup): void {
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
+  const blob = new Blob([serializeBackupEnvelope(backup)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   anchor.href = url
-  anchor.download = `axsis-backup-${backup.exportedAt.slice(0, 10)}.json`
+  anchor.download = `axsis-backup-${backup.metadata.createdAt.slice(0, 10)}.json`
   anchor.click()
   URL.revokeObjectURL(url)
 }
 
-export function parseBackup(text: string): AxsisBackup {
-  const parsed = JSON.parse(text) as Partial<AxsisBackup>
-  if (parsed.app !== 'axsis-v2' || parsed.version !== BACKUP_VERSION || !parsed.collections) {
-    throw new Error('ملف النسخة الاحتياطية غير صالح أو غير مدعوم.')
+export async function parseBackup(text: string): Promise<AxsisBackup> {
+  const envelope = await parseAndVerifyBackupEnvelope(text)
+  assertBackupCollections(envelope.payload)
+  return envelope as AxsisBackup
+}
+
+function assertBackupCollections(value: unknown): asserts value is BackupCollections {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('بيانات النسخة الاحتياطية غير صالحة.')
   }
 
+  const collections = value as Record<string, unknown>
   for (const key of Object.keys(collectionStores) as Array<keyof BackupCollections>) {
-    if (!Array.isArray(parsed.collections[key])) {
+    if (!Array.isArray(collections[key])) {
       throw new Error(`المجموعة ${key} غير صالحة داخل ملف النسخة الاحتياطية.`)
     }
   }
-
-  return parsed as AxsisBackup
 }
 
 function isRecordWithId(value: unknown): value is { id: string } {
@@ -73,7 +79,7 @@ export async function importBackup(backup: AxsisBackup): Promise<Record<keyof Ba
   for (const [name, storeName] of Object.entries(collectionStores) as Array<
     [keyof BackupCollections, (typeof collectionStores)[keyof typeof collectionStores]]
   >) {
-    const records = backup.collections[name]
+    const records = backup.payload[name]
     let count = 0
     for (const record of records) {
       if (!isRecordWithId(record)) continue
