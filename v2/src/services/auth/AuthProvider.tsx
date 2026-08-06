@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
-import { FirebaseAuthAdapter } from '@/services/auth/firebase-auth.adapter'
 import { LocalAuthAdapter } from '@/services/auth/local-auth.adapter'
 import type {
+  AuthAdapter,
   AuthSession,
   SignInCredentials,
   SignUpCredentials,
@@ -20,8 +20,16 @@ interface AuthContextValue {
 }
 
 const localAdapter = new LocalAuthAdapter()
-const cloudAdapter = firebaseConfigState.configured ? new FirebaseAuthAdapter() : null
 const AuthContext = createContext<AuthContextValue | null>(null)
+let cloudAdapterPromise: Promise<AuthAdapter> | null = null
+
+async function getCloudAdapter(): Promise<AuthAdapter> {
+  if (!firebaseConfigState.configured) throw new Error('إعداد Firebase غير مكتمل.')
+  cloudAdapterPromise ??= import('@/services/auth/firebase-auth.adapter').then(
+    ({ FirebaseAuthAdapter }) => new FirebaseAuthAdapter(),
+  )
+  return cloudAdapterPromise
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [localSession, setLocalSession] = useState<AuthSession | null>(null)
@@ -30,21 +38,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true
+    let unsubscribeCloud: (() => void) | undefined
     const unsubscribeLocal = localAdapter.subscribe((nextSession) => {
       if (active) setLocalSession(nextSession)
     })
-    const unsubscribeCloud = cloudAdapter?.subscribe((nextSession) => {
-      if (active) setCloudSession(nextSession)
-    })
 
-    void Promise.all([
-      localAdapter.getSession(),
-      cloudAdapter?.getSession() ?? Promise.resolve(null),
-    ]).then(([savedLocalSession, savedCloudSession]) => {
+    async function initialize(): Promise<void> {
+      const savedLocalSession = await localAdapter.getSession()
+      let savedCloudSession: AuthSession | null = null
+
+      if (firebaseConfigState.configured) {
+        const cloudAdapter = await getCloudAdapter()
+        if (!active) return
+        unsubscribeCloud = cloudAdapter.subscribe((nextSession) => {
+          if (active) setCloudSession(nextSession)
+        })
+        savedCloudSession = await cloudAdapter.getSession()
+      }
+
       if (!active) return
       setLocalSession(savedLocalSession)
       setCloudSession(savedCloudSession)
       setLoading(false)
+    }
+
+    void initialize().catch((error) => {
+      console.error(error)
+      if (active) setLoading(false)
     })
 
     return () => {
@@ -59,23 +79,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthContextValue>(() => ({
     session,
     loading,
-    cloudConfigured: cloudAdapter !== null,
+    cloudConfigured: firebaseConfigState.configured,
     continueLocally: async (displayName) => {
-      if (cloudSession) await cloudAdapter?.signOut()
+      if (cloudSession) await (await getCloudAdapter()).signOut()
       await localAdapter.continueLocally(displayName)
     },
     signIn: async (credentials) => {
-      if (!cloudAdapter) throw new Error('إعداد Firebase غير مكتمل.')
+      const cloudAdapter = await getCloudAdapter()
       if (localSession) await localAdapter.signOut()
       await cloudAdapter.signIn(credentials)
     },
     signUp: async (credentials) => {
-      if (!cloudAdapter) throw new Error('إعداد Firebase غير مكتمل.')
+      const cloudAdapter = await getCloudAdapter()
       if (localSession) await localAdapter.signOut()
       await cloudAdapter.signUp(credentials)
     },
     signOut: async () => {
-      if (cloudSession) await cloudAdapter?.signOut()
+      if (cloudSession) await (await getCloudAdapter()).signOut()
       if (localSession) await localAdapter.signOut()
     },
   }), [cloudSession, loading, localSession, session])
