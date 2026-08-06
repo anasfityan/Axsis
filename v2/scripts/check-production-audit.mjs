@@ -7,17 +7,56 @@ if (!reportPath) {
 }
 
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'))
+const vulnerabilities = report.vulnerabilities ?? {}
 const allowedAdvisories = new Set([
   // React Router RSC-only advisory. Axsis is a client-side SPA and does not use
   // React Server Components, Server Actions, or the affected RSC request path.
   'GHSA-qwww-vcr4-c8h2',
 ])
 
+function advisoryIsAllowed(advisory) {
+  const reference = `${advisory.url ?? ''} ${advisory.source ?? ''}`
+  return [...allowedAdvisories].some((id) => reference.includes(id))
+}
+
+function vulnerabilityIsAllowed(packageName, visiting = new Set()) {
+  if (visiting.has(packageName)) return false
+
+  const vulnerability = vulnerabilities[packageName]
+  if (!vulnerability || !Array.isArray(vulnerability.via) || vulnerability.via.length === 0) {
+    return false
+  }
+
+  const nextVisiting = new Set(visiting)
+  nextVisiting.add(packageName)
+
+  return vulnerability.via.every((entry) => {
+    if (typeof entry === 'object' && entry !== null) {
+      return advisoryIsAllowed(entry)
+    }
+
+    if (typeof entry === 'string') {
+      return vulnerabilityIsAllowed(entry, nextVisiting)
+    }
+
+    return false
+  })
+}
+
 const blocking = []
 const acknowledged = []
 
-for (const [packageName, vulnerability] of Object.entries(report.vulnerabilities ?? {})) {
+for (const [packageName, vulnerability] of Object.entries(vulnerabilities)) {
   if (!['high', 'critical'].includes(vulnerability.severity)) continue
+
+  if (vulnerabilityIsAllowed(packageName)) {
+    acknowledged.push({
+      packageName,
+      severity: vulnerability.severity,
+      advisory: 'transitively limited to acknowledged RSC advisory',
+    })
+    continue
+  }
 
   const advisories = Array.isArray(vulnerability.via)
     ? vulnerability.via.filter((entry) => typeof entry === 'object' && entry !== null)
@@ -29,16 +68,11 @@ for (const [packageName, vulnerability] of Object.entries(report.vulnerabilities
   }
 
   for (const advisory of advisories) {
-    const reference = `${advisory.url ?? ''} ${advisory.source ?? ''}`
-    const allowed = [...allowedAdvisories].some((id) => reference.includes(id))
-    const item = {
+    blocking.push({
       packageName,
       severity: advisory.severity ?? vulnerability.severity,
       advisory: advisory.url ?? advisory.title ?? String(advisory.source ?? 'unknown'),
-    }
-
-    if (allowed) acknowledged.push(item)
-    else blocking.push(item)
+    })
   }
 }
 
