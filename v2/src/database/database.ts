@@ -1,5 +1,5 @@
 const DATABASE_NAME = "axsis-v2"
-const DATABASE_VERSION = 2
+const DATABASE_VERSION = 3
 
 export const stores = {
   courses: "courses",
@@ -10,6 +10,8 @@ export const stores = {
   settings: "settings",
   syncQueue: "syncQueue",
   syncConflicts: "syncConflicts",
+  syncAudit: "syncAudit",
+  syncDeadLetters: "syncDeadLetters",
   migrations: "migrations",
 } as const
 
