@@ -1,5 +1,6 @@
-import { deleteRecord, getAllRecords, putRecord, stores } from '@/database/database'
+import { getAllRecords, putRecord, stores } from '@/database/database'
 import type { StudyFile, StudyFileDraft } from '@/features/files/file.types'
+import { enqueueSyncOperation } from '@/services/sync/sync.repository'
 
 const DEVICE_KEY = 'axsis-v2-device-id'
 
@@ -41,9 +42,19 @@ export async function saveStudyFile(draft: StudyFileDraft, existing?: StudyFile)
   }
 
   await putRecord(stores.files, file)
+  await enqueueSyncOperation('file', file.id, 'upsert', file)
   return file
 }
 
 export async function removeStudyFile(file: StudyFile): Promise<void> {
-  await deleteRecord(stores.files, file.id)
+  const now = new Date().toISOString()
+  const tombstone: StudyFile = {
+    ...file,
+    deletedAt: now,
+    updatedAt: now,
+    version: file.version + 1,
+    deviceId: getDeviceId(),
+  }
+  await putRecord(stores.files, tombstone)
+  await enqueueSyncOperation('file', file.id, 'delete', tombstone)
 }
