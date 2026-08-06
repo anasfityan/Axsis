@@ -3,10 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { PlaceholderPage } from '@/components/feedback/PlaceholderPage'
 import { AppShell } from '@/components/layout/AppShell'
 import { CoursesPage } from '@/features/courses/CoursesPage'
+import { SchedulePage } from '@/features/schedule/SchedulePage'
 
 const placeholderPages = [
   ['/dashboard', 'الرئيسية', 'ملخص المواد والاختبارات والملفات وحالة المزامنة.'],
-  ['/schedule', 'الجدول', 'عرض أسبوعي موحد للهاتف والكمبيوتر.'],
   ['/exams', 'الاختبارات', 'مواعيد الاختبارات والتنبيهات والعد التنازلي.'],
   ['/grades', 'الدرجات', 'متابعة الدرجات والتقدم لكل مادة.'],
   ['/files', 'الملفات', 'تنظيم ملفات الدراسة وروابطها ومجلداتها.'],
@@ -18,6 +18,7 @@ export function App() {
     <Routes>
       <Route element={<AppShell />}>
         <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/schedule" element={<SchedulePage />} />
         {placeholderPages.map(([path, title, description]) => (
           <Route
             key={path}
