@@ -1,5 +1,6 @@
 import { getRecord, putRecord, removeRecord, stores } from '@/database/database'
 import type { CloudAdapter, CloudChange } from '@/services/cloud/cloud.types'
+import { decideCloudChange } from '@/services/sync/conflict.policy'
 import type { SyncEntity } from '@/services/sync/sync.types'
 
 interface SyncCursorRecord {
@@ -71,12 +72,13 @@ export async function pullAndApplyCloudChanges(
 async function applyCloudChange(change: CloudChange): Promise<boolean> {
   const storeName = storeByEntity[change.entity]
   const local = await getRecord<Record<string, unknown>>(storeName, change.entityId)
+  const decision = decideCloudChange(change, local)
 
-  if (local && isEqualVersionConflict(change, local)) {
-    await saveConflict(change, local)
+  if (local && decision.hasConflict) {
+    await saveConflict(change, local, decision.resolution)
   }
 
-  if (!isRemoteNewer(change, local)) return false
+  if (!decision.shouldApplyRemote) return false
 
   if (change.deletedAt) {
     if (local) await removeRecord(storeName, change.entityId)
@@ -96,51 +98,22 @@ async function applyCloudChange(change: CloudChange): Promise<boolean> {
   return true
 }
 
-function isRemoteNewer(
-  change: CloudChange,
-  local: Record<string, unknown> | undefined,
-): boolean {
-  if (!local) return true
-
-  const localVersion = readFiniteNumber(local.version)
-  if (change.recordVersion !== localVersion) return change.recordVersion > localVersion
-
-  const localUpdatedAt = readString(local.updatedAt)
-  return change.updatedAt > localUpdatedAt
-}
-
-function isEqualVersionConflict(
-  change: CloudChange,
-  local: Record<string, unknown>,
-): boolean {
-  const localVersion = readFiniteNumber(local.version)
-  if (localVersion !== change.recordVersion) return false
-
-  const localUpdatedAt = readString(local.updatedAt)
-  if (!localUpdatedAt || localUpdatedAt === change.updatedAt) return false
-
-  if (change.deletedAt) return true
-  return stableSerialize(cleanMetadata(local)) !== stableSerialize(change.payload)
-}
-
 async function saveConflict(
   change: CloudChange,
   local: Record<string, unknown>,
+  resolution: 'remote-newer' | 'local-newer',
 ): Promise<void> {
-  const localUpdatedAt = readString(local.updatedAt)
-  const remoteWins = change.updatedAt > localUpdatedAt
-
   const conflict: SyncConflictRecord = {
     id: `conflict:${change.entity}:${change.entityId}:${change.changeId}`,
     entity: change.entity,
     entityId: change.entityId,
     localPayload: local,
     remotePayload: change.deletedAt ? null : change.payload,
-    localUpdatedAt,
+    localUpdatedAt: readString(local.updatedAt),
     remoteUpdatedAt: change.updatedAt,
     recordVersion: change.recordVersion,
     detectedAt: new Date().toISOString(),
-    resolution: remoteWins ? 'remote-newer' : 'local-newer',
+    resolution,
   }
 
   await putRecord(stores.syncConflicts, conflict)
@@ -161,27 +134,6 @@ async function writeCursor(userId: string, cursor: string): Promise<void> {
 
 function cursorId(userId: string): string {
   return `sync-cursor:${userId}`
-}
-
-function cleanMetadata(record: Record<string, unknown>): Record<string, unknown> {
-  const payload = { ...record }
-  delete payload.updatedAt
-  delete payload.version
-  return payload
-}
-
-function stableSerialize(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(stableSerialize).join(',')}]`
-  if (!value || typeof value !== 'object') return JSON.stringify(value)
-
-  const entries = Object.entries(value as Record<string, unknown>)
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, item]) => `${JSON.stringify(key)}:${stableSerialize(item)}`)
-  return `{${entries.join(',')}}`
-}
-
-function readFiniteNumber(value: unknown): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : 0
 }
 
 function readString(value: unknown): string {
