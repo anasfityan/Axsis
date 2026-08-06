@@ -56,6 +56,7 @@ export async function parseBackup(text: string): Promise<AxsisBackup> {
 
 export function validateAxsisBackup(envelope: BackupEnvelope): AxsisBackup {
   assertBackupCollections(envelope.payload)
+  validateBackupRecords(envelope.payload)
   return envelope as AxsisBackup
 }
 
@@ -72,24 +73,112 @@ function assertBackupCollections(value: unknown): asserts value is BackupCollect
   }
 }
 
-function isRecordWithId(value: unknown): value is { id: string } {
-  return typeof value === 'object' && value !== null && typeof (value as { id?: unknown }).id === 'string'
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+function isNullableString(value: unknown): value is string | null {
+  return value === null || isString(value)
+}
+
+function hasCommonRecordFields(value: unknown): value is Record<string, unknown> & { id: string } {
+  if (!isObjectRecord(value)) return false
+  return isString(value.id)
+    && value.id.length > 0
+    && isString(value.userId)
+    && isString(value.createdAt)
+    && isString(value.updatedAt)
+    && isNullableString(value.deletedAt)
+    && typeof value.version === 'number'
+    && Number.isInteger(value.version)
+    && value.version > 0
+    && isString(value.deviceId)
+}
+
+function isValidCollectionRecord(collection: keyof BackupCollections, value: unknown): boolean {
+  if (!hasCommonRecordFields(value)) return false
+
+  switch (collection) {
+    case 'courses':
+      return isString(value.name)
+        && isString(value.code)
+        && isString(value.instructor)
+        && isString(value.department)
+        && isString(value.room)
+        && isString(value.colorToken)
+        && isString(value.notes)
+        && isNullableString(value.semesterId)
+        && isNullableString(value.archivedAt)
+    case 'courseSessions':
+      return isString(value.courseId)
+        && typeof value.weekday === 'number'
+        && Number.isInteger(value.weekday)
+        && value.weekday >= 0
+        && value.weekday <= 6
+        && isString(value.startTime)
+        && isString(value.endTime)
+        && isString(value.room)
+    case 'exams':
+      return isString(value.courseId)
+        && isString(value.title)
+        && isString(value.type)
+        && isString(value.date)
+        && isString(value.startTime)
+        && isString(value.room)
+        && isString(value.notes)
+        && typeof value.reminderMinutes === 'number'
+    case 'grades':
+      return isString(value.courseId)
+        && isString(value.title)
+        && isString(value.type)
+        && typeof value.score === 'number'
+        && Number.isFinite(value.score)
+        && typeof value.maximumScore === 'number'
+        && Number.isFinite(value.maximumScore)
+        && value.maximumScore > 0
+        && typeof value.weight === 'number'
+        && Number.isFinite(value.weight)
+        && isString(value.date)
+        && isString(value.notes)
+    case 'files':
+      return isString(value.courseId)
+        && isString(value.name)
+        && isString(value.fileType)
+        && isString(value.folder)
+        && isString(value.note)
+        && isString(value.source)
+        && isString(value.url)
+        && isNullableString(value.driveFileId)
+        && (value.size === null || typeof value.size === 'number')
+        && isNullableString(value.mimeType)
+  }
+}
+
+function validateBackupRecords(collections: BackupCollections): void {
+  for (const collection of Object.keys(collectionStores) as Array<keyof BackupCollections>) {
+    const invalidIndex = collections[collection].findIndex((record) => !isValidCollectionRecord(collection, record))
+    if (invalidIndex >= 0) {
+      throw new Error(`السجل رقم ${invalidIndex + 1} داخل مجموعة ${collection} غير صالح.`)
+    }
+  }
 }
 
 export async function importBackup(backup: AxsisBackup): Promise<Record<keyof BackupCollections, number>> {
+  validateBackupRecords(backup.payload)
   const imported = {} as Record<keyof BackupCollections, number>
 
   for (const [name, storeName] of Object.entries(collectionStores) as Array<
     [keyof BackupCollections, (typeof collectionStores)[keyof typeof collectionStores]]
   >) {
-    const records = backup.payload[name]
-    let count = 0
+    const records = backup.payload[name] as Array<Record<string, unknown>>
     for (const record of records) {
-      if (!isRecordWithId(record)) continue
       await putRecord(storeName, record)
-      count += 1
     }
-    imported[name] = count
+    imported[name] = records.length
   }
 
   return imported
