@@ -15,42 +15,45 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: axsis-v2-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: v2
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout without external actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init .
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --no-tags --depth=1 origin "${GITHUB_SHA}"
+          git checkout --detach FETCH_HEAD
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: v2/package-lock.json
+      - name: Verify runtime
+        run: |
+          node --version
+          npm --version
 
       - name: Install dependencies
+        working-directory: v2
         run: npm ci --no-fund --no-audit
 
       - name: Audit production dependencies
+        working-directory: v2
         run: |
           npm audit --omit=dev --json > audit-report.json || true
           node scripts/check-production-audit.mjs audit-report.json
 
       - name: Lint
+        working-directory: v2
         run: npm run lint
 
       - name: Test
+        working-directory: v2
         run: npm run test
 
       - name: Build
+        working-directory: v2
         run: npm run build
