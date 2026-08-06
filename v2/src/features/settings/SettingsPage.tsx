@@ -14,6 +14,7 @@ import {
   parseBackup,
   type BackupCollections,
 } from '@/features/settings/backup'
+import { SyncQueueCard } from '@/features/settings/SyncQueueCard'
 
 const countLabels: Record<keyof BackupCollections, string> = {
   courses: 'المواد',
@@ -197,6 +198,8 @@ export function SettingsPage() {
           />
         </CardContent>
       </Card>
+
+      <SyncQueueCard />
 
       <Card>
         <CardHeader><CardTitle>المزامنة السحابية</CardTitle><CardDescription>غير مفعّلة بعد في V2.</CardDescription></CardHeader>
