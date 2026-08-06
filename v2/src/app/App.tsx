@@ -3,8 +3,8 @@ import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 
 import { AppShell } from '@/components/layout/AppShell'
 import { useAuth } from '@/services/auth/AuthProvider'
-import { SyncCloudBridge } from '@/services/sync/SyncCloudBridge'
 
+const SyncCloudBridge = lazy(() => import('@/services/sync/SyncCloudBridge').then((module) => ({ default: module.SyncCloudBridge })))
 const AuthPage = lazy(() => import('@/features/auth/AuthPage').then((module) => ({ default: module.AuthPage })))
 const CoursesPage = lazy(() => import('@/features/courses/CoursesPage').then((module) => ({ default: module.CoursesPage })))
 const DashboardPage = lazy(() => import('@/features/dashboard/DashboardPage').then((module) => ({ default: module.DashboardPage })))
@@ -35,7 +35,9 @@ function ProtectedRoutes() {
 export function App() {
   return (
     <>
-      <SyncCloudBridge />
+      <Suspense fallback={null}>
+        <SyncCloudBridge />
+      </Suspense>
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
