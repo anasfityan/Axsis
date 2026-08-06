@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 import { getSyncQueueSummary } from '@/services/sync/sync.repository'
 import { SyncWorker, type SyncOperationHandler, type SyncWorkerState } from '@/services/sync/sync.worker'
@@ -22,20 +22,16 @@ export function SyncRuntimeProvider({ children }: { children: ReactNode }) {
   const [queue, setQueue] = useState<SyncQueueSummary>(emptyQueue)
   const workerRef = useRef<SyncWorker | null>(null)
 
-  async function refreshQueue(): Promise<void> {
+  const refreshQueue = useCallback(async (): Promise<void> => {
     setQueue(await getSyncQueueSummary())
-  }
+  }, [])
 
-  if (!workerRef.current) {
-    workerRef.current = new SyncWorker({
+  useEffect(() => {
+    const worker = new SyncWorker({
       onStateChange: setWorkerState,
       onQueueChange: () => void refreshQueue(),
     })
-  }
-
-  useEffect(() => {
-    const worker = workerRef.current
-    if (!worker) return
+    workerRef.current = worker
 
     const updateOnline = () => setOnline(navigator.onLine)
     window.addEventListener('online', updateOnline)
@@ -47,8 +43,9 @@ export function SyncRuntimeProvider({ children }: { children: ReactNode }) {
       window.removeEventListener('online', updateOnline)
       window.removeEventListener('offline', updateOnline)
       worker.stop()
+      workerRef.current = null
     }
-  }, [])
+  }, [refreshQueue])
 
   const value = useMemo<SyncRuntimeContextValue>(() => ({
     online,
@@ -60,7 +57,7 @@ export function SyncRuntimeProvider({ children }: { children: ReactNode }) {
     },
     refreshQueue,
     setHandler: (handler) => workerRef.current?.setHandler(handler),
-  }), [online, queue, workerState])
+  }), [online, queue, refreshQueue, workerState])
 
   return <SyncRuntimeContext.Provider value={value}>{children}</SyncRuntimeContext.Provider>
 }
