@@ -1,4 +1,5 @@
 import { getAllRecords, putRecord, removeRecord, stores } from '@/database/database'
+import { moveToDeadLetter } from '@/services/sync/sync.reliability'
 import type {
   SyncEntity,
   SyncOperation,
@@ -65,10 +66,10 @@ export async function markSyncOperationFailed(
   now = new Date(),
 ): Promise<SyncOperation> {
   const attempts = operation.attempts + 1
-  const status: SyncOperationStatus = attempts >= MAX_ATTEMPTS ? 'failed' : 'pending'
+  const message = error instanceof Error ? error.message : String(error)
   const delay = Math.min(BASE_RETRY_DELAY_MS * 2 ** Math.max(0, attempts - 1), 60 * 60 * 1_000)
   const nextAttemptAt = new Date(now.getTime() + delay).toISOString()
-  const message = error instanceof Error ? error.message : String(error)
+  const status: SyncOperationStatus = attempts >= MAX_ATTEMPTS ? 'failed' : 'pending'
 
   const updated: SyncOperation = {
     ...operation,
@@ -78,6 +79,12 @@ export async function markSyncOperationFailed(
     nextAttemptAt,
     lastError: message,
   }
+
+  if (attempts >= MAX_ATTEMPTS) {
+    await moveToDeadLetter(updated, message, now)
+    return updated
+  }
+
   await putRecord(stores.syncQueue, updated)
   return updated
 }
