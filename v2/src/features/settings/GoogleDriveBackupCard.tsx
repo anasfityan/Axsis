@@ -3,7 +3,7 @@ import { Cloud, Download, RefreshCw, Trash2, Upload } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { createBackup, importBackup } from '@/features/settings/backup'
+import { createBackup, importBackup, validateAxsisBackup } from '@/features/settings/backup'
 import { GoogleDriveBackupAdapter } from '@/services/backup/google-drive-backup.adapter'
 import { createGoogleDriveTokenProvider } from '@/services/backup/google-oauth-token.provider'
 import type { StoredBackupSummary } from '@/services/backup/backup-storage.types'
@@ -62,7 +62,7 @@ export function GoogleDriveBackupCard() {
       setBusy(true)
       setError(null)
       setMessage(null)
-      const backup = await adapter.downloadBackup(item.id)
+      const backup = validateAxsisBackup(await adapter.downloadBackup(item.id))
       const imported = await importBackup(backup)
       const total = Object.values(imported).reduce((sum, count) => sum + count, 0)
       window.dispatchEvent(new CustomEvent('axsis:data-changed', { detail: { source: 'google-drive-restore' } }))
