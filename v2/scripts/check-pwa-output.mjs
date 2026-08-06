@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const distDir = path.resolve('dist')
-const requiredFiles = ['index.html', 'manifest.webmanifest', 'sw.js', 'icons/axsis-icon.svg']
+const requiredFiles = ['index.html', 'manifest.webmanifest', 'sw.js']
 
 const missingFiles = requiredFiles.filter((file) => !fs.existsSync(path.join(distDir, file)))
 
@@ -35,6 +35,16 @@ if (invalidFields.length > 0) {
   for (const [key, expected] of invalidFields) {
     console.error(`- ${key} must be ${JSON.stringify(expected)}`)
   }
+  process.exit(1)
+}
+
+const missingIcons = (manifest.icons ?? [])
+  .map((icon) => String(icon.src ?? '').replace(/^\//, ''))
+  .filter((iconPath) => iconPath.length === 0 || !fs.existsSync(path.join(distDir, iconPath)))
+
+if (missingIcons.length > 0) {
+  console.error('PWA manifest references missing icons:')
+  for (const iconPath of missingIcons) console.error(`- Missing dist/${iconPath || '(empty icon path)'}`)
   process.exit(1)
 }
 
