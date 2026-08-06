@@ -17,6 +17,8 @@ export type BackupCollections = {
 
 export type AxsisBackup = BackupEnvelope<BackupCollections>
 
+type ImportableRecord = Record<string, unknown> & { id: string }
+
 const collectionStores = {
   courses: stores.courses,
   courseSessions: stores.courseSessions,
@@ -85,7 +87,7 @@ function isNullableString(value: unknown): value is string | null {
   return value === null || isString(value)
 }
 
-function hasCommonRecordFields(value: unknown): value is Record<string, unknown> & { id: string } {
+function hasCommonRecordFields(value: unknown): value is ImportableRecord {
   if (!isObjectRecord(value)) return false
   return isString(value.id)
     && value.id.length > 0
@@ -99,7 +101,7 @@ function hasCommonRecordFields(value: unknown): value is Record<string, unknown>
     && isString(value.deviceId)
 }
 
-function isValidCollectionRecord(collection: keyof BackupCollections, value: unknown): boolean {
+function isValidCollectionRecord(collection: keyof BackupCollections, value: unknown): value is ImportableRecord {
   if (!hasCommonRecordFields(value)) return false
 
   switch (collection) {
@@ -174,7 +176,7 @@ export async function importBackup(backup: AxsisBackup): Promise<Record<keyof Ba
   for (const [name, storeName] of Object.entries(collectionStores) as Array<
     [keyof BackupCollections, (typeof collectionStores)[keyof typeof collectionStores]]
   >) {
-    const records = backup.payload[name] as Array<Record<string, unknown>>
+    const records = backup.payload[name] as ImportableRecord[]
     for (const record of records) {
       await putRecord(storeName, record)
     }
