@@ -153,12 +153,15 @@ function toSummary(file: DriveFile): StoredBackupSummary {
 
 async function assertOk(response: Response, fallbackMessage: string): Promise<void> {
   if (response.ok) return
-  let detail = ''
+  const detail = await readDriveErrorDetail(response)
+  throw new Error(detail ? `${fallbackMessage} ${detail}` : fallbackMessage)
+}
+
+async function readDriveErrorDetail(response: Response): Promise<string> {
   try {
     const payload = await response.json() as { error?: { message?: string } }
-    detail = payload.error?.message?.trim() ?? ''
+    return payload.error?.message?.trim() ?? ''
   } catch {
-    detail = ''
+    return ''
   }
-  throw new Error(detail ? `${fallbackMessage} ${detail}` : fallbackMessage)
 }
