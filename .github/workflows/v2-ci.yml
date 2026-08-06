@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.sha }}
+          ref: agent/v2-foundation
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -37,7 +37,6 @@ jobs:
         run: npm install --no-fund --no-audit
 
       - name: Commit generated package lock
-        if: github.event_name == 'push'
         working-directory: .
         run: |
           if git diff --quiet -- v2/package-lock.json; then
@@ -48,7 +47,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add v2/package-lock.json
           git commit -m "Lock Axsis V2 dependencies"
-          git push origin HEAD:${{ github.ref_name }}
+          git push origin HEAD:agent/v2-foundation
 
       - name: Audit production dependencies
         run: |
