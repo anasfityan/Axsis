@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm run check:bundle",
+    "build": "tsc -b && vite build && npm run check:bundle && npm run check:pwa",
     "check:bundle": "node scripts/check-bundle-size.mjs",
+    "check:pwa": "node scripts/check-pwa-output.mjs",
     "preview": "vite preview",
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run"
