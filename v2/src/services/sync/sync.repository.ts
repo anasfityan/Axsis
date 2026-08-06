@@ -1,5 +1,6 @@
 import { getAllRecords, putRecord, removeRecord, stores } from '@/database/database'
 import { moveToDeadLetter } from '@/services/sync/sync.reliability'
+import { getSyncRetryDecision } from '@/services/sync/sync.retry'
 import type {
   SyncEntity,
   SyncOperation,
@@ -7,9 +8,6 @@ import type {
   SyncOperationType,
   SyncQueueSummary,
 } from '@/services/sync/sync.types'
-
-const MAX_ATTEMPTS = 6
-const BASE_RETRY_DELAY_MS = 5_000
 
 export async function enqueueSyncOperation(
   entity: SyncEntity,
@@ -65,22 +63,20 @@ export async function markSyncOperationFailed(
   error: unknown,
   now = new Date(),
 ): Promise<SyncOperation> {
-  const attempts = operation.attempts + 1
+  const retry = getSyncRetryDecision(operation.attempts, now)
   const message = error instanceof Error ? error.message : String(error)
-  const delay = Math.min(BASE_RETRY_DELAY_MS * 2 ** Math.max(0, attempts - 1), 60 * 60 * 1_000)
-  const nextAttemptAt = new Date(now.getTime() + delay).toISOString()
-  const status: SyncOperationStatus = attempts >= MAX_ATTEMPTS ? 'failed' : 'pending'
+  const status: SyncOperationStatus = retry.exhausted ? 'failed' : 'pending'
 
   const updated: SyncOperation = {
     ...operation,
     status,
-    attempts,
+    attempts: retry.attempts,
     updatedAt: now.toISOString(),
-    nextAttemptAt,
+    nextAttemptAt: retry.nextAttemptAt,
     lastError: message,
   }
 
-  if (attempts >= MAX_ATTEMPTS) {
+  if (retry.exhausted) {
     await moveToDeadLetter(updated, message, now)
     return updated
   }
