@@ -59,11 +59,13 @@ export class LocalAuthAdapter implements AuthAdapter {
     return session
   }
 
-  async signIn(_credentials: SignInCredentials): Promise<AuthSession> {
+  async signIn(credentials: SignInCredentials): Promise<AuthSession> {
+    void credentials
     throw new Error('تسجيل الدخول السحابي غير مفعّل بعد.')
   }
 
-  async signUp(_credentials: SignUpCredentials): Promise<AuthSession> {
+  async signUp(credentials: SignUpCredentials): Promise<AuthSession> {
+    void credentials
     throw new Error('إنشاء الحساب السحابي غير مفعّل بعد.')
   }
 
