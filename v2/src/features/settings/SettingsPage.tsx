@@ -78,14 +78,14 @@ export function SettingsPage() {
       setBusy(true)
       setError(null)
       setStatus(null)
-      const backup = parseBackup(await file.text())
+      const backup = await parseBackup(await file.text())
       const confirmed = window.confirm(
-        'سيتم دمج بيانات النسخة الاحتياطية مع البيانات الحالية حسب المعرّف. لن تُحذف البيانات الموجودة. هل تريد المتابعة؟',
+        'تم التحقق من سلامة النسخة. سيتم دمج بياناتها مع البيانات الحالية حسب المعرّف، ولن تُحذف البيانات الموجودة. هل تريد المتابعة؟',
       )
       if (!confirmed) return
       const imported = await importBackup(backup)
       const total = Object.values(imported).reduce((sum, count) => sum + count, 0)
-      setStatus(`تم استيراد ${total} سجلًا بنجاح. أعد فتح الصفحات لرؤية البيانات.`)
+      setStatus(`تم التحقق من النسخة واستيراد ${total} سجلًا بنجاح. أعد فتح الصفحات لرؤية البيانات.`)
       await loadStorage()
     } catch (importError) {
       console.error(importError)
@@ -184,12 +184,12 @@ export function SettingsPage() {
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="rounded-xl bg-[var(--surface-3)] p-2 text-[var(--accent)]"><ShieldCheck className="h-5 w-5" /></div>
-            <div><CardTitle>النسخ الاحتياطي والاستعادة</CardTitle><CardDescription>التصدير يشمل المواد والمحاضرات والاختبارات والدرجات والملفات.</CardDescription></div>
+            <div><CardTitle>النسخ الاحتياطي والاستعادة</CardTitle><CardDescription>تُوقّع النسخة ببصمة SHA-256 ويُتحقق من سلامتها قبل الاستعادة.</CardDescription></div>
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 sm:flex-row">
-          <Button onClick={() => void exportData()} disabled={busy} className="gap-2"><Download className="h-4 w-4" /> تصدير نسخة JSON</Button>
-          <Button variant="secondary" onClick={() => inputRef.current?.click()} disabled={busy} className="gap-2"><Upload className="h-4 w-4" /> استيراد ودمج نسخة</Button>
+          <Button onClick={() => void exportData()} disabled={busy} className="gap-2"><Download className="h-4 w-4" /> تصدير نسخة موثقة</Button>
+          <Button variant="secondary" onClick={() => inputRef.current?.click()} disabled={busy} className="gap-2"><Upload className="h-4 w-4" /> تحقق واستيراد نسخة</Button>
           <input
             ref={inputRef}
             type="file"
@@ -207,7 +207,7 @@ export function SettingsPage() {
       <SyncReliabilityCard />
 
       <Card>
-        <CardHeader><CardTitle>المزامنة السحابية</CardTitle><CardDescription>Firestone مهيأة للحسابات السحابية عند توفير إعداد Firebase.</CardDescription></CardHeader>
+        <CardHeader><CardTitle>المزامنة السحابية</CardTitle><CardDescription>Firestore مهيأة للحسابات السحابية عند توفير إعداد Firebase.</CardDescription></CardHeader>
         <CardContent className="text-sm leading-7 text-[var(--text-secondary)]">
           تعمل البيانات محليًا أولًا، ثم تُرفع وتُنزل تدريجيًا عبر Firestore. يبقى Google Drive مخصصًا للملفات والنسخ الاحتياطية الاختيارية، ولا يمنع فشل أي خدمة سحابية استخدام التطبيق محليًا.
         </CardContent>
