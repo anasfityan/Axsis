@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Axsis</title>
+  <desc id="description">Axsis academic organizer icon</desc>
+  <rect width="512" height="512" rx="112" fill="#0b0f17"/>
+  <path d="M256 92 414 420h-92l-28-68h-76l31-76h14l-7-18-69 162H98L256 92Z" fill="#f4b942"/>
+  <circle cx="256" cy="198" r="20" fill="#ffffff"/>
+</svg>
