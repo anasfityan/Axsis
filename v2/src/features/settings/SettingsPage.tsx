@@ -14,6 +14,7 @@ import {
   parseBackup,
   type BackupCollections,
 } from '@/features/settings/backup'
+import { DemoDataCard } from '@/features/settings/DemoDataCard'
 import { DiagnosticsCard } from '@/features/settings/DiagnosticsCard'
 import { GoogleDriveBackupCard } from '@/features/settings/GoogleDriveBackupCard'
 import { SyncQueueCard } from '@/features/settings/SyncQueueCard'
@@ -117,7 +118,7 @@ export function SettingsPage() {
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="rounded-xl bg-[var(--surface-3)] p-2 text-[var(--accent)]"><Languages className="h-5 w-5" /></div>
-              <div><CardTitle>اللغة</CardTitle><CardDescription>يتغير اتجاه الواجهة تلقائيًا حسب اللغة.</CardDescription></div>
+              <div><CardTitle>اللغة</CardTitle><CardDescription>يتغير اتجاه الواجهة وعناصر التنقل حسب اللغة.</CardDescription></div>
             </div>
           </CardHeader>
           <CardContent className="grid gap-2 sm:grid-cols-3">
@@ -139,7 +140,7 @@ export function SettingsPage() {
               <div className="rounded-xl bg-[var(--surface-3)] p-2 text-[var(--accent)]">
                 {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </div>
-              <div><CardTitle>المظهر</CardTitle><CardDescription>هوية واحدة بوضعين متناسقين.</CardDescription></div>
+              <div><CardTitle>المظهر</CardTitle><CardDescription>وضع فاتح وداكن بألوان مستقلة لكامل الواجهة.</CardDescription></div>
             </div>
           </CardHeader>
           <CardContent className="grid gap-2 sm:grid-cols-2">
@@ -149,6 +150,7 @@ export function SettingsPage() {
         </Card>
       </div>
 
+      <DemoDataCard />
       <DiagnosticsCard />
 
       <Card>
