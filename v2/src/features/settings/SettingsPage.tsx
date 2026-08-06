@@ -14,6 +14,7 @@ import {
   parseBackup,
   type BackupCollections,
 } from '@/features/settings/backup'
+import { DiagnosticsCard } from '@/features/settings/DiagnosticsCard'
 import { SyncQueueCard } from '@/features/settings/SyncQueueCard'
 
 const countLabels: Record<keyof BackupCollections, string> = {
@@ -145,6 +146,8 @@ export function SettingsPage() {
           </CardContent>
         </Card>
       </div>
+
+      <DiagnosticsCard />
 
       <Card>
         <CardHeader>
