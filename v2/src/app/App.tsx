@@ -4,12 +4,12 @@ import { PlaceholderPage } from '@/components/feedback/PlaceholderPage'
 import { AppShell } from '@/components/layout/AppShell'
 import { CoursesPage } from '@/features/courses/CoursesPage'
 import { ExamsPage } from '@/features/exams/ExamsPage'
+import { FilesPage } from '@/features/files/FilesPage'
 import { GradesPage } from '@/features/grades/GradesPage'
 import { SchedulePage } from '@/features/schedule/SchedulePage'
 
 const placeholderPages = [
   ['/dashboard', 'الرئيسية', 'ملخص المواد والاختبارات والملفات وحالة المزامنة.'],
-  ['/files', 'الملفات', 'تنظيم ملفات الدراسة وروابطها ومجلداتها.'],
   ['/settings', 'الإعدادات', 'اللغة والمظهر والمزامنة والخصوصية.'],
 ] as const
 
@@ -21,6 +21,7 @@ export function App() {
         <Route path="/schedule" element={<SchedulePage />} />
         <Route path="/exams" element={<ExamsPage />} />
         <Route path="/grades" element={<GradesPage />} />
+        <Route path="/files" element={<FilesPage />} />
         {placeholderPages.map(([path, title, description]) => (
           <Route
             key={path}
