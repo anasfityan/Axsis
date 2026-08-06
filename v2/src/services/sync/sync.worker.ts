@@ -103,19 +103,24 @@ export class SyncWorker {
       throw error
     } finally {
       const finishedAt = new Date()
-      await saveSyncAudit({
-        id: crypto.randomUUID(),
-        startedAt: startedAt.toISOString(),
-        finishedAt: finishedAt.toISOString(),
-        durationMs: finishedAt.getTime() - startedAt.getTime(),
-        attempted,
-        succeeded,
-        failed,
-        movedToDeadLetter,
-        error: cycleError,
-      })
-      this.running = false
-      this.emitState('idle')
+      try {
+        await saveSyncAudit({
+          id: crypto.randomUUID(),
+          startedAt: startedAt.toISOString(),
+          finishedAt: finishedAt.toISOString(),
+          durationMs: finishedAt.getTime() - startedAt.getTime(),
+          attempted,
+          succeeded,
+          failed,
+          movedToDeadLetter,
+          error: cycleError,
+        })
+      } catch (auditError) {
+        console.error('Failed to save sync audit.', auditError)
+      } finally {
+        this.running = false
+        this.emitState('idle')
+      }
     }
   }
 
@@ -123,7 +128,9 @@ export class SyncWorker {
     if (this.stopped) return
     if (this.timer !== null) window.clearTimeout(this.timer)
     this.timer = window.setTimeout(() => {
-      void this.runNow().finally(() => this.schedule())
+      void this.runNow().catch((error) => {
+        console.error('Scheduled sync cycle failed.', error)
+      }).finally(() => this.schedule())
     }, delay)
   }
 
