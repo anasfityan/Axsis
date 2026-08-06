@@ -10,6 +10,7 @@ import { GradesPage } from '@/features/grades/GradesPage'
 import { SchedulePage } from '@/features/schedule/SchedulePage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 import { useAuth } from '@/services/auth/AuthProvider'
+import { SyncCloudBridge } from '@/services/sync/SyncCloudBridge'
 
 function ProtectedRoutes() {
   const { session, loading } = useAuth()
@@ -23,21 +24,24 @@ function ProtectedRoutes() {
 
 export function App() {
   return (
-    <Routes>
-      <Route path="/auth" element={<AuthPage />} />
-      <Route element={<ProtectedRoutes />}>
-        <Route element={<AppShell />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/schedule" element={<SchedulePage />} />
-          <Route path="/exams" element={<ExamsPage />} />
-          <Route path="/grades" element={<GradesPage />} />
-          <Route path="/files" element={<FilesPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+    <>
+      <SyncCloudBridge />
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route element={<AppShell />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/exams" element={<ExamsPage />} />
+            <Route path="/grades" element={<GradesPage />} />
+            <Route path="/files" element={<FilesPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
         </Route>
-      </Route>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    </Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </>
   )
 }
