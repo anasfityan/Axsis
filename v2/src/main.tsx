@@ -6,6 +6,7 @@ import { App } from "@/app/App"
 import { ThemeProvider } from "@/app/ThemeProvider"
 import "./design-system/globals.css"
 import { LanguageProvider } from "@/i18n/LanguageProvider"
+import { SyncRuntimeProvider } from "@/services/sync/SyncRuntimeProvider"
 
 const root = document.getElementById("root")
 
@@ -17,9 +18,11 @@ createRoot(root).render(
   <StrictMode>
     <ThemeProvider>
       <LanguageProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <SyncRuntimeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </SyncRuntimeProvider>
       </LanguageProvider>
     </ThemeProvider>
   </StrictMode>,
