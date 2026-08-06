@@ -1,16 +1,16 @@
 name: Axsis V2 CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - agent/v2-foundation
-    paths:
-      - 'v2/**'
-      - '.github/workflows/v2-ci.yml'
   pull_request:
-    paths:
-      - 'v2/**'
-      - '.github/workflows/v2-ci.yml'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 
 permissions:
   contents: read
