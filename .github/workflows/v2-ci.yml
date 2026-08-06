@@ -1,0 +1,47 @@
+name: Axsis V2 CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/v2-foundation
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: v2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: v2/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-fund --no-audit
+
+      - name: Audit production dependencies
+        run: |
+          npm audit --omit=dev --json > audit-report.json || true
+          node scripts/check-production-audit.mjs audit-report.json
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build

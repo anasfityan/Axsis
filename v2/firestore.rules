@@ -1,0 +1,92 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedInAs(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function validEntity(value) {
+      return value in ['course', 'courseSession', 'exam', 'grade', 'file'];
+    }
+
+    function validRecord(data) {
+      return data.keys().hasAll([
+          'entity',
+          'entityId',
+          'payload',
+          'deletedAt',
+          'recordVersion',
+          'updatedAt',
+          'deviceId',
+          'operationId'
+        ])
+        && validEntity(data.entity)
+        && data.entityId is string
+        && data.entityId.size() > 0
+        && data.recordVersion is int
+        && data.recordVersion > 0
+        && data.updatedAt is string
+        && data.deviceId is string
+        && data.operationId is string
+        && (data.deletedAt == null || data.deletedAt is string);
+    }
+
+    function validOperation(data, userId) {
+      return data.keys().hasAll([
+          'operationId',
+          'userId',
+          'device',
+          'entity',
+          'entityId',
+          'operation',
+          'payload',
+          'recordVersion',
+          'occurredAt',
+          'receivedAt'
+        ])
+        && data.userId == userId
+        && validEntity(data.entity)
+        && data.entityId is string
+        && data.entityId.size() > 0
+        && data.operation in ['upsert', 'delete']
+        && data.recordVersion is int
+        && data.recordVersion > 0
+        && data.occurredAt is string
+        && data.receivedAt is string
+        && data.device is map
+        && data.device.id is string;
+    }
+
+    match /users/{userId} {
+      allow read, write: if false;
+
+      match /records/{recordId} {
+        allow read: if signedInAs(userId);
+        allow create: if signedInAs(userId) && validRecord(request.resource.data);
+        allow update: if signedInAs(userId)
+          && validRecord(request.resource.data)
+          && request.resource.data.recordVersion >= resource.data.recordVersion;
+        allow delete: if false;
+      }
+
+      match /changes/{changeId} {
+        allow read: if signedInAs(userId);
+        allow create, update: if signedInAs(userId) && validRecord(request.resource.data);
+        allow delete: if false;
+      }
+
+      match /operations/{operationId} {
+        allow read: if signedInAs(userId);
+        allow create: if signedInAs(userId)
+          && request.resource.data.operationId == operationId
+          && validOperation(request.resource.data, userId);
+        allow update, delete: if false;
+      }
+
+      match /{document=**} {
+        allow read, write: if false;
+      }
+    }
+  }
+}

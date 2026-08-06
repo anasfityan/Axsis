@@ -1,0 +1,22 @@
+{
+  "name": "Axsis",
+  "short_name": "Axsis",
+  "description": "منظم أكاديمي يعمل دون اتصال مع مزامنة ونسخ احتياطي آمن.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f17",
+  "theme_color": "#0b0f17",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/axsis-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

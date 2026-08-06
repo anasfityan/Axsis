@@ -5,19 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run check:bundle && npm run check:pwa",
+    "check:bundle": "node scripts/check-bundle-size.mjs",
+    "check:pwa": "node scripts/check-pwa-output.mjs",
     "preview": "vite preview",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "test": "vitest run"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
     "class-variance-authority": "latest",
     "clsx": "latest",
+    "firebase": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest",
+    "react-router-dom": "7.18.2",
     "tailwind-merge": "latest"
   },
   "devDependencies": {
