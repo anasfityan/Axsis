@@ -1,4 +1,8 @@
 import { getAllRecords, putRecord, stores } from '@/database/database'
+import { listExams, removeExam } from '@/features/exams/exam.repository'
+import { listStudyFiles, removeStudyFile } from '@/features/files/file.repository'
+import { listGrades, removeGrade } from '@/features/grades/grade.repository'
+import { listCourseSessions, removeCourseSession } from '@/features/schedule/session.repository'
 import type { Course, CourseDraft } from '@/features/courses/course.types'
 import { enqueueSyncOperation } from '@/services/sync/sync.repository'
 
@@ -46,6 +50,22 @@ export async function saveCourse(draft: CourseDraft, existing?: Course): Promise
 }
 
 export async function removeCourse(course: Course): Promise<void> {
+  const [sessions, exams, grades, files] = await Promise.all([
+    listCourseSessions(),
+    listExams(),
+    listGrades(),
+    listStudyFiles(),
+  ])
+
+  const relatedDeletions = [
+    ...sessions.filter((session) => session.courseId === course.id).map(removeCourseSession),
+    ...exams.filter((exam) => exam.courseId === course.id).map(removeExam),
+    ...grades.filter((grade) => grade.courseId === course.id).map(removeGrade),
+    ...files.filter((file) => file.courseId === course.id).map(removeStudyFile),
+  ]
+
+  await Promise.all(relatedDeletions)
+
   const now = new Date().toISOString()
   const tombstone: Course = {
     ...course,
