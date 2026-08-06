@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: agent/v2-foundation
+          ref: ${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.head.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -39,7 +39,7 @@ jobs:
       - name: Commit generated package lock
         working-directory: .
         run: |
-          if git diff --quiet -- v2/package-lock.json; then
+          if [ -z "$(git status --porcelain -- v2/package-lock.json)" ]; then
             echo "package-lock.json is already committed."
             exit 0
           fi
