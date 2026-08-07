@@ -37,12 +37,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         ? 'Axsis - Öğrenci Alanı'
         : 'Axsis - Student Workspace'
 
-    const cleanupBase = installInterfaceTranslator(locale)
+    // The complete layer records the original Arabic text first; the base layer
+    // then handles the short shared labels. This keeps all three language modes isolated.
     const cleanupComplete = installCompleteInterfaceTranslator(locale)
+    const cleanupBase = installInterfaceTranslator(locale)
 
     return () => {
-      cleanupComplete()
       cleanupBase()
+      cleanupComplete()
     }
   }, [direction, locale])
 
