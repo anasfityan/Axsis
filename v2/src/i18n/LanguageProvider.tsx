@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
+import { localizeDemoData } from '@/database/demoData'
 import { installCompleteInterfaceTranslator } from '@/i18n/complete-interface-runtime'
 import { installInterfaceTranslator } from '@/i18n/interface-runtime'
 import { translations } from '@/i18n/translations'
@@ -37,8 +38,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         ? 'Axsis - Öğrenci Alanı'
         : 'Axsis - Student Workspace'
 
-    // The complete layer records the original Arabic text first; the base layer
-    // then handles the short shared labels. This keeps all three language modes isolated.
+    void localizeDemoData(locale).catch((error) => {
+      console.error('Unable to localize demo data.', error)
+    })
+
     const cleanupComplete = installCompleteInterfaceTranslator(locale)
     const cleanupBase = installInterfaceTranslator(locale)
 
