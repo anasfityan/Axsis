@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
+import { installCompleteInterfaceTranslator } from '@/i18n/complete-interface-runtime'
 import { installInterfaceTranslator } from '@/i18n/interface-runtime'
 import { translations } from '@/i18n/translations'
 import type { Locale } from '@/types/domain'
@@ -29,8 +30,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(STORAGE_KEY, locale)
     document.documentElement.lang = locale
     document.documentElement.dir = direction
-    document.title = locale === 'ar' ? 'Axsis - مساحة الطالب' : locale === 'tr' ? 'Axsis - Öğrenci Alanı' : 'Axsis - Student Workspace'
-    return installInterfaceTranslator(locale)
+    document.documentElement.dataset.locale = locale
+    document.title = locale === 'ar'
+      ? 'Axsis - مساحة الطالب'
+      : locale === 'tr'
+        ? 'Axsis - Öğrenci Alanı'
+        : 'Axsis - Student Workspace'
+
+    const cleanupBase = installInterfaceTranslator(locale)
+    const cleanupComplete = installCompleteInterfaceTranslator(locale)
+
+    return () => {
+      cleanupComplete()
+      cleanupBase()
+    }
   }, [direction, locale])
 
   const value = useMemo<LanguageContextValue>(() => ({
