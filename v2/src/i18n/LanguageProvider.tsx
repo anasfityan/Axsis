@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { localizeDemoData } from '@/database/demoData'
 import { installCompleteInterfaceTranslator } from '@/i18n/complete-interface-runtime'
@@ -38,10 +38,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         ? 'Axsis - Öğrenci Alanı'
         : 'Axsis - Student Workspace'
 
-    void localizeDemoData(locale).catch((error) => {
-      console.error('Unable to localize demo data.', error)
-    })
-
     const cleanupComplete = installCompleteInterfaceTranslator(locale)
     const cleanupBase = installInterfaceTranslator(locale)
 
@@ -51,12 +47,26 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [direction, locale])
 
+  const setLocale = useCallback((nextLocale: Locale) => {
+    if (nextLocale === locale) return
+
+    void localizeDemoData(nextLocale)
+      .catch((error) => {
+        console.error('Unable to localize demo data.', error)
+      })
+      .finally(() => {
+        localStorage.setItem(STORAGE_KEY, nextLocale)
+        setLocaleState(nextLocale)
+        window.location.reload()
+      })
+  }, [locale])
+
   const value = useMemo<LanguageContextValue>(() => ({
     locale,
     direction,
-    setLocale: setLocaleState,
+    setLocale,
     t: (key) => translations[locale][key],
-  }), [direction, locale])
+  }), [direction, locale, setLocale])
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
