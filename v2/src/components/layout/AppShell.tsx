@@ -61,7 +61,7 @@ function getInitialSidebarState(): boolean {
 export function AppShell() {
   const { session, signOut } = useAuth()
   const { online, workerState, queue } = useSyncRuntime()
-  const { locale, t } = useLanguage()
+  const { locale, direction, t } = useLanguage()
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(getInitialSidebarState)
   const navigate = useNavigate()
   const device = getDeviceIdentity()
@@ -83,8 +83,12 @@ export function AppShell() {
   const CollapseIcon = isSidebarCollapsed ? PanelRightOpen : PanelRightClose
 
   return (
-    <div className={isSidebarCollapsed ? 'app-shell sidebar-is-collapsed' : 'app-shell'}>
-      <aside className="sidebar" aria-label={text.navLabel}>
+    <div
+      className={isSidebarCollapsed ? 'app-shell app-shell-right sidebar-is-collapsed' : 'app-shell app-shell-right'}
+      dir="rtl"
+      data-content-direction={direction}
+    >
+      <aside className="sidebar app-sidebar-right" aria-label={text.navLabel} dir={direction}>
         <button
           type="button"
           className="sidebar-toggle"
@@ -146,9 +150,9 @@ export function AppShell() {
         </div>
       </aside>
 
-      <main className="main-content"><Outlet /></main>
+      <main className="main-content app-main-content" dir={direction}><Outlet /></main>
 
-      <nav className="mobile-nav" aria-label={text.mobileNavLabel}>
+      <nav className="mobile-nav" aria-label={text.mobileNavLabel} dir={direction}>
         {navigation.map(({ to, key, icon: Icon }) => (
           <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'mobile-nav-item mobile-nav-item-active' : 'mobile-nav-item'}>
             <Icon aria-hidden="true" size={20} strokeWidth={1.8} />
