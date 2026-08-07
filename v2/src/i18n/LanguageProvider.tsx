@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { installInterfaceTranslator } from '@/i18n/interface-translator'
+import { installInterfaceTranslator } from '@/i18n/interface-runtime'
 import { translations } from '@/i18n/translations'
 import type { Locale } from '@/types/domain'
 
