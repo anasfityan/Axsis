@@ -1,0 +1,41 @@
+/* Courses page refinements: wider cards, stable actions, and readable metadata. */
+
+.main-content button,
+.main-content a button {
+  white-space: nowrap;
+}
+
+.main-content [class*="2xl:grid-cols-3"] {
+  align-items: stretch;
+}
+
+.main-content [class*="2xl:grid-cols-3"] > * {
+  min-width: 0;
+}
+
+.main-content [class*="2xl:grid-cols-3"] [class*="CardDescription"],
+.main-content [class*="2xl:grid-cols-3"] p {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1280px) {
+  .main-content [class*="2xl:grid-cols-3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .main-content [class*="xl:grid-cols-[320px_minmax(0,1fr)]"] {
+    grid-template-columns: 340px minmax(0, 1fr) !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .main-content [class*="2xl:grid-cols-3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1279px) {
+  .main-content [class*="xl:grid-cols-[320px_minmax(0,1fr)]"] > :first-child {
+    position: static !important;
+  }
+}
