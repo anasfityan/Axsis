@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   BookOpen,
   CalendarDays,
@@ -6,6 +7,10 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
   Settings,
   Wifi,
   WifiOff,
@@ -28,71 +33,119 @@ const navigation = [
   { to: '/settings', key: 'settings', icon: Settings },
 ] as const
 
+const SIDEBAR_STORAGE_KEY = 'axsis-v2-sidebar-collapsed'
+
 const shellText = {
   ar: {
     workspace: 'مساحة الطالب', online: 'متصل بالإنترنت', offline: 'يعمل دون إنترنت',
     cloudOff: 'السحابة غير مفعلة بعد', pending: 'معلقة', failed: 'فاشلة', student: 'طالب',
     local: 'حساب محلي', logout: 'تسجيل الخروج', navLabel: 'التنقل الرئيسي', mobileNavLabel: 'التنقل على الهاتف',
+    collapse: 'طي القائمة الجانبية', expand: 'فتح القائمة الجانبية',
   },
   tr: {
     workspace: 'Öğrenci alanı', online: 'İnternete bağlı', offline: 'Çevrimdışı çalışıyor',
     cloudOff: 'Bulut henüz yapılandırılmadı', pending: 'bekliyor', failed: 'başarısız', student: 'Öğrenci',
     local: 'Yerel hesap', logout: 'Çıkış yap', navLabel: 'Ana gezinme', mobileNavLabel: 'Mobil gezinme',
+    collapse: 'Kenar çubuğunu daralt', expand: 'Kenar çubuğunu aç',
   },
   en: {
     workspace: 'Student workspace', online: 'Online', offline: 'Working offline',
     cloudOff: 'Cloud is not configured', pending: 'pending', failed: 'failed', student: 'Student',
     local: 'Local account', logout: 'Sign out', navLabel: 'Main navigation', mobileNavLabel: 'Mobile navigation',
+    collapse: 'Collapse sidebar', expand: 'Expand sidebar',
   },
 } as const
+
+function getInitialSidebarState(): boolean {
+  return localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
+}
 
 export function AppShell() {
   const { session, signOut } = useAuth()
   const { online, workerState, queue } = useSyncRuntime()
   const { locale, t } = useLanguage()
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(getInitialSidebarState)
   const navigate = useNavigate()
   const device = getDeviceIdentity()
   const text = shellText[locale]
+  const isRtl = locale === 'ar'
 
   const handleSignOut = async () => {
     await signOut()
     navigate('/auth', { replace: true })
   }
 
+  const toggleSidebar = () => {
+    setSidebarCollapsed((current) => {
+      const next = !current
+      localStorage.setItem(SIDEBAR_STORAGE_KEY, String(next))
+      return next
+    })
+  }
+
+  const CollapseIcon = isRtl
+    ? (isSidebarCollapsed ? PanelRightOpen : PanelRightClose)
+    : (isSidebarCollapsed ? PanelLeftOpen : PanelLeftClose)
+
   return (
-    <div className="app-shell">
+    <div className={isSidebarCollapsed ? 'app-shell sidebar-is-collapsed' : 'app-shell'}>
       <aside className="sidebar" aria-label={text.navLabel}>
+        <button
+          type="button"
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isSidebarCollapsed ? text.expand : text.collapse}
+          title={isSidebarCollapsed ? text.expand : text.collapse}
+        >
+          <CollapseIcon aria-hidden="true" size={19} strokeWidth={1.8} />
+        </button>
+
         <div className="brand">
           <div className="brand-mark">A</div>
-          <div><strong>Axsis</strong><span>{text.workspace}</span></div>
+          <div className="sidebar-copy"><strong>Axsis</strong><span>{text.workspace}</span></div>
         </div>
 
         <nav className="sidebar-nav">
           {navigation.map(({ to, key, icon: Icon }) => (
-            <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}>
+            <NavLink
+              key={to}
+              to={to}
+              title={isSidebarCollapsed ? t(key) : undefined}
+              aria-label={t(key)}
+              className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}
+            >
               <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
-              <span>{t(key)}</span>
+              <span className="sidebar-copy">{t(key)}</span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="mt-auto space-y-3">
-          <div className="sync-card">
+        <div className="sidebar-footer mt-auto space-y-3">
+          <div className="sync-card" title={isSidebarCollapsed ? (online ? text.online : text.offline) : undefined}>
             {online ? <Wifi aria-hidden="true" size={17} /> : <WifiOff aria-hidden="true" size={17} />}
-            <div>
+            <div className="sidebar-copy">
               <strong>{online ? text.online : text.offline}</strong>
               <span>{workerState === 'unconfigured' ? text.cloudOff : `${queue.pending} ${text.pending}، ${queue.failed} ${text.failed}`}</span>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
-            <div className="mb-3 min-w-0">
+          <div className="account-card rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
+            <div className="sidebar-copy mb-3 min-w-0">
               <strong className="block truncate text-sm text-[var(--text-primary)]">{session?.user.displayName ?? text.student}</strong>
               <span className="block truncate text-xs text-[var(--text-secondary)]">{session?.user.mode === 'cloud' ? session.user.email : text.local}</span>
               <span className="mt-1 block truncate text-xs text-[var(--text-muted)]">{device.name} · {device.appVersion}</span>
             </div>
-            <Button type="button" variant="ghost" size="sm" className="w-full justify-start" onClick={() => void handleSignOut()}>
-              <LogOut aria-hidden="true" size={16} />{text.logout}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              title={isSidebarCollapsed ? text.logout : undefined}
+              aria-label={text.logout}
+              className="sidebar-logout w-full justify-start"
+              onClick={() => void handleSignOut()}
+            >
+              <LogOut aria-hidden="true" size={16} />
+              <span className="sidebar-copy">{text.logout}</span>
             </Button>
           </div>
         </div>
