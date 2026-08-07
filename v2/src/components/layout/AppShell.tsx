@@ -7,8 +7,6 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
-  PanelLeftClose,
-  PanelLeftOpen,
   PanelRightClose,
   PanelRightOpen,
   Settings,
@@ -68,11 +66,6 @@ export function AppShell() {
   const navigate = useNavigate()
   const device = getDeviceIdentity()
   const text = shellText[locale]
-  const isRtl = locale === 'ar'
-  const isCloud = session?.user.mode === 'cloud'
-  const displayName = isCloud ? (session?.user.displayName ?? text.student) : text.student
-  const accountLabel = isCloud ? session?.user.email : text.local
-  const deviceLabel = `${text.device}: ${device.platform} · ${device.appVersion}`
 
   const handleSignOut = async () => {
     await signOut()
@@ -87,14 +80,18 @@ export function AppShell() {
     })
   }
 
-  const CollapseIcon = isRtl
-    ? (isSidebarCollapsed ? PanelRightOpen : PanelRightClose)
-    : (isSidebarCollapsed ? PanelLeftOpen : PanelLeftClose)
+  const CollapseIcon = isSidebarCollapsed ? PanelRightOpen : PanelRightClose
 
   return (
     <div className={isSidebarCollapsed ? 'app-shell sidebar-is-collapsed' : 'app-shell'}>
       <aside className="sidebar" aria-label={text.navLabel}>
-        <button type="button" className="sidebar-toggle" onClick={toggleSidebar} aria-label={isSidebarCollapsed ? text.expand : text.collapse} title={isSidebarCollapsed ? text.expand : text.collapse}>
+        <button
+          type="button"
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isSidebarCollapsed ? text.expand : text.collapse}
+          title={isSidebarCollapsed ? text.expand : text.collapse}
+        >
           <CollapseIcon aria-hidden="true" size={19} strokeWidth={1.8} />
         </button>
 
@@ -105,7 +102,13 @@ export function AppShell() {
 
         <nav className="sidebar-nav">
           {navigation.map(({ to, key, icon: Icon }) => (
-            <NavLink key={to} to={to} title={isSidebarCollapsed ? t(key) : undefined} aria-label={t(key)} className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}>
+            <NavLink
+              key={to}
+              to={to}
+              title={isSidebarCollapsed ? t(key) : undefined}
+              aria-label={t(key)}
+              className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}
+            >
               <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
               <span className="sidebar-copy">{t(key)}</span>
             </NavLink>
@@ -123,11 +126,19 @@ export function AppShell() {
 
           <div className="account-card rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
             <div className="sidebar-copy mb-3 min-w-0">
-              <strong className="block truncate text-sm text-[var(--text-primary)]">{displayName}</strong>
-              <span className="block truncate text-xs text-[var(--text-secondary)]">{accountLabel}</span>
-              <span className="mt-1 block truncate text-xs text-[var(--text-muted)]">{deviceLabel}</span>
+              <strong className="block truncate text-sm text-[var(--text-primary)]">{session?.user.displayName ?? text.student}</strong>
+              <span className="block truncate text-xs text-[var(--text-secondary)]">{session?.user.mode === 'cloud' ? session.user.email : text.local}</span>
+              <span className="mt-1 block truncate text-xs text-[var(--text-muted)]">{text.device}: {device.name} · {device.appVersion}</span>
             </div>
-            <Button type="button" variant="ghost" size="sm" title={isSidebarCollapsed ? text.logout : undefined} aria-label={text.logout} className="sidebar-logout w-full justify-start" onClick={() => void handleSignOut()}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              title={isSidebarCollapsed ? text.logout : undefined}
+              aria-label={text.logout}
+              className="sidebar-logout w-full justify-start"
+              onClick={() => void handleSignOut()}
+            >
               <LogOut aria-hidden="true" size={16} />
               <span className="sidebar-copy">{text.logout}</span>
             </Button>
