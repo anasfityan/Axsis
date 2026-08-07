@@ -39,19 +39,19 @@ const shellText = {
   ar: {
     workspace: 'مساحة الطالب', online: 'متصل بالإنترنت', offline: 'يعمل دون إنترنت',
     cloudOff: 'السحابة غير مفعلة بعد', pending: 'معلقة', failed: 'فاشلة', student: 'طالب',
-    local: 'حساب محلي', logout: 'تسجيل الخروج', navLabel: 'التنقل الرئيسي', mobileNavLabel: 'التنقل على الهاتف',
+    local: 'حساب محلي', device: 'جهاز', logout: 'تسجيل الخروج', navLabel: 'التنقل الرئيسي', mobileNavLabel: 'التنقل على الهاتف',
     collapse: 'طي القائمة الجانبية', expand: 'فتح القائمة الجانبية',
   },
   tr: {
     workspace: 'Öğrenci alanı', online: 'İnternete bağlı', offline: 'Çevrimdışı çalışıyor',
     cloudOff: 'Bulut henüz yapılandırılmadı', pending: 'bekliyor', failed: 'başarısız', student: 'Öğrenci',
-    local: 'Yerel hesap', logout: 'Çıkış yap', navLabel: 'Ana gezinme', mobileNavLabel: 'Mobil gezinme',
+    local: 'Yerel hesap', device: 'Cihaz', logout: 'Çıkış yap', navLabel: 'Ana gezinme', mobileNavLabel: 'Mobil gezinme',
     collapse: 'Kenar çubuğunu daralt', expand: 'Kenar çubuğunu aç',
   },
   en: {
     workspace: 'Student workspace', online: 'Online', offline: 'Working offline',
     cloudOff: 'Cloud is not configured', pending: 'pending', failed: 'failed', student: 'Student',
-    local: 'Local account', logout: 'Sign out', navLabel: 'Main navigation', mobileNavLabel: 'Mobile navigation',
+    local: 'Local account', device: 'Device', logout: 'Sign out', navLabel: 'Main navigation', mobileNavLabel: 'Mobile navigation',
     collapse: 'Collapse sidebar', expand: 'Expand sidebar',
   },
 } as const
@@ -69,6 +69,10 @@ export function AppShell() {
   const device = getDeviceIdentity()
   const text = shellText[locale]
   const isRtl = locale === 'ar'
+  const isCloud = session?.user.mode === 'cloud'
+  const displayName = isCloud ? (session?.user.displayName ?? text.student) : text.student
+  const accountLabel = isCloud ? session?.user.email : text.local
+  const deviceLabel = `${text.device}: ${device.platform} · ${device.appVersion}`
 
   const handleSignOut = async () => {
     await signOut()
@@ -90,13 +94,7 @@ export function AppShell() {
   return (
     <div className={isSidebarCollapsed ? 'app-shell sidebar-is-collapsed' : 'app-shell'}>
       <aside className="sidebar" aria-label={text.navLabel}>
-        <button
-          type="button"
-          className="sidebar-toggle"
-          onClick={toggleSidebar}
-          aria-label={isSidebarCollapsed ? text.expand : text.collapse}
-          title={isSidebarCollapsed ? text.expand : text.collapse}
-        >
+        <button type="button" className="sidebar-toggle" onClick={toggleSidebar} aria-label={isSidebarCollapsed ? text.expand : text.collapse} title={isSidebarCollapsed ? text.expand : text.collapse}>
           <CollapseIcon aria-hidden="true" size={19} strokeWidth={1.8} />
         </button>
 
@@ -107,13 +105,7 @@ export function AppShell() {
 
         <nav className="sidebar-nav">
           {navigation.map(({ to, key, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              title={isSidebarCollapsed ? t(key) : undefined}
-              aria-label={t(key)}
-              className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}
-            >
+            <NavLink key={to} to={to} title={isSidebarCollapsed ? t(key) : undefined} aria-label={t(key)} className={({ isActive }) => isActive ? 'nav-item nav-item-active' : 'nav-item'}>
               <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
               <span className="sidebar-copy">{t(key)}</span>
             </NavLink>
@@ -131,19 +123,11 @@ export function AppShell() {
 
           <div className="account-card rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
             <div className="sidebar-copy mb-3 min-w-0">
-              <strong className="block truncate text-sm text-[var(--text-primary)]">{session?.user.displayName ?? text.student}</strong>
-              <span className="block truncate text-xs text-[var(--text-secondary)]">{session?.user.mode === 'cloud' ? session.user.email : text.local}</span>
-              <span className="mt-1 block truncate text-xs text-[var(--text-muted)]">{device.name} · {device.appVersion}</span>
+              <strong className="block truncate text-sm text-[var(--text-primary)]">{displayName}</strong>
+              <span className="block truncate text-xs text-[var(--text-secondary)]">{accountLabel}</span>
+              <span className="mt-1 block truncate text-xs text-[var(--text-muted)]">{deviceLabel}</span>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              title={isSidebarCollapsed ? text.logout : undefined}
-              aria-label={text.logout}
-              className="sidebar-logout w-full justify-start"
-              onClick={() => void handleSignOut()}
-            >
+            <Button type="button" variant="ghost" size="sm" title={isSidebarCollapsed ? text.logout : undefined} aria-label={text.logout} className="sidebar-logout w-full justify-start" onClick={() => void handleSignOut()}>
               <LogOut aria-hidden="true" size={16} />
               <span className="sidebar-copy">{text.logout}</span>
             </Button>
